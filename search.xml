@@ -63,7 +63,40 @@
 <blockquote>
 <p><code>codebase</code>是一个地址，<u>告诉Java虚拟机我们应该从哪个地方去搜索类</u>，有点像我们日常用的 <code>CLASSPATH</code>，但<code>CLASSPATH</code>是本地路径，而<code>codebase</code>通常是远程<code>URL</code>，比如<code>http</code>、<code>ftp</code>等。</p>
 </blockquote>
-<p>如果指定<code>codebase=http://example.com/</code>，然后加载<code>org.vulhub.example.Example</code> 类，则java虚拟机就会加载<code>http://example.com/org/vulhub/example/Example.class</code></p>
+<p>如果指定<code>codebase=http://example.com/</code>，然后加载<code>org.vulhub.example.Example</code> 类，则java虚拟机就会下载<code>http://example.com/org/vulhub/example/Example.class</code>，并作为<code>Example</code>类的字节码。</p>
+<p>在RMI中，客户端和服务端之间传递的是一些序列化后的对象，这些对象在反序列化时，就会去寻找类。<strong>如果某一端反序列化时发现一个对象，它会先从自己的<code>CLASSPATH</code>中进行寻找对应的类，如果在本地还是找不到，就会远程去加载<code>codebase</code>中的类。</strong></p>
+<p>所以如果<code>codebase</code>被控制，那么我们写上我们恶意类的<code>CLASSPATH</code>，当服务端本地加载不到的时候，就会通过我们控制的<code>codebase</code>下载恶意类，最后达到加载恶意类的目的。</p>
+<blockquote>
+<p>在RMI中，codebase可以随着序列化数据一起传输，服务端接收到这个数据后，就先在CLASSPATH中寻找，然后去指定的codebase寻找类。最后就可能被<code>codebase</code>指向的恶意类控制导致被getshell或者任意命令执行。</p>
+</blockquote>
+<h3 id="codebase恶意攻击"><a href="#codebase恶意攻击" class="headerlink" title="codebase恶意攻击"></a>codebase恶意攻击</h3><p>环境配置，只有满足如下条件的RMI服务器才能被攻击</p>
+<blockquote>
+<ul>
+<li><p>安装并配置了SecurityManager </p>
+</li>
+<li><p>Java版本低于<code>7u21</code>、<code>6u45</code>，或者设置了 <code>java.rmi.server.useCodebaseOnly=false</code></p>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>其中 <code>java.rmi.server.useCodebaseOnly</code> 是在<code>Java 7u21</code>、<code>6u45</code>的时候修改的一个默认设置： </p>
+<ul>
+<li><a href="https://docs.oracle.com/javase/7/docs/technotes/guides/rmi/enhancements-7.html">https://docs.oracle.com/javase/7/docs/technotes/guides/rmi/enhancements-7.html</a> </li>
+<li><a href="https://www.oracle.com/technetwork/java/javase/7u21-relnotes-1932873.html">https://www.oracle.com/technetwork/java/javase/7u21-relnotes-1932873.html</a></li>
+</ul>
+</blockquote>
+<p>服务端的四个文件，</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// RemoteRMIServer.java</span></span><br><span class="line"><span class="keyword">package</span> RMI_2;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.rmi.Naming;</span><br><span class="line"><span class="keyword">import</span> java.rmi.registry.LocateRegistry;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RemoteRMIServer</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">start</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="keyword">if</span> (System.getSecurityManager() == <span class="literal">null</span>) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;setup SecurityManager&quot;</span>);</span><br><span class="line">            System.setSecurityManager(<span class="keyword">new</span> <span class="title class_">SecurityManager</span>());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">Calc</span> <span class="variable">h</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Calc</span>();</span><br><span class="line">        LocateRegistry.createRegistry(<span class="number">1099</span>);</span><br><span class="line">        Naming.rebind(<span class="string">&quot;refObj&quot;</span>, h);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">RemoteRMIServer</span>().start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Calc.java</span></span><br><span class="line"><span class="keyword">package</span> RMI_2;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.rmi.Remote;</span><br><span class="line"><span class="keyword">import</span> java.rmi.RemoteException;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ICalc</span> <span class="keyword">extends</span> <span class="title class_">Remote</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> Integer <span class="title function_">sum</span><span class="params">(List&lt;Integer&gt; params)</span> <span class="keyword">throws</span> RemoteException;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ICalc.java</span></span><br><span class="line"><span class="keyword">package</span> RMI_2;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.rmi.Remote;</span><br><span class="line"><span class="keyword">import</span> java.rmi.RemoteException;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ICalc</span> <span class="keyword">extends</span> <span class="title class_">Remote</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> Integer <span class="title function_">sum</span><span class="params">(List&lt;Integer&gt; params)</span> <span class="keyword">throws</span> RemoteException;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// client.policy</span></span><br><span class="line">grant &#123;</span><br><span class="line">permission java.security.AllPermission;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>然后编译三个java文件，并运行服务端</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">javac *</span><br><span class="line"></span><br><span class="line">java -Djava.rmi.server.hostname=192.168.169.136 -Djava.rmi.server.useCodebaseOnly=<span class="literal">false</span> -Djava.security.policy=client.policy -<span class="built_in">cp</span> E:\Java_Study\src\main\java RMI_2.RemoteRMIServer</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>*注意，第二段命令我是在<code>cmd</code>中运行，如果在<code>powershell</code>中运行需要把-D和java用引号分开，如</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">java -D<span class="string">&quot;java.rmi.server.hostname=192.168.168.131&quot;</span> -D<span class="string">&quot;java.rmi.server.useCodebaseOnly=false&quot;</span> -D<span class="string">&quot;java.security.policy=client.policy&quot;</span> -<span class="built_in">cp</span> E:\Java_Study\src\main\java RMI_2.RemoteRMIServer</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>执行后如下图，<code>client.policy</code>文件用于配置协议关闭<code>java.security</code>，执行时加上<code>java.rmi.server.useCodebaseOnly=false</code>允许服务端加载<code>codebase</code>，<code>java.rmi.server.hostname=192.168.168.131</code>为服务端<code>ip</code>，也是客户端要访问的<code>ip</code></p>
+<p><img src="/2023/09/17/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20231014154228530.png" alt="image-20231014154228530"></p>
 <hr>
 <hr>
 <p>*注意，进行RMI时，客户端接口文件的包名必须和服务器包名必须一样</p>
