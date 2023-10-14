@@ -50,7 +50,20 @@
 <blockquote>
 <p>lookup作用就是获得某个远程对象。那么，只要目标服务器上存在一些危险方法，我们通过RMI就可以对其进行调用，之前曾经有一个工具 <a href="https://github.com/NickstaDB/BaRMIe%EF%BC%8C%E5%85%B6%E4%B8%AD%E4%B8%80%E4%B8%AA%E5%8A%9F%E8%83%BD%E5%B0%B1%E6%98%AF%E8%BF%9B%E8%A1%8C%E5%8D%B1%E9%99%A9%E6%96%B9%E6%B3%95%E7%9A%84%E6%8E%A2%E6%B5%8B%E3%80%82">https://github.com/NickstaDB/BaRMIe，其中一个功能就是进行危险方法的探测。</a> 但是显然，RMI的攻击面绝不仅仅是这样没营养。</p>
 </blockquote>
-<h2 id="RMI利用codebase执行任意代码"><a href="#RMI利用codebase执行任意代码" class="headerlink" title="RMI利用codebase执行任意代码"></a>RMI利用<code>codebase</code>执行任意代码</h2><p>大部分的Java的漏洞都是远程进行利用恶意类，但是在怎么让目标服务器能够下载并加载自己的恶意服务器上的恶意类，这里就涉及到了<code>codebase</code></p>
+<h2 id="RMI利用codebase执行任意代码"><a href="#RMI利用codebase执行任意代码" class="headerlink" title="RMI利用codebase执行任意代码"></a>RMI利用<code>codebase</code>执行任意代码</h2><p>大部分的Java的漏洞都是远程进行利用恶意类，但是在怎么让目标服务器能够下载并加载自己的恶意服务器上的恶意类，这里就涉及到了<code>codebase</code>。</p>
+<p>曾经浏览器可以直接运行<code>java</code>，就是通过<code>Applet</code>标签，但是在<code>HTML5</code>中不再支持，并在<code>HTML 4.01</code> 中不赞成使用 <code>&lt;applet&gt;</code> 元素。</p>
+<blockquote>
+<p>Applet 是一种 Java 程序。它一般运行在支持 Java 的 Web 浏览器内。因为它有完整的 Java API支持,所以Applet 是一个全功能的 Java 应用程序。</p>
+<p><code>&lt;applet&gt; 标签在 HTML 4 中用于定义嵌入式小程序（插件）。</code></p>
+</blockquote>
+<p>使用<code>Applet</code>的时候通常需要指定一个<code>codebase</code>属性，如下</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">applet</span> <span class="attr">code</span>=<span class="string">&quot;HelloWorld.class&quot;</span> <span class="attr">codebase</span>=<span class="string">&quot;Applets&quot;</span> <span class="attr">width</span>=<span class="string">&quot;800&quot;</span> <span class="attr">height</span>=<span class="string">&quot;600&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">applet</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在RMI中远程加载时也同时涉及到了<code>codebase</code></p>
+<blockquote>
+<p><code>codebase</code>是一个地址，<u>告诉Java虚拟机我们应该从哪个地方去搜索类</u>，有点像我们日常用的 <code>CLASSPATH</code>，但<code>CLASSPATH</code>是本地路径，而<code>codebase</code>通常是远程<code>URL</code>，比如<code>http</code>、<code>ftp</code>等。</p>
+</blockquote>
+<p>如果指定<code>codebase=http://example.com/</code>，然后加载<code>org.vulhub.example.Example</code> 类，则java虚拟机就会加载<code>http://example.com/org/vulhub/example/Example.class</code></p>
 <hr>
 <hr>
 <p>*注意，进行RMI时，客户端接口文件的包名必须和服务器包名必须一样</p>
@@ -3340,7 +3353,7 @@
 <blockquote>
 <p>pop链的构造</p>
 <p>切入口 sorry类的析构函数，<strong>突破口fine类的__invoke函数中的call_user_func函数</strong></p>
-<p><code>sorry.__destruct -&gt; show.__toString</code><br><code>-&gt;</code><br><code>secret.show()</code><br><code>-&gt;</code><br><code>sorry.__get -&gt; fine.__invoke</code><br><code>-&gt;</code><br><code>call_user_func函数</code></p>
+<p><code>sorry.__destruct -&gt; show.__toString</code><br><code>-&gt;</code><br><code>secret.show()</code><br><code>-&gt;</code><br><code>sorry.__get() -&gt; fine.__invoke()</code><br><code>-&gt;</code><br><code>call_user_func函数</code></p>
 <p>#call_user_func(a,b) — 把第一个参数作为回调函数调用, 其余参数是回调函数的参数<br>#也就是把a当作函数，把b当作传入a函数的参数【如call_user_func(assert,phpinfo()),就会执行代码phpinfo()】</p>
 </blockquote>
 <p>所以<code>payload</code>为</p>
@@ -11383,9 +11396,9 @@ file_get_contents() 函数是用于将文件的内容读入到一个字符串中
 <p>2）猜某库的数据表 【以下语句功能，显示该数据库内所有数据库的名字】</p>
 <p><code>select table_name from information_schema.tables where table_schema=’xxxxx’</code> </p>
 <p>3）猜某表的所有列【以下语句功能，显示该数据库内所有数据库的名字】</p>
-<p><code>Select column_name from information_schema.columns where table_name=’xxxxx’</code> </p>
+<p><code>select column_name from information_schema.columns where table_name=’xxxxx’</code> </p>
 <p>4）获取某列的内容 【以下语句功能，显示该列】</p>
-<p><code>Select 该列的目标数据分类的名称  from   列名</code></p>
+<p><code>select column_name  from  table_name</code></p>
 </blockquote>
 <h4 id="2-注入流程图"><a href="#2-注入流程图" class="headerlink" title="[2] 注入流程图"></a>[2] 注入流程图</h4><p><img src="/2022/05/28/Web-study/image-20230803154919325.png" alt="image-20230803154919325"></p>
 <h3 id="5-mysql错误分析解决"><a href="#5-mysql错误分析解决" class="headerlink" title="5.mysql错误分析解决"></a>5.mysql错误分析解决</h3><h4 id="1）子查询结果多于一行"><a href="#1）子查询结果多于一行" class="headerlink" title="1）子查询结果多于一行"></a>1）子查询结果多于一行</h4><p><code>Subquery returns more than 1 row</code></p>
