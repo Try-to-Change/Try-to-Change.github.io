@@ -1,1 +1,357 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="/favicon.ico"><script type="module" crossorigin src="/static/js/14c27e7f.js"></script><link rel="stylesheet" href="/static/css/d5346b99.css"><meta name="generator" content="Hexo 5.4.2"><style>.darkmode--activated{--body-bg-color:#494444;--content-bg-color:#524d4d;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#423f3f;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#3b3d3f;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#4d5155;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style><link rel="stylesheet" href="/css/prism-vs.css" type="text/css"></head><body id="body-container"><noscript><strong>We're sorry but this app doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id="app"></div><script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>golang | Ttoc's blog</title><meta name="author" content="Ttoc"><meta name="copyright" content="Ttoc"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="主要从黄哥的资料笔记，尚硅谷，以及谢先斌大佬的笔记https:&#x2F;&#x2F;www.xiexianbin.cn&#x2F;golang 以及https:&#x2F;&#x2F;exercism.org&#x2F;上面进行练习, 顺便推荐一本书《go黑帽子》">
+<meta property="og:type" content="article">
+<meta property="og:title" content="golang">
+<meta property="og:url" content="https://ttoc.fun/2022/12/23/Go/index.html">
+<meta property="og:site_name" content="Ttoc&#39;s blog">
+<meta property="og:description" content="主要从黄哥的资料笔记，尚硅谷，以及谢先斌大佬的笔记https:&#x2F;&#x2F;www.xiexianbin.cn&#x2F;golang 以及https:&#x2F;&#x2F;exercism.org&#x2F;上面进行练习, 顺便推荐一本书《go黑帽子》">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ttoc.fun/img/7.jpg">
+<meta property="article:published_time" content="2022-12-23T13:16:34.183Z">
+<meta property="article:modified_time" content="2023-09-06T12:29:46.996Z">
+<meta property="article:author" content="Ttoc">
+<meta property="article:tag" content="go语言">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ttoc.fun/img/7.jpg"><link rel="shortcut icon" href="/img/website.png"><link rel="canonical" href="https://ttoc.fun/2022/12/23/Go/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":230},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: 'days',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'golang',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: undefined,
+  isToc: true,
+  postUpdate: '2023-09-06 20:29:46'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const now = new Date()
+          const hour = now.getHours()
+          const isNight = hour <= 6 || hour >= 18
+          if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+          else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="/css/progress_bar.css"><svg aria-hidden="true" style="position:absolute; overflow:hidden; width:0; height:0"><symbol id="icon-sun" viewBox="0 0 1024 1024"><path d="M960 512l-128 128v192h-192l-128 128-128-128H192v-192l-128-128 128-128V192h192l128-128 128 128h192v192z" fill="#FFD878" p-id="8420"></path><path d="M736 512a224 224 0 1 0-448 0 224 224 0 1 0 448 0z" fill="#FFE4A9" p-id="8421"></path><path d="M512 109.248L626.752 224H800v173.248L914.752 512 800 626.752V800h-173.248L512 914.752 397.248 800H224v-173.248L109.248 512 224 397.248V224h173.248L512 109.248M512 64l-128 128H192v192l-128 128 128 128v192h192l128 128 128-128h192v-192l128-128-128-128V192h-192l-128-128z" fill="#4D5152" p-id="8422"></path><path d="M512 320c105.888 0 192 86.112 192 192s-86.112 192-192 192-192-86.112-192-192 86.112-192 192-192m0-32a224 224 0 1 0 0 448 224 224 0 0 0 0-448z" fill="#4D5152" p-id="8423"></path></symbol><symbol id="icon-moon" viewBox="0 0 1024 1024"><path d="M611.370667 167.082667a445.013333 445.013333 0 0 1-38.4 161.834666 477.824 477.824 0 0 1-244.736 244.394667 445.141333 445.141333 0 0 1-161.109334 38.058667 85.077333 85.077333 0 0 0-65.066666 135.722666A462.08 462.08 0 1 0 747.093333 102.058667a85.077333 85.077333 0 0 0-135.722666 65.024z" fill="#FFB531" p-id="11345"></path><path d="M329.728 274.133333l35.157333-35.157333a21.333333 21.333333 0 1 0-30.165333-30.165333l-35.157333 35.157333-35.114667-35.157333a21.333333 21.333333 0 0 0-30.165333 30.165333l35.114666 35.157333-35.114666 35.157334a21.333333 21.333333 0 1 0 30.165333 30.165333l35.114667-35.157333 35.157333 35.157333a21.333333 21.333333 0 1 0 30.165333-30.165333z" fill="#030835" p-id="11346"></path></symbol></svg><meta name="generator" content="Hexo 5.4.2"><style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style><link rel="stylesheet" href="/css/prism-vs.css" type="text/css"></head><body><link rel="stylesheet" href="/css/barber-shop.css"/><script src="https://cdn.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/touxiang.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">56</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">17</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">10</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> Archives</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/7.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Ttoc's blog</a></span><div id="menus"></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> Archives</span></a></div></div><div id="nav-right"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i></a></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">golang</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-12-23T13:16:34.183Z" title="Created 2022-12-23 21:16:34">2022-12-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-09-06T12:29:46.996Z" title="Updated 2023-09-06 20:29:46">2023-09-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/">语言学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">2.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>8min</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p><code>主要从黄哥的资料笔记，尚硅谷，以及谢先斌大佬的笔记</code><strong><code>https://www.xiexianbin.cn/golang</code></strong></p>
+<p><code>以及</code><strong><a target="_blank" rel="noopener" href="https://exercism.org/">https://exercism.org/</a></strong><code>上面进行练习, 顺便推荐一本书《go黑帽子》</code></p>
+<span id="more"></span>
+
+<h2 id="GO语言概述"><a href="#GO语言概述" class="headerlink" title="GO语言概述"></a>GO语言概述</h2><blockquote>
+<p>Go语言是谷歌2009年发布的第二款开源编程语言,它专门针对多处理器系统应用程序的编程进行了优化，它是一种系统语言其非常有用和强大,其程序可以媲美C或C++代码的速度，而且更加安全、支持并行进程。</p>
+<p>Go支持面向对象，而且具有真正的闭包(closures)和反射 (reflection)等功能。</p>
+<p>Go可以在不损失应用程序性能的情况下降低代码的复杂性。</p>
+<p>Go是是静态强类型语言</p>
+<p>Go语言开发者被叫做gopher，这个和信息查找系统gopher协议同名</p>
+</blockquote>
+<h2 id="Go语言特色"><a href="#Go语言特色" class="headerlink" title="Go语言特色"></a>Go语言特色</h2><blockquote>
+<ul>
+<li>简洁、快速、安全</li>
+<li>并行、有趣、开源</li>
+<li>内存管理、数组安全、编译迅速</li>
+</ul>
+</blockquote>
+<h2 id="Go语言用途"><a href="#Go语言用途" class="headerlink" title="Go语言用途"></a>Go语言用途</h2><blockquote>
+<p>Go 语言被设计成一门应用于搭载 Web 服务器，存储集群或类似用途的巨型中央服务器的系统编程<br>语言。对于高性能分布式系统领域而言，Go 语言无疑比大多数其它语言有着更高的开发效率。<br>它提供了海量并行的支持，这对于游戏服务端的开发而言是再好不过了。</p>
+</blockquote>
+<h2 id="Go语言编译过程"><a href="#Go语言编译过程" class="headerlink" title="Go语言编译过程"></a>Go语言编译过程</h2><p><img src="/2022/12/23/Go/image-20230117215732032.png" alt="image-20230117215732032"></p>
+<h2 id="可查看文档网站信息"><a href="#可查看文档网站信息" class="headerlink" title="可查看文档网站信息"></a>可查看文档网站信息</h2><blockquote>
+<p>官网:<br><a target="_blank" rel="noopener" href="https://golang.google.cn/">https://golang.google.cn/</a><br>API文档:<br><a target="_blank" rel="noopener" href="https://golang.google.cn/doc/">https://golang.google.cn/doc/</a><br>教程:<br><a target="_blank" rel="noopener" href="http://www.w3cschool.cn/go/go-tutorial.html">http://www.w3cschool.cn/go/go-tutorial.html</a><br>下载:<br><a target="_blank" rel="noopener" href="https://golang.google.cn/dl/">https://golang.google.cn/dl/</a></p>
+</blockquote>
+<h2 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h2><p>基础概念将介绍三种主要的语言特性：<code>包、函数和变量</code></p>
+<h3 id="Package"><a href="#Package" class="headerlink" title="Package"></a>Package</h3><blockquote>
+<p><code>Go</code> 应用程序以包的形式组织。包是位于同一目录中的源文件的集合。目录中的所有源文件必须共享相同的包名称。包名称通常是导入路径中的最后一个目录。</p>
+</blockquote>
+<p>例如，</p>
+<p><a target="_blank" rel="noopener" href="https://golang.org/src/math/rand/">“math&#x2F;rand”包</a>中的文件以语句开头<code>package rand</code>。</p>
+<blockquote>
+<p>导入包时，只能使用&#x2F;访问名称以大写字母开头的实体（函数、类型、变量、常量）。Go 中推荐的命名风格是标识符将使用 命名<code>camelCase</code>，除了那些意味着可以跨包访问的标识符应该是<code>PascalCase</code></p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> lasagna</span><br></pre></td></tr></table></figure>
+
+<h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3><p>Go 是静态类型的，这意味着所有变量在编译时都<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Type_system">必须具有定义的类型。</a></p>
+<p>可以通过显式指定类型来定义变量：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> explicit <span class="type">int</span> <span class="comment">// 显式声明</span></span><br></pre></td></tr></table></figure>
+
+<p>您还可以使用初始化器，编译器将分配变量类型以匹配初始化器的类型。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">implicit := <span class="number">10</span>   <span class="comment">// 隐式声明为int，自动分配类型</span></span><br><span class="line"><span class="comment">//也就是说可以利用 := 进行类型声明，其类型为其后数据的类型</span></span><br></pre></td></tr></table></figure>
+
+<p>声明后，可以使用运算符为变量赋值<code>=</code>。一旦声明，变量的类型就永远不会改变。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">count := <span class="number">1</span> <span class="comment">// 赋初值</span></span><br><span class="line">count = <span class="number">2</span>  <span class="comment">// 更新新值</span></span><br><span class="line"></span><br><span class="line">count = <span class="literal">false</span> <span class="comment">// 由于分配了非“int”类型，这会引发编译器错误</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="常量"><a href="#常量" class="headerlink" title="常量"></a>常量</h3><p>常量就像变量一样保存一段数据，但它们的值在程序执行过程中不能改变。</p>
+<p>常量使用<code>const</code>关键字定义，可以是数字、字符、字符串或布尔值：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Age = <span class="number">21</span> <span class="comment">// 定义一个值为 21 的数值常量 &#x27;Age&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><p><code>Go</code> 函数接受<code>零个或多个参数</code>。<strong>参数必须明确类型化，没有隐式声明类型。</strong></p>
+<p><code>return</code>使用关键字从函数返回值。</p>
+<p>通过指定函数名称并为函数的每个参数传递参数来调用函数。</p>
+<blockquote>
+<p>请注意，Go 支持两种类型的注释：</p>
+<p>单行注释在前面，多行注释在和<code>//</code>之间插入。<code>/*``*/</code></p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> greeting</span><br><span class="line"></span><br><span class="line"><span class="comment">// Hello is a public function.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Hello</span> <span class="params">(name <span class="type">string</span>)</span></span> <span class="type">string</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> hi(name)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// hi is a private function.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">hi</span> <span class="params">(name <span class="type">string</span>)</span></span> <span class="type">string</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;hi &quot;</span> + name</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="函数定义"><a href="#函数定义" class="headerlink" title="*函数定义"></a>*函数定义</h4><blockquote>
+<p><code>func 函数名(形参列表) 返回类型列表 &#123;</code><br>  <code>函数体</code><br><code>&#125;</code></p>
+<p>这里的返回类型列表是因为<code>返回值需要描述返回值类型</code></p>
+</blockquote>
+<h4 id="函数调用"><a href="#函数调用" class="headerlink" title="函数调用"></a>函数调用</h4><blockquote>
+<p>函数可以通过 <code>函数名(实参列表)</code>，在调用过程中实参的每个数据会赋值给形参中的对应变量（实参列表类型和数量需要与形参一一对应）</p>
+<p>【这和大部分代码的调用函数方法一样，不用多说】</p>
+</blockquote>
+<h4 id="基础函数示例"><a href="#基础函数示例" class="headerlink" title="*基础函数示例"></a>*基础函数示例</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 无参函数</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">hello</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;Hello World!&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 有参函数，name 称为形参</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">helloSomeone</span><span class="params">(name <span class="type">string</span>)</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;Hello&quot;</span>, name, <span class="string">&quot;!&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 有返回值函数</span></span><br><span class="line"><span class="comment">//func add(a int, b int) int &#123;</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">add</span><span class="params">(a, b <span class="type">int</span>)</span></span> <span class="type">int</span> &#123;</span><br><span class="line"><span class="comment">//函数声明中[a,b]存在多个相同类型[int]的连续形参，可以只保留最后一个形参的类型[a, b int]</span></span><br><span class="line">	<span class="keyword">return</span> a + b</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ExampleFunc</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 无参函数调用</span></span><br><span class="line">	hello()</span><br><span class="line">	<span class="comment">// 函数的标识符为 func()，调用函数需要加 ()</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;%T\n&quot;</span>, hello)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 有参函数调用</span></span><br><span class="line">	helloSomeone(<span class="string">&quot;xianbin&quot;</span>) <span class="comment">// name = &quot;xianbin&quot; 为实参，调用函数时，传递给函数的形参</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;%T\n&quot;</span>, helloSomeone)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 有返回值函数调用</span></span><br><span class="line">	sum := add(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">	fmt.Println(sum)</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%T\n&quot;</span>, add)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 函数的类型</span></span><br><span class="line">	<span class="keyword">var</span> f <span class="function"><span class="keyword">func</span><span class="params">(<span class="type">int</span>, <span class="type">int</span>)</span></span> <span class="type">int</span></span><br><span class="line">    <span class="comment">//函数[func(int, int) int]也可以赋值给变量[var f]，也可以当成实参[f(1, 2)]赋值给另一个函数[fmt.Println()]作为形参。</span></span><br><span class="line">	f = add</span><br><span class="line">	fmt.Println(f(<span class="number">1</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Output:</span></span><br><span class="line">	<span class="comment">//Hello World!</span></span><br><span class="line">	<span class="comment">//func()</span></span><br><span class="line">	<span class="comment">//Hello xianbin !</span></span><br><span class="line">	<span class="comment">//func(string)</span></span><br><span class="line">	<span class="comment">//3</span></span><br><span class="line">	<span class="comment">//func(int, int) int</span></span><br><span class="line">	<span class="comment">//3</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="数字"><a href="#数字" class="headerlink" title="数字"></a>数字</h2><p>Go 包含基本的数字类型，可以表示整数或浮点值的集合。</p>
+<p>这个概念将集中在两种数字类型上：</p>
+<blockquote>
+<ul>
+<li><code>int</code>：例如<code>0</code>，，<code>255</code>。<code>2147483647</code>大小至少为 32 位的带符号整数（值范围：-2147483648 到 2147483647）。但这将取决于系统架构。大多数现代计算机都是 64 位的，因此<code>int</code>大小为 64 位（取值率为：-9223372036854775808 到 9223372036854775807）。</li>
+<li><code>float64</code>：例如<code>0.0</code>，<code>3.14</code>。包含所有 64 位浮点数的集合。</li>
+</ul>
+</blockquote>
+<p><code>+</code>Go 支持, <code>-</code>, <code>*</code>,<code>/</code> 和<code>%</code>（余数不取模）的标准算术运算符集。</p>
+<p>在 Go 中，不同类型之间的赋值需要显式转换。例如，要将 an <code>int</code> 转换为 a <code>float64</code>，</p>
+<p>您需要执行以下操作：<code>an := float64(a)</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x <span class="type">int</span> = <span class="number">42</span></span><br><span class="line">f := <span class="type">float64</span>(x)</span><br><span class="line"></span><br><span class="line">fmt.Printf(<span class="string">&quot;x is of type: %s\n&quot;</span>, reflect.TypeOf(x))</span><br><span class="line"><span class="comment">// Output: x is of type: int</span></span><br><span class="line"></span><br><span class="line">fmt.Printf(<span class="string">&quot;f is of type: %s\n&quot;</span>, reflect.TypeOf(f))</span><br><span class="line"><span class="comment">// Output: f is of type: float64</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="计算"><a href="#计算" class="headerlink" title="计算"></a>计算</h3><p><code>Go</code>的计算符使用以及运算简写和大部分代码是一样</p>
+<blockquote>
+<p>对于整数除法，余数被丢弃（例如<code>5 / 2 == 2</code>），也是一样的</p>
+<p>简写，如</p>
+<p>a+&#x3D;5</p>
+<p>a++</p>
+<p>a–</p>
+</blockquote>
+<h4 id="不同类型的算术运算"><a href="#不同类型的算术运算" class="headerlink" title="不同类型的算术运算"></a>不同类型的算术运算</h4><p>在许多语言中，您可以对不同类型的变量执行算术运算，但在 Go 中，这会产生错误。例如：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x <span class="type">int</span> = <span class="number">42</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// this line produces an error</span></span><br><span class="line">value := <span class="type">float32</span>(<span class="number">2.0</span>) * x <span class="comment">// invalid operation: mismatched types float32 and int</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// you must convert int type to float32 before performing arithmetic operation</span></span><br><span class="line">value := <span class="type">float32</span>(<span class="number">2.0</span>) * <span class="type">float32</span>(x)</span><br></pre></td></tr></table></figure>
+
+<p>这是由于这样高精度和低精度进行计算，会导致精度丢失，需要先将低精度类型转化为高精度类型，再进行计算</p>
+<h2 id="bool"><a href="#bool" class="headerlink" title="bool"></a>bool</h2><p>和大部分代码一样</p>
+<p>Go 中的布尔值由<code>bool</code>类型表示。<code>bool</code>是<code>true</code>或<code>false</code>。</p>
+<p>Go 支持三种布尔运算符：<code>!</code>(NOT)、<code>&amp;&amp;</code>(AND) 和<code>||</code>(OR)。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="literal">true</span> || <span class="literal">false</span> <span class="comment">// =&gt; true</span></span><br><span class="line"><span class="literal">true</span> &amp;&amp; <span class="literal">false</span> <span class="comment">// =&gt; false</span></span><br><span class="line">!<span class="literal">true</span> <span class="comment">// =&gt; false</span></span><br></pre></td></tr></table></figure>
+
+<p>这三个布尔运算符各有不同的<em>运算符优先级</em>。因此，它们按以下顺序进行评估：<code>!</code>首先、<code>&amp;&amp;</code>第二和最后<code>||</code>。如果您想强制执行不同的顺序，您可以将布尔表达式括在圆括号中（即。<code>()</code>），因为圆括号具有更高的运算符优先级。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">!<span class="literal">true</span> &amp;&amp; <span class="literal">false</span>   <span class="comment">// =&gt; false</span></span><br><span class="line">!(<span class="literal">true</span> &amp;&amp; <span class="literal">false</span>) <span class="comment">// =&gt; true</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="if条件语句书写规范"><a href="#if条件语句书写规范" class="headerlink" title="if条件语句书写规范"></a>if条件语句书写规范</h3><p>如果习惯用</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(condition)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// do something</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// do something1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>那么在<code>Go</code>这里就行不通了，如果你按上面的格式进行书写，就会报错</p>
+<blockquote>
+<p><code>unexpected else</code></p>
+</blockquote>
+<p>你需要按照作者规定的格式，才会使得代码不显示错误</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> condition &#123;</span><br><span class="line">    <span class="comment">// do something</span></span><br><span class="line">&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// do something1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>if+else if</code>也是如此</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> condition &#123;</span><br><span class="line">    <span class="comment">// do something</span></span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span> condition1 &#123;</span><br><span class="line">    <span class="comment">// do something1</span></span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span> condition2 &#123;</span><br><span class="line">    <span class="comment">// do something2</span></span><br><span class="line">&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// do something3</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>Go</code>的作者追求简洁优雅高效的代码格式，所以遇到这种形式，只能按作者的方式进行编写（无奈</p>
+<h2 id="关于字符串"><a href="#关于字符串" class="headerlink" title="关于字符串"></a>关于字符串</h2><p>Go 中的<code>string</code>是一个<code>不可变的字节序列</code>，<code>不一定代表字符</code>。</p>
+<p>双引号之间定义了一个字符串文字：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> name = <span class="string">&quot;Jane&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>字符串可以通过<code>+</code>运算符连接起来：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;Jane&quot;</span> + <span class="string">&quot; &quot;</span> + <span class="string">&quot;Austen&quot;</span></span><br><span class="line"><span class="comment">// =&gt; &quot;Jane Austen&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>一些特殊字符需要使用前导反斜杠进行转义，例如<code>\t</code>制表符和<code>\n</code>字符串中的新行。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;How is the weather today?\nIt&#x27;s sunny&quot;</span>  </span><br><span class="line"><span class="comment">// =&gt;</span></span><br><span class="line"><span class="comment">// How is the weather today?</span></span><br><span class="line"><span class="comment">// It&#x27;s sunny</span></span><br></pre></td></tr></table></figure>
+
+<p>该<code>strings</code>包包含许多用于处理字符串的有用函数。有关字符串函数的更多信息，请查看<a target="_blank" rel="noopener" href="https://pkg.go.dev/strings">字符串包文档</a>。这里有些例子：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;strings&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// strings.ToLower returns the string given as argument with all its characters lowercased</span></span><br><span class="line">strings.ToLower(<span class="string">&quot;MaKEmeLoweRCase&quot;</span>)</span><br><span class="line"><span class="comment">// =&gt; &quot;makemelowercase&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// strings.Repeat returns a string with a substring given as argument repeated many times</span></span><br><span class="line">strings.Repeat(<span class="string">&quot;Go&quot;</span>, <span class="number">3</span>)</span><br><span class="line"><span class="comment">// =&gt; &quot;GoGoGo&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="字符串包（strings）"><a href="#字符串包（strings）" class="headerlink" title="字符串包（strings）"></a>字符串包（strings）</h2><h3 id="关于字符串包"><a href="#关于字符串包" class="headerlink" title="关于字符串包"></a>关于字符串包</h3><p>该<code>strings</code>包包含许多用于处理字符串的有用函数。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;strings&quot;</span></span><br><span class="line"></span><br><span class="line">strings.ToUpper(<span class="string">&quot;test&quot;</span>) <span class="comment">// =&gt; &quot;TEST&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>和<code>java</code>中的包很相似</p>
+<blockquote>
+<p>记几个常用的</p>
+<p><code>strings.Repeat(str,num)</code>：重复str字符num次</p>
+<p><code>strings.TrimSpace(str)</code>：清除<code>str</code>字符串<code>左右</code>边的空格</p>
+<p><code>strings.TrimLeft/TrimRight(str,sign)</code>：清除<code>str</code>字符串<code>左/右</code>边的sign符号</p>
+</blockquote>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/go%E8%AF%AD%E8%A8%80/">go语言</a></div><div class="post_share"><div class="social-share" data-image="/img/7.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/02/13/tooluse(Commontools)/"><img class="prev-cover" src="/img/27.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">常用工具的使用</div></div></a></div><div class="next-post pull-right"><a href="/2022/12/01/CVE-Test/"><img class="next-cover" src="/img/5.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">CVE漏洞学习</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2023/02/15/tools-making/" title="工具项目编写"><img class="cover" src="/img/25.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2023-09-06</div><div class="title">工具项目编写</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#GO%E8%AF%AD%E8%A8%80%E6%A6%82%E8%BF%B0"><span class="toc-text">GO语言概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go%E8%AF%AD%E8%A8%80%E7%89%B9%E8%89%B2"><span class="toc-text">Go语言特色</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go%E8%AF%AD%E8%A8%80%E7%94%A8%E9%80%94"><span class="toc-text">Go语言用途</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Go%E8%AF%AD%E8%A8%80%E7%BC%96%E8%AF%91%E8%BF%87%E7%A8%8B"><span class="toc-text">Go语言编译过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E6%9F%A5%E7%9C%8B%E6%96%87%E6%A1%A3%E7%BD%91%E7%AB%99%E4%BF%A1%E6%81%AF"><span class="toc-text">可查看文档网站信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="toc-text">基础概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Package"><span class="toc-text">Package</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%98%E9%87%8F"><span class="toc-text">变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E9%87%8F"><span class="toc-text">常量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0"><span class="toc-text">函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E5%AE%9A%E4%B9%89"><span class="toc-text">*函数定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8"><span class="toc-text">函数调用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E5%87%BD%E6%95%B0%E7%A4%BA%E4%BE%8B"><span class="toc-text">*基础函数示例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E5%AD%97"><span class="toc-text">数字</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97"><span class="toc-text">计算</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%8D%E5%90%8C%E7%B1%BB%E5%9E%8B%E7%9A%84%E7%AE%97%E6%9C%AF%E8%BF%90%E7%AE%97"><span class="toc-text">不同类型的算术运算</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#bool"><span class="toc-text">bool</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#if%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5%E4%B9%A6%E5%86%99%E8%A7%84%E8%8C%83"><span class="toc-text">if条件语句书写规范</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-text">关于字符串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%85%EF%BC%88strings%EF%BC%89"><span class="toc-text">字符串包（strings）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%85"><span class="toc-text">关于字符串包</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background: transparent"><div id="footer-wrap"><div class="copyright">&copy;2022.5 - 2023 By Ttoc</div><div class="footer_custom_text">This blog is mainly used for me to learn and record,wish it can help you too.</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="Switch Between Traditional Chinese And Simplified Chinese">繁</button><a class="icon-V hidden" onclick="switchNightMode()" title="Switch Between Light And Dark Mode"><svg width="25" height="25" viewBox="0 0 1024 1024"><use id="modeicon" xlink:href="#icon-moon"></use></svg></a><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script src="/js/sun_moon.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script></div></body></html><div id="web_bg"></div>
