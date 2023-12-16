@@ -1,0 +1,292 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Java安全[反序列化(1)] | Ttoc's blog</title><meta name="author" content="Ttoc"><meta name="copyright" content="Ttoc"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="终于开始反序列化开篇，之前再RMI的攻击和流程中发现，大多数的数据发送和接收都是反序列化数据。  那么，为什么反序列化常常会带来安全隐患？  一门成熟的语言，如果需要在网络上传递信息，通常会用到一些格式化数据， 比如：   JSON  XML  但这两个数据格式都有一个共 同的问题：不支持复杂的数据类型。 大多数处理方法中，JSON和XML支持的数据类型就是基本数据类型，整型、浮点型、字符串、布尔">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java安全[反序列化(1)]">
+<meta property="og:url" content="https://ttoc.fun/2023/10/25/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96(1)]/index.html">
+<meta property="og:site_name" content="Ttoc&#39;s blog">
+<meta property="og:description" content="终于开始反序列化开篇，之前再RMI的攻击和流程中发现，大多数的数据发送和接收都是反序列化数据。  那么，为什么反序列化常常会带来安全隐患？  一门成熟的语言，如果需要在网络上传递信息，通常会用到一些格式化数据， 比如：   JSON  XML  但这两个数据格式都有一个共 同的问题：不支持复杂的数据类型。 大多数处理方法中，JSON和XML支持的数据类型就是基本数据类型，整型、浮点型、字符串、布尔">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ttoc.fun/img/61.jpg">
+<meta property="article:published_time" content="2023-10-25T05:28:10.329Z">
+<meta property="article:modified_time" content="2023-12-16T13:17:56.042Z">
+<meta property="article:author" content="Ttoc">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ttoc.fun/img/61.jpg"><link rel="shortcut icon" href="/img/website.png"><link rel="canonical" href="https://ttoc.fun/2023/10/25/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96(1)]/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":230},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Java安全[反序列化(1)]',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: undefined,
+  isToc: true,
+  postUpdate: '2023-12-16 21:17:56'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const now = new Date()
+          const hour = now.getHours()
+          const isNight = hour <= 6 || hour >= 18
+          if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+          else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="/css/progress_bar.css"><svg aria-hidden="true" style="position:absolute; overflow:hidden; width:0; height:0"><symbol id="icon-sun" viewBox="0 0 1024 1024"><path d="M960 512l-128 128v192h-192l-128 128-128-128H192v-192l-128-128 128-128V192h192l128-128 128 128h192v192z" fill="#FFD878" p-id="8420"></path><path d="M736 512a224 224 0 1 0-448 0 224 224 0 1 0 448 0z" fill="#FFE4A9" p-id="8421"></path><path d="M512 109.248L626.752 224H800v173.248L914.752 512 800 626.752V800h-173.248L512 914.752 397.248 800H224v-173.248L109.248 512 224 397.248V224h173.248L512 109.248M512 64l-128 128H192v192l-128 128 128 128v192h192l128 128 128-128h192v-192l128-128-128-128V192h-192l-128-128z" fill="#4D5152" p-id="8422"></path><path d="M512 320c105.888 0 192 86.112 192 192s-86.112 192-192 192-192-86.112-192-192 86.112-192 192-192m0-32a224 224 0 1 0 0 448 224 224 0 0 0 0-448z" fill="#4D5152" p-id="8423"></path></symbol><symbol id="icon-moon" viewBox="0 0 1024 1024"><path d="M611.370667 167.082667a445.013333 445.013333 0 0 1-38.4 161.834666 477.824 477.824 0 0 1-244.736 244.394667 445.141333 445.141333 0 0 1-161.109334 38.058667 85.077333 85.077333 0 0 0-65.066666 135.722666A462.08 462.08 0 1 0 747.093333 102.058667a85.077333 85.077333 0 0 0-135.722666 65.024z" fill="#FFB531" p-id="11345"></path><path d="M329.728 274.133333l35.157333-35.157333a21.333333 21.333333 0 1 0-30.165333-30.165333l-35.157333 35.157333-35.114667-35.157333a21.333333 21.333333 0 0 0-30.165333 30.165333l35.114666 35.157333-35.114666 35.157334a21.333333 21.333333 0 1 0 30.165333 30.165333l35.114667-35.157333 35.157333 35.157333a21.333333 21.333333 0 1 0 30.165333-30.165333z" fill="#030835" p-id="11346"></path></symbol></svg><meta name="generator" content="Hexo 5.4.2"><style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style></head><body><link rel="stylesheet" href="/css/barber-shop.css"/><script src="https://cdn.jsdelivr.net/npm/pace-js/pace.min.js"></script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/touxiang.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">47</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> Archives</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/61.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Ttoc's blog</a></span><div id="menus"></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> Archives</span></a></div></div><div id="nav-right"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i></a></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Java安全[反序列化(1)]</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-10-25T05:28:10.329Z" title="发表于 2023-10-25 13:28:10">2023-10-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-12-16T13:17:56.042Z" title="更新于 2023-12-16 21:17:56">2023-12-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Java%E6%BC%AB%E8%B0%88%E5%AD%A6%E4%B9%A0/">Java漫谈学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>终于开始反序列化开篇，之前再RMI的攻击和流程中发现，大多数的数据发送和接收都是反序列化数据。</p>
+<blockquote>
+<p>那么，为什么反序列化常常会带来安全隐患？ </p>
+<p>一门成熟的语言，如果需要在网络上传递信息，通常会用到一些格式化数据，</p>
+<p>比如： </p>
+<ul>
+<li>JSON </li>
+<li>XML</li>
+</ul>
+<p>但这两个数据格式都有一个共 同的问题：不支持复杂的数据类型。 大多数处理方法中，JSON和XML支持的数据类型就是基本数据类型，整型、浮点型、字符串、布尔 等，如果开发者希望在传输数据的时候直接传输一个对象，那么就不得不想办法扩展基础的 JSON（XML）语法。 </p>
+<p>比如，Jackson和Fastjson这类序列化库，在JSON（XML）的基础上进行改造，通过特定的语法来传递对象；亦或者如RMI，直接使用Java等语言内置的序列化方法，将一个对象转换成一串二进制数据进行 传输。</p>
+<p>不管是Jackson、Fastjson还是编程语言内置的序列化方法，一旦涉及到序列化与反序列化数据，就可 能会涉及到安全问题。但首先要理解的是，“反序列化漏洞”是对一类漏洞的泛指，而不是专指某种反序 列化方法导致的漏洞，比如Jackson反序列化漏洞和Java readObject造成的反序列化漏洞就是完全不同 的两种漏洞。 </p>
+</blockquote>
+<p>我们先来说说Java内置的序列化方法<code>readObject</code>，和其有关的漏洞</p>
+<span id="more"></span>
+
+<h1 id="Java安全-反序列化-1"><a href="#Java安全-反序列化-1" class="headerlink" title="Java安全[反序列化(1)]"></a>Java安全[反序列化(1)]</h1><h2 id="反序列化方法的对比"><a href="#反序列化方法的对比" class="headerlink" title="反序列化方法的对比"></a>反序列化方法的对比</h2><p>说到反序列化，第一时间想到的就是php反序列化和python反序列化。</p>
+<p>其中Java反序列化与php反序列化有类似之处，他们都只能将一个对象中的属性按照某种特定的格式生成一段数据流，反序列化时再按照序列化的格式顺序，将属性拿回来重新赋值给新的对象。</p>
+<p>但是两者区别在于，Java反序列化更加深入，它提供了更加高级、灵活的方法<code>wirteObject</code>，</p>
+<blockquote>
+<p>允许开发者在序列化流中插入一些自定义数据，进而在反序列化的时候能够使用 <code>readObject</code> 进行读取。</p>
+</blockquote>
+<p>而php中有个魔术方法叫做<code>__wakeup</code>，在反序列化的时候进行触发。虽然Java的<code>readObject</code>也是在反序列化的时候触发的，但是两者处理的问题还是有所不同的。</p>
+<ul>
+<li><code>readObject</code>倾向于解决<code>反序列化时，如何将序列化对象进行还原为一个完整的对象</code></li>
+<li><code>__wakeup</code>更倾向于解决<code>反序列化后，如何初始化这个对象</code></li>
+</ul>
+<p>下面仔细分析这两者的差异。</p>
+<h3 id="php反序列化"><a href="#php反序列化" class="headerlink" title="php反序列化"></a>php反序列化</h3><p>php在对数据进行序列化的过程开发者是无法介入的，在调用<code>serialize</code>函数后，序列化数据就已经完成，最后直接得到一个完整的对象，如果还想在序列化数据流中新增某一个内容，只能将其保存在一个属性中，所以php的序列化、反序列化是一个纯内部的过程，而其<code>__sleep</code>、<code>__wakeup</code>魔术方法的目的就是序列化或者反序列化的前后执行一些操作。</p>
+<p>一个非常典型的PHP序列化例子，就是含有资源类型的PHP类，如数据库连接： </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Connection</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$link</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$dsn</span>, <span class="variable">$username</span>, <span class="variable">$password</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="variable">$dsn</span>, <span class="variable">$username</span>, <span class="variable">$password</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;dsn = <span class="variable">$dsn</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;username = <span class="variable">$username</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;password = <span class="variable">$password</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">connect</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">connect</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;link = <span class="keyword">new</span> <span class="title function_ invoke__">PDO</span>(<span class="variable">$this</span>-&gt;dsn, <span class="variable">$this</span>-&gt;username, <span class="variable">$this</span>-&gt;password);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>PHP中，<code>资源类型的对象默认是不会写入序列化数据</code>中的。那么上述<code>Connection</code>类的 <code>$link</code> 属性在序 列化后就是<code>null</code>，反序列化时拿到的也是<code>null</code>。 那么，如果我想要反序列化时拿到的 <code>$link</code> 就是一个数据库连接，我就需要编写 <code>__wakeup</code> 方法：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Connection</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$link</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$dsn</span>, <span class="variable">$username</span>, <span class="variable">$password</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="variable">$dsn</span>, <span class="variable">$username</span>, <span class="variable">$password</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;dsn = <span class="variable">$dsn</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;username = <span class="variable">$username</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;password = <span class="variable">$password</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">connect</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">connect</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;link = <span class="keyword">new</span> <span class="title function_ invoke__">PDO</span>(<span class="variable">$this</span>-&gt;dsn, <span class="variable">$this</span>-&gt;username, <span class="variable">$this</span>-&gt;password);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__sleep</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">array</span>(<span class="string">&#x27;dsn&#x27;</span>, <span class="string">&#x27;username&#x27;</span>, <span class="string">&#x27;password&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__wakeup</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">connect</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可见，这里 <code>__wakeup</code> 的工作就是在反序列化拿到<code>Connection</code>对象后，执行 <code>connect()</code> 函数，连接数 据库。</p>
+<p> <code>__wakeup</code> 的作用在反序列化后，执行一些初始化操作。但其实我们很少利用序列化数据传递资源类型 的对象，而其他类型的对象，在反序列化的时候就已经赋予其值了。 </p>
+<p>所以你会发现，PHP的反序列化漏洞，很少是由 <code>__wakeup</code> 这个方法触发的，通常触发在析构函数 <code>__destruct</code> 里。其实大部分PHP反序列化漏洞，都并不是由反序列化导致的，只是通过反序列化可以 控制对象的属性，进而在后续的代码中进行危险操作。</p>
+<h3 id="Java反序列化"><a href="#Java反序列化" class="headerlink" title="Java反序列化"></a>Java反序列化</h3><p>上篇文章最后提及<code>classAnnotations</code>，这里讲到<code>ObjectAnnotations</code>知识。</p>
+<p><code>Java</code>在序列化时一个对象，将会调用这个对象<code>writeobject</code>方法，参数类型是<code>ObjectOutputStream</code>，开发者可以将任何内容写入这个<code>stream</code>中；</p>
+<p>反序列化时，会调用<code>readobject</code>，开发者也可以从读取出前面的写入的内容，再进行处理。</p>
+<p>举个例子，展示<code>writeobject</code>和<code>readobject</code>的作用，</p>
+<p>先写个<code>Person</code>类，重写<code>writeobject</code>和<code>readobject</code>，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> Ser_1;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Person</span> <span class="keyword">implements</span> <span class="title class_">java</span>.io.Serializable &#123;</span><br><span class="line">    <span class="keyword">public</span> String name;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> age;</span><br><span class="line"></span><br><span class="line">    Person(String name, <span class="type">int</span> age) &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">        <span class="built_in">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">writeObject</span><span class="params">(java.io.ObjectOutputStream s)</span> <span class="keyword">throws</span></span><br><span class="line">            IOException &#123;</span><br><span class="line">        s.defaultWriteObject();  <span class="comment">//调用默认写对象，把Person类中name和age序列化写入字节流中</span></span><br><span class="line">        s.writeObject(<span class="string">&quot;This is a object&quot;</span>); <span class="comment">//额外写入字符串，加到序列化对象后面，写入字节流中</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">readObject</span><span class="params">(java.io.ObjectInputStream s)</span></span><br><span class="line">            <span class="keyword">throws</span> IOException, ClassNotFoundException &#123;</span><br><span class="line">        s.defaultReadObject();  <span class="comment">//调用默认读对象，反序列化Person类中name和age</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">str</span> <span class="operator">=</span> (String) s.readObject();  <span class="comment">//读取写入字符串</span></span><br><span class="line">        System.out.println(str);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">Person</span> <span class="variable">p</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Person</span>(<span class="string">&quot;John&quot;</span>, <span class="number">20</span>);</span><br><span class="line">        <span class="type">ObjectOutputStream</span> <span class="variable">oos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectOutputStream</span>(<span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(<span class="string">&quot;per.ser&quot;</span>));</span><br><span class="line">        oos.writeObject(p);</span><br><span class="line">        <span class="type">ObjectInputStream</span> <span class="variable">ois</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectInputStream</span>(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(<span class="string">&quot;per.ser&quot;</span>));</span><br><span class="line">        ois.readObject();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果，</p>
+<p><img src="/2023/10/25/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96(1)]/image-20231104085645456.png" alt="image-20231104085645456"></p>
+<p>最后用工具<code>SerializationDumper</code>得到反序列化内容，</p>
+<blockquote>
+<p>java -jar .\SerializationDumper.jar -r .\test\per.ser</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">STREAM_MAGIC - <span class="number">0xac</span> ed</span><br><span class="line">STREAM_VERSION - <span class="number">0x00</span> <span class="number">05</span></span><br><span class="line">Contents</span><br><span class="line">  TC_OBJECT - <span class="number">0x73</span></span><br><span class="line">    TC_CLASSDESC - <span class="number">0x72</span></span><br><span class="line">      className</span><br><span class="line">        Length - <span class="number">12</span> - <span class="number">0x00</span> 0c</span><br><span class="line">        Value - Ser_1.Person - <span class="number">0x5365725f312e506572736f6e</span></span><br><span class="line">      serialVersionUID - <span class="number">0xb5</span> <span class="number">13</span> 8a f8 <span class="number">13</span> b1 5c a7</span><br><span class="line">      newHandle <span class="number">0x00</span> 7e <span class="number">00</span> <span class="number">00</span></span><br><span class="line">      classDescFlags - <span class="number">0x03</span> - SC_WRITE_METHOD | SC_SERIALIZABLE</span><br><span class="line">      fieldCount - <span class="number">2</span> - <span class="number">0x00</span> <span class="number">02</span></span><br><span class="line">      Fields</span><br><span class="line">        <span class="number">0</span>:</span><br><span class="line">          Int - I - <span class="number">0x49</span></span><br><span class="line">          fieldName</span><br><span class="line">            Length - <span class="number">3</span> - <span class="number">0x00</span> <span class="number">03</span></span><br><span class="line">            Value - age - <span class="number">0x616765</span></span><br><span class="line">        <span class="number">1</span>:</span><br><span class="line">          Object - L - <span class="number">0x4c</span></span><br><span class="line">          fieldName</span><br><span class="line">            Length - <span class="number">4</span> - <span class="number">0x00</span> <span class="number">04</span></span><br><span class="line">            Value - name - <span class="number">0x6e616d65</span></span><br><span class="line">          className1</span><br><span class="line">            TC_STRING - <span class="number">0x74</span></span><br><span class="line">              newHandle <span class="number">0x00</span> 7e <span class="number">00</span> <span class="number">01</span></span><br><span class="line">              Length - <span class="number">18</span> - <span class="number">0x00</span> <span class="number">12</span></span><br><span class="line">              Value - Ljava/lang/String; - <span class="number">0x4c6a6176612f6c616e672f537472696e673b</span></span><br><span class="line">      classAnnotations</span><br><span class="line">        TC_ENDBLOCKDATA - <span class="number">0x78</span></span><br><span class="line">      superClassDesc</span><br><span class="line">        TC_NULL - <span class="number">0x70</span></span><br><span class="line">    newHandle <span class="number">0x00</span> 7e <span class="number">00</span> <span class="number">02</span></span><br><span class="line">    classdata</span><br><span class="line">      Ser_1.Person</span><br><span class="line">        values</span><br><span class="line">          <span class="title function_">age</span></span><br><span class="line">            <span class="params">(<span class="type">int</span>)</span><span class="number">20</span> - <span class="number">0x00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">14</span></span><br><span class="line">          name</span><br><span class="line">            (object)</span><br><span class="line">              TC_STRING - <span class="number">0x74</span></span><br><span class="line">                newHandle <span class="number">0x00</span> 7e <span class="number">00</span> <span class="number">03</span></span><br><span class="line">                Length - <span class="number">4</span> - <span class="number">0x00</span> <span class="number">04</span></span><br><span class="line">                Value - John - <span class="number">0x4a6f686e</span></span><br><span class="line">        objectAnnotation</span><br><span class="line">          TC_STRING - <span class="number">0x74</span></span><br><span class="line">            newHandle <span class="number">0x00</span> 7e <span class="number">00</span> <span class="number">04</span></span><br><span class="line">            Length - <span class="number">16</span> - <span class="number">0x00</span> <span class="number">10</span></span><br><span class="line">            Value - This is a object - <span class="number">0x546869732069732061206f626a656374</span></span><br><span class="line">          TC_ENDBLOCKDATA - <span class="number">0x78</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到，我们写入的字符串 <code>This is a object</code> 被放在 <code>objectAnnotation</code> 的位置，并且位于<code>Person</code>类的<code>name</code>和<code>age</code>的后面。 在反序列化时，读取了这个字符串，并将其输出。</p>
+<blockquote>
+<p>这个特性就让<code>Java</code>的开发变得非常灵活。比如后面将会讲到的<code>HashMap</code>，其就是将<code>Map</code>中的所有键、 值都存储在 <code>objectAnnotation</code> 中，而并不是某个具体属性里。</p>
+</blockquote>
+<p>对于Java序列化和反序列化的过程，可以更加详细的分析，</p>
+<blockquote>
+<p>首先<code>writeObject</code>是对对象进行序列化，而<code>readObject</code>是对对象进行反序列化</p>
+<p>序列化数据后无法通过赋值修改，</p>
+<p>而序列化之前以及反序列化之后，可以进行赋值修改数据</p>
+</blockquote>
+<p>就拿上面的代码进行展示，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">writeObject</span><span class="params">(java.io.ObjectOutputStream s)</span> <span class="keyword">throws</span></span><br><span class="line">           IOException &#123;</span><br><span class="line">       age = age + <span class="number">100</span>;</span><br><span class="line">       s.defaultWriteObject();</span><br><span class="line">       s.writeObject(<span class="string">&quot;This is a object&quot;</span>);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>在调用默认写对象进行序列化前，将<code>age</code>加上<code>100</code>，然后用工具看看反序列后数据，</p>
+<p><img src="/2023/10/25/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96(1)]/image-20231104100930112.png" alt="image-20231104100930112"></p>
+<p>但是如果将这个加<code>100</code>写到序列化后进行，就无法实现，无法覆盖序列化数据中age的值</p>
+<p><img src="/2023/10/25/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96(1)]/image-20231104101020500.png" alt="image-20231104101020500"></p>
+<p>但是反序列化就有点意思了，如下代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">readObject</span><span class="params">(java.io.ObjectInputStream s)</span></span><br><span class="line">        <span class="keyword">throws</span> IOException, ClassNotFoundException &#123;</span><br><span class="line">    age = age + <span class="number">100</span>;</span><br><span class="line">    System.out.println(age);</span><br><span class="line">    s.defaultReadObject();</span><br><span class="line">    System.out.println(age);</span><br><span class="line">    <span class="type">String</span> <span class="variable">str</span> <span class="operator">=</span> (String) s.readObject();</span><br><span class="line">    System.out.println(str);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2023/10/25/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96(1)]/image-20231104103730076.png" alt="image-20231104103730076"></p>
+<p>可以看到，<code>age = age + 100</code>后打印的结果是<code>100</code>，也就是在<code>readObject</code>中<code>age = 0</code>，也可以推出在<code>writeObject</code> 中<code>age=20</code>，从下面的测试代码可以看出来。</p>
+<p><img src="/2023/10/25/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96(1)]/image-20231216211543444.png" alt="image-20231216211543444"></p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Java/">Java</a></div><div class="post_share"><div class="social-share" data-image="/img/61.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023/10/17/Java%E5%AE%89%E5%85%A8%5BRMI(3)%5D/"><img class="next-cover" src="/img/60.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Java安全[RMI(3)]</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/10/17/Java%E5%AE%89%E5%85%A8%5BRMI(3)%5D/" title="Java安全[RMI(3)]"><img class="cover" src="/img/60.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2023-12-05</div><div class="title">Java安全[RMI(3)]</div></div></a></div><div><a href="/2023/09/17/Java%E5%AE%89%E5%85%A8%5BRMI(2)%5D/" title="Java安全[RMI(2)]"><img class="cover" src="/img/59.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2023-12-05</div><div class="title">Java安全[RMI(2)]</div></div></a></div><div><a href="/2023/09/10/Java%E5%AE%89%E5%85%A8%5BRMI(1)%5D/" title="Java安全[RMI(1)]"><img class="cover" src="/img/58.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2023-12-05</div><div class="title">Java安全[RMI(1)]</div></div></a></div><div><a href="/2023/09/09/Java%E5%AE%89%E5%85%A8%5B%E5%8F%8D%E5%B0%84(3)%5D/" title="Java安全[反射(3)]"><img class="cover" src="/img/57.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="fas fa-history fa-fw"></i> 2023-12-05</div><div class="title">Java安全[反射(3)]</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Java%E5%AE%89%E5%85%A8-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96-1"><span class="toc-text">Java安全[反序列化(1)]</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%96%B9%E6%B3%95%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="toc-text">反序列化方法的对比</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96"><span class="toc-text">php反序列化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96"><span class="toc-text">Java反序列化</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background: transparent"><div id="footer-wrap"><div class="copyright">&copy;2022.5 - 2023 By Ttoc</div><div class="footer_custom_text">This blog is mainly used for me to learn and record,wish it can help you too.</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><a class="icon-V hidden" onclick="switchNightMode()" title="浅色和深色模式转换"><svg width="25" height="25" viewBox="0 0 1024 1024"><use id="modeicon" xlink:href="#icon-moon"></use></svg></a><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script src="/js/sun_moon.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script></div></body></html><div id="web_bg"></div>
