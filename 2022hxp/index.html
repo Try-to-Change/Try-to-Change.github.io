@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="在ctftime看到的，题目有深度的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hxp2022 wp">
+<meta property="og:url" content="https://ttoc.fun/2022hxp/index.html">
+<meta property="og:site_name" content="Ttoc&#39;s blog">
+<meta property="og:description" content="在ctftime看到的，题目有深度的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ttoc.fun/2022hxp/image-20230406222548469.png">
+<meta property="og:image" content="https://ttoc.fun/2022hxp/image-20230406222817323.png">
+<meta property="og:image" content="https://ttoc.fun/2022hxp/image-20230406223708029.png">
+<meta property="og:image" content="https://ttoc.fun/2022hxp/image-20230411181542931.png">
+<meta property="og:image" content="https://ttoc.fun/2022hxp/image-20230411185506095.png">
+<meta property="og:image" content="https://ttoc.fun/2022hxp/image-20230411215254139.png">
+<meta property="og:image" content="https://ttoc.fun/2022hxp/image-20230411220246020.png">
+<meta property="og:image" content="https://ttoc.fun/2022hxp/image-20230411220931414.png">
+<meta property="article:published_time" content="2023-03-10T07:03:20.894Z">
+<meta property="article:modified_time" content="2023-08-06T08:01:43.403Z">
+<meta property="article:author" content="Ttoc">
+<meta property="article:tag" content="Game">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ttoc.fun/2022hxp/image-20230406222548469.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>hxp2022 wp</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 5.4.2"><style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style></head>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css" />
+
+
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <li><a href="/">首页</a></li>
+          <li><a href="/archives/">文章</a></li>
+        <li><a href="/search/">搜索</a></li>
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/2023Cyber-Apocalypse/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/Notes/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ttoc.fun/2022hxp/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ttoc.fun/2022hxp/&text=hxp2022 wp"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ttoc.fun/2022hxp/&title=hxp2022 wp"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ttoc.fun/2022hxp/&is_video=false&description=hxp2022 wp"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=hxp2022 wp&body=Check out this article: https://ttoc.fun/2022hxp/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ttoc.fun/2022hxp/&title=hxp2022 wp"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ttoc.fun/2022hxp/&title=hxp2022 wp"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ttoc.fun/2022hxp/&title=hxp2022 wp"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ttoc.fun/2022hxp/&title=hxp2022 wp"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ttoc.fun/2022hxp/&name=hxp2022 wp&description=&lt;p&gt;&lt;code&gt;在ctftime看到的，题目有深度的&lt;/code&gt;&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ttoc.fun/2022hxp/&t=hxp2022 wp"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#valentine"><span class="toc-number">1.</span> <span class="toc-text">valentine</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#delimiter"><span class="toc-number">1.1.</span> <span class="toc-text">delimiter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E9%A2%98%E6%B5%81%E7%A8%8B"><span class="toc-number">1.2.</span> <span class="toc-text">解题流程</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        hxp2022 wp
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Ttoc</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-03-10T07:03:20.894Z" class="dt-published" itemprop="datePublished">2023-03-10</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/">网络安全学习</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Game/" rel="tag">Game</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p><code>在ctftime看到的，题目有深度的</code></p>
+<span id="more"></span>
+
+<blockquote>
+<p>Disclaimer</p>
+<p>This challenge offers an individual instance for you and therefore runs behind a proxy requesting login credentials. Locally use <code>hxp:hxp</code>.</p>
+</blockquote>
+<p>每个题的<code>docker-compose.yml</code>文件需要修改一下</p>
+<figure class="highlight nestedtext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">   <span class="attribute">build</span><span class="punctuation">:</span></span><br><span class="line"><span class="attribute">+    context</span><span class="punctuation">:</span> <span class="string">.</span></span><br><span class="line">     <span class="attribute">dockerfile</span><span class="punctuation">:</span> <span class="string">Dockerfile</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="valentine"><a href="#valentine" class="headerlink" title="valentine"></a>valentine</h2><p>WEB</p>
+<p>Difficulty estimate: - easy</p>
+<blockquote>
+<p>Description:</p>
+<p>Create an awesome template for your valentine and share it with the world!</p>
+</blockquote>
+<p>开始页面一看就知道是node.js的ssti</p>
+<p><a data-fancybox="gallery" data-src="/2022hxp/image-20230406222548469.png"><img src="/2022hxp/image-20230406222548469.png" alt="image-20230406222548469"></a></p>
+<p><a data-fancybox="gallery" data-src="/2022hxp/image-20230406222817323.png"><img src="/2022hxp/image-20230406222817323.png" alt="image-20230406222817323"></a></p>
+<p>尝试直接用payload解决</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;%= <span class="built_in">global</span>.<span class="built_in">process</span>.mainModule.<span class="built_in">require</span>(<span class="string">&#x27;child_process&#x27;</span>).execSync(<span class="string">&#x27;cat /flag.txt&#x27;</span>) %&gt;</span><br></pre></td></tr></table></figure>
+
+<p>发现输入的数据实际上就是实现一个前端的效果，并不被模板化<a data-fancybox="gallery" data-src="/2022hxp/image-20230406223708029.png"><img src="/2022hxp/image-20230406223708029.png" alt="image-20230406223708029"></a></p>
+<p>看看app.js</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">&#x27;express&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> bodyParser = <span class="built_in">require</span>(<span class="string">&#x27;body-parser&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> crypto = <span class="built_in">require</span>(<span class="string">&quot;crypto&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> app = <span class="title function_">express</span>();</span><br><span class="line">viewsFolder = path.<span class="title function_">join</span>(__dirname, <span class="string">&#x27;views&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!fs.<span class="title function_">existsSync</span>(viewsFolder)) &#123;</span><br><span class="line">  fs.<span class="title function_">mkdirSync</span>(viewsFolder);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">app.<span class="title function_">set</span>(<span class="string">&#x27;views&#x27;</span>, viewsFolder);</span><br><span class="line">app.<span class="title function_">set</span>(<span class="string">&#x27;view engine&#x27;</span>, <span class="string">&#x27;ejs&#x27;</span>);</span><br><span class="line"></span><br><span class="line">app.<span class="title function_">use</span>(bodyParser.<span class="title function_">urlencoded</span>(&#123; <span class="attr">extended</span>: <span class="literal">false</span> &#125;))</span><br><span class="line"></span><br><span class="line">app.<span class="title function_">post</span>(<span class="string">&#x27;/template&#x27;</span>, <span class="keyword">function</span>(<span class="params">req, res</span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> tmpl = req.<span class="property">body</span>.<span class="property">tmpl</span>;</span><br><span class="line">  <span class="keyword">let</span> i = -<span class="number">1</span>;</span><br><span class="line">  <span class="keyword">while</span>((i = tmpl.<span class="title function_">indexOf</span>(<span class="string">&quot;&lt;%&quot;</span>, i+<span class="number">1</span>)) &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (tmpl.<span class="title function_">substring</span>(i, i+<span class="number">11</span>) !== <span class="string">&quot;&lt;%= name %&gt;&quot;</span>) &#123;</span><br><span class="line">      res.<span class="title function_">status</span>(<span class="number">400</span>).<span class="title function_">send</span>(&#123;<span class="attr">message</span>:<span class="string">&quot;Only &#x27;&lt;%= name %&gt;&#x27; is allowed.&quot;</span>&#125;);</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">let</span> uuid;</span><br><span class="line">  <span class="keyword">do</span> &#123;</span><br><span class="line">    uuid = crypto.<span class="title function_">randomUUID</span>();</span><br><span class="line">  &#125; <span class="keyword">while</span> (fs.<span class="title function_">existsSync</span>(<span class="string">`views/<span class="subst">$&#123;uuid&#125;</span>.ejs`</span>))</span><br><span class="line"></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    fs.<span class="title function_">writeFileSync</span>(<span class="string">`views/<span class="subst">$&#123;uuid&#125;</span>.ejs`</span>, tmpl);</span><br><span class="line">  &#125; <span class="keyword">catch</span>(err) &#123;</span><br><span class="line">    res.<span class="title function_">status</span>(<span class="number">500</span>).<span class="title function_">send</span>(<span class="string">&quot;Failed to write Valentine&#x27;s card&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">let</span> name = req.<span class="property">body</span>.<span class="property">name</span> ?? <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  <span class="keyword">return</span> res.<span class="title function_">redirect</span>(<span class="string">`/<span class="subst">$&#123;uuid&#125;</span>?name=<span class="subst">$&#123;name&#125;</span>`</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.<span class="title function_">get</span>(<span class="string">&#x27;/:template&#x27;</span>, <span class="keyword">function</span>(<span class="params">req, res</span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> query = req.<span class="property">query</span>;</span><br><span class="line">  <span class="keyword">let</span> template = req.<span class="property">params</span>.<span class="property">template</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="regexp">/^[0-9A-F]&#123;8&#125;-[0-9A-F]&#123;4&#125;-[4][0-9A-F]&#123;3&#125;-[89AB][0-9A-F]&#123;3&#125;-[0-9A-F]&#123;12&#125;$/i</span>.<span class="title function_">test</span>(template)) &#123;</span><br><span class="line">    res.<span class="title function_">status</span>(<span class="number">400</span>).<span class="title function_">send</span>(<span class="string">&quot;Not a valid card id&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (!fs.<span class="title function_">existsSync</span>(<span class="string">`views/<span class="subst">$&#123;template&#125;</span>.ejs`</span>)) &#123;</span><br><span class="line">    res.<span class="title function_">status</span>(<span class="number">400</span>).<span class="title function_">send</span>(<span class="string">&#x27;Valentine\&#x27;s card does not exist&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (!query[<span class="string">&#x27;name&#x27;</span>]) &#123;</span><br><span class="line">    query[<span class="string">&#x27;name&#x27;</span>] = <span class="string">&#x27;&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> res.<span class="title function_">render</span>(template, query);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.<span class="title function_">get</span>(<span class="string">&#x27;/&#x27;</span>, <span class="keyword">function</span>(<span class="params">req, res</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> res.<span class="title function_">sendFile</span>(<span class="string">&#x27;./index.html&#x27;</span>, &#123;<span class="attr">root</span>: __dirname&#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.<span class="title function_">listen</span>(process.<span class="property">env</span>.<span class="property">PORT</span> || <span class="number">3000</span>);</span><br></pre></td></tr></table></figure>
+
+<p>在这里</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">app.<span class="title function_">post</span>(<span class="string">&#x27;/template&#x27;</span>, <span class="keyword">function</span>(<span class="params">req, res</span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> tmpl = req.<span class="property">body</span>.<span class="property">tmpl</span>;</span><br><span class="line">  <span class="keyword">let</span> i = -<span class="number">1</span>;</span><br><span class="line">  <span class="keyword">while</span>((i = tmpl.<span class="title function_">indexOf</span>(<span class="string">&quot;&lt;%&quot;</span>, i+<span class="number">1</span>)) &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (tmpl.<span class="title function_">substring</span>(i, i+<span class="number">11</span>) !== <span class="string">&quot;&lt;%= name %&gt;&quot;</span>) &#123;</span><br><span class="line">      res.<span class="title function_">status</span>(<span class="number">400</span>).<span class="title function_">send</span>(&#123;<span class="attr">message</span>:<span class="string">&quot;Only &#x27;&lt;%= name %&gt;&#x27; is allowed.&quot;</span>&#125;);</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">let</span> uuid;</span><br><span class="line">  <span class="keyword">do</span> &#123;</span><br><span class="line">    uuid = crypto.<span class="title function_">randomUUID</span>();</span><br><span class="line">  &#125; <span class="keyword">while</span> (fs.<span class="title function_">existsSync</span>(<span class="string">`views/<span class="subst">$&#123;uuid&#125;</span>.ejs`</span>))</span><br><span class="line"></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    fs.<span class="title function_">writeFileSync</span>(<span class="string">`views/<span class="subst">$&#123;uuid&#125;</span>.ejs`</span>, tmpl);</span><br><span class="line">  &#125; <span class="keyword">catch</span>(err) &#123;</span><br><span class="line">    res.<span class="title function_">status</span>(<span class="number">500</span>).<span class="title function_">send</span>(<span class="string">&quot;Failed to write Valentine&#x27;s card&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">let</span> name = req.<span class="property">body</span>.<span class="property">name</span> ?? <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  <span class="keyword">return</span> res.<span class="title function_">redirect</span>(<span class="string">`/<span class="subst">$&#123;uuid&#125;</span>?name=<span class="subst">$&#123;name&#125;</span>`</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>发现它会将输入的tmpl写入<code>views/$&#123;uuid&#125;.ejs</code>当作模板</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  fs.<span class="title function_">writeFileSync</span>(<span class="string">`views/<span class="subst">$&#123;uuid&#125;</span>.ejs`</span>, tmpl);</span><br><span class="line">&#125; <span class="keyword">catch</span>(err) &#123;</span><br><span class="line">  res.<span class="title function_">status</span>(<span class="number">500</span>).<span class="title function_">send</span>(<span class="string">&quot;Failed to write Valentine&#x27;s card&quot;</span>);</span><br><span class="line">  <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是存在校验</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>((i = tmpl.<span class="title function_">indexOf</span>(<span class="string">&quot;&lt;%&quot;</span>, i+<span class="number">1</span>)) &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (tmpl.<span class="title function_">substring</span>(i, i+<span class="number">11</span>) !== <span class="string">&quot;&lt;%= name %&gt;&quot;</span>) &#123;</span><br><span class="line">    res.<span class="title function_">status</span>(<span class="number">400</span>).<span class="title function_">send</span>(&#123;<span class="attr">message</span>:<span class="string">&quot;Only &#x27;&lt;%= name %&gt;&#x27; is allowed.&quot;</span>&#125;);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段语句限制了如果输入的字段开头为<code>&lt;%</code>，那么从<code>&lt;%</code>开头后的字段必须是<code>&lt;%= name %&gt;</code></p>
+<p>开始尝试各种方法绕过，但确实不行，因为仅能是<code>&lt;%= name %&gt;</code>,里面也不能加东西</p>
+<blockquote>
+<p>后面只有看wp才有思路，既然是从&lt;%进行匹配限制，如果可以修改模板语句让其不是&lt;%的开头，</p>
+<p>所以绕过的思路就是能用其他的标签进行绕过</p>
+</blockquote>
+<p>但是在文档中查看时会发现，所有都是以<code>&lt;%</code>开头的标签</p>
+<p><a data-fancybox="gallery" data-src="/2022hxp/image-20230411181542931.png"><img src="/2022hxp/image-20230411181542931.png" alt="image-20230411181542931"></a></p>
+<h3 id="delimiter"><a href="#delimiter" class="headerlink" title="delimiter"></a>delimiter</h3><p><a target="_blank" rel="noopener" href="https://github.com/mde/ejs#custom-delimiters">mde&#x2F;ejs: Embedded JavaScript templates delimiter</a></p>
+<p>可以看到标签几乎都是以<code>&lt;%</code>开头和结尾的，</p>
+<p>后面看官方wp时</p>
+<blockquote>
+<p>In his analysis, Eslam even scratches the possibility to overwrite options which are passed with data. He specifically mentions the delimiter in the context of abusing it for catastrophic regex.</p>
+<p><strong>In what scenario does anybody even want to pass options with untrusted user data?</strong></p>
+<p>Especially: Options which greatly affect the parsing of the template like ?<code>delimiter</code></p>
+<p>And: Could this “feature” maybe be abused in any way?</p>
+<p>Thus, the idea for this challenge was born.</p>
+</blockquote>
+<p>大致意思就是因为大都ssti过滤就只是对分隔符进行正则匹配过滤，但是如果有选项比如<code>delimiter</code>，可以利用其以不受信任的用户身份发生数据或者以其他形式滥用</p>
+<p><code>delimiter</code>就是对标签的分隔符定义的选项，这样我们就可以通过其修改覆盖标签，从<code>&lt;%=</code>变成<code>&lt;?=</code>或者<code>&lt;==</code>等等</p>
+<p><a data-fancybox="gallery" data-src="/2022hxp/image-20230411185506095.png"><img src="/2022hxp/image-20230411185506095.png" alt="image-20230411185506095"></a></p>
+<p>但是如何传参使得标签覆盖并且同时传入我们的<code>payload</code>？</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">app.<span class="title function_">get</span>(<span class="string">&#x27;/:template&#x27;</span>, <span class="keyword">function</span>(<span class="params">req, res</span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> query = req.<span class="property">query</span>;</span><br><span class="line">  <span class="keyword">let</span> template = req.<span class="property">params</span>.<span class="property">template</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="regexp">/^[0-9A-F]&#123;8&#125;-[0-9A-F]&#123;4&#125;-[4][0-9A-F]&#123;3&#125;-[89AB][0-9A-F]&#123;3&#125;-[0-9A-F]&#123;12&#125;$/i</span>.<span class="title function_">test</span>(template)) &#123;</span><br><span class="line">    res.<span class="title function_">status</span>(<span class="number">400</span>).<span class="title function_">send</span>(<span class="string">&quot;Not a valid card id&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (!fs.<span class="title function_">existsSync</span>(<span class="string">`views/<span class="subst">$&#123;template&#125;</span>.ejs`</span>)) &#123;</span><br><span class="line">    res.<span class="title function_">status</span>(<span class="number">400</span>).<span class="title function_">send</span>(<span class="string">&#x27;Valentine\&#x27;s card does not exist&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (!query[<span class="string">&#x27;name&#x27;</span>]) &#123;</span><br><span class="line">    query[<span class="string">&#x27;name&#x27;</span>] = <span class="string">&#x27;&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> res.<span class="title function_">render</span>(template, query);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>其中看到关键代码</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> res.<span class="title function_">render</span>(template, query);</span><br></pre></td></tr></table></figure>
+
+<p>这里会将template和query内容渲染，将query中的值把模板中变量的值替换，从而可以通过在query中重新定义<code>delimiter</code>参数，然后实现渲染覆盖原有的<code>?</code>分割符，将其替换成其他可以绕过的分隔符</p>
+<p>但是这里还有过滤，对<code>template</code>进行的过滤，而<code>template</code>取自<code>:template</code></p>
+<blockquote>
+<p><code>:template</code> 是一个动态路由参数，它可以匹配 URL 中的任何值。例如，如果请求的 URL 是 <code>http://example.com/about</code>，那么 <code>:template</code> 就会被设置为 <code>about</code></p>
+</blockquote>
+<p>而template的正则匹配内容</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">!/^[<span class="number">0</span>-9A-F]&#123;<span class="number">8</span>&#125;-[<span class="number">0</span>-9A-F]&#123;<span class="number">4</span>&#125;-[<span class="number">4</span>][<span class="number">0</span>-9A-F]&#123;<span class="number">3</span>&#125;-[89AB][<span class="number">0</span>-9A-F]&#123;<span class="number">3</span>&#125;-[<span class="number">0</span>-9A-F]&#123;<span class="number">12</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>搜索发现是 <code>UUID version 4</code> 的格式，而<code>uuid</code>在上面代码出现</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> res.<span class="title function_">redirect</span>(<span class="string">`/<span class="subst">$&#123;uuid&#125;</span>?name=<span class="subst">$&#123;name&#125;</span>`</span>);</span><br></pre></td></tr></table></figure>
+
+<p>这是重定向时生成的uuid，代表当我们被重定向后，</p>
+<p><code>app</code>会自动渲染下面内容</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">http</span>://x.x.x.x:<span class="number">9086</span>/<span class="number">365</span>c9839-b1a3-<span class="number">4</span>df9-<span class="number">8</span>c1a-<span class="number">142378</span>b79cd5?name=<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>所以可以先抓包，得到重定向的uuid，</p>
+<p>然后在后面添加<code>delimiter</code>参数，重新发包，从而实现利用渲染覆盖原有分隔符的目的，然后在按上面的代码<code>POST</code>发送<code>tmpl</code>参数【包含的是修改了分隔符的<code>payload</code>】</p>
+<hr>
+<h3 id="解题流程"><a href="#解题流程" class="headerlink" title="解题流程"></a>解题流程</h3><p>先打算将覆盖<code>%</code>换成<code>?</code>，先发送到<code>/template</code>，这里因为没有黑名单限制字符，于是我们的内容成功写入<code>views/$&#123;uuid&#125;.ejs</code>文件中，而<code>uuid</code>就是响应包中的</p>
+<blockquote>
+<p>77354ee1-466d-402f-a829-ec5e859c223e</p>
+</blockquote>
+<p><a data-fancybox="gallery" data-src="/2022hxp/image-20230411215254139.png"><img src="/2022hxp/image-20230411215254139.png" alt="image-20230411215254139"></a></p>
+<p>但是在<code>views/$&#123;uuid&#125;.ejs</code>文件中是以%为分隔符，于是需要修改分隔符为<code>payload</code>的<code>?</code></p>
+<p><a data-fancybox="gallery" data-src="/2022hxp/image-20230411220246020.png"><img src="/2022hxp/image-20230411220246020.png" alt="image-20230411220246020"></a></p>
+<p>得到flag</p>
+<hr>
+<p>进<code>docker</code>看看</p>
+<p><a data-fancybox="gallery" data-src="/2022hxp/image-20230411220931414.png"><img src="/2022hxp/image-20230411220931414.png" alt="image-20230411220931414"></a></p>
+<hr>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/archives/">文章</a></li>
+        
+          <li><a href="/categories/">分类</a></li>
+        
+          <li><a href="/tags/">标签</a></li>
+        
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#valentine"><span class="toc-number">1.</span> <span class="toc-text">valentine</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#delimiter"><span class="toc-number">1.1.</span> <span class="toc-text">delimiter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E9%A2%98%E6%B5%81%E7%A8%8B"><span class="toc-number">1.2.</span> <span class="toc-text">解题流程</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ttoc.fun/2022hxp/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ttoc.fun/2022hxp/&text=hxp2022 wp"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ttoc.fun/2022hxp/&title=hxp2022 wp"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ttoc.fun/2022hxp/&is_video=false&description=hxp2022 wp"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=hxp2022 wp&body=Check out this article: https://ttoc.fun/2022hxp/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ttoc.fun/2022hxp/&title=hxp2022 wp"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ttoc.fun/2022hxp/&title=hxp2022 wp"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ttoc.fun/2022hxp/&title=hxp2022 wp"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ttoc.fun/2022hxp/&title=hxp2022 wp"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ttoc.fun/2022hxp/&name=hxp2022 wp&description=&lt;p&gt;&lt;code&gt;在ctftime看到的，题目有深度的&lt;/code&gt;&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ttoc.fun/2022hxp/&t=hxp2022 wp"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2022-2024
+    Ttoc
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+
+<!-- FancyBox -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+  
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

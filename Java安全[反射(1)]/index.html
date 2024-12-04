@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="“类初始化”和“类实例化”严格区分">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java安全[反射(1)]">
+<meta property="og:url" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/index.html">
+<meta property="og:site_name" content="Ttoc&#39;s blog">
+<meta property="og:description" content="“类初始化”和“类实例化”严格区分">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/image-20230816215846754.png">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/image-20230816205947106.png">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/image-20230816215442026.png">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/image-20230816215755720.png">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/image-20230816220429728.png">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/image-20230816220712735.png">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/image-20230817165815554.png">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/image-20230821155641195.png">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/image-20230821212351622.png">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/image-20230822092726107.png">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/image-20230822212911537.png">
+<meta property="article:published_time" content="2023-05-02T15:44:02.117Z">
+<meta property="article:modified_time" content="2024-12-04T15:34:33.177Z">
+<meta property="article:author" content="Ttoc">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/image-20230816215846754.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Java安全[反射(1)]</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 5.4.2"><style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style></head>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css" />
+
+
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <li><a href="/">首页</a></li>
+          <li><a href="/archives/">文章</a></li>
+        <li><a href="/search/">搜索</a></li>
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/Key/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/Interesting-Game-wp/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/&text=Java安全[反射(1)]"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/&title=Java安全[反射(1)]"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/&is_video=false&description=Java安全[反射(1)]"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Java安全[反射(1)]&body=Check out this article: https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/&title=Java安全[反射(1)]"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/&title=Java安全[反射(1)]"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/&title=Java安全[反射(1)]"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/&title=Java安全[反射(1)]"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/&name=Java安全[反射(1)]&description=&lt;blockquote&gt;
+&lt;p&gt;“类初始化”和“类实例化”严格区分&lt;/p&gt;
+&lt;/blockquote&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/&t=Java安全[反射(1)]"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Java%E5%AE%89%E5%85%A8-%E5%8F%8D%E5%B0%84-1"><span class="toc-number">1.</span> <span class="toc-text">Java安全[反射(1)]</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8D%E5%B0%84%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-number">1.1.</span> <span class="toc-text">反射的概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Class%E5%AF%B9%E8%B1%A1%E4%B8%8E%E5%8F%8D%E5%B0%84%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">1.2.</span> <span class="toc-text">*Class对象与反射的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Class%E5%AF%B9%E8%B1%A1%E4%B8%8EClass%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">1.3.</span> <span class="toc-text">Class对象与Class的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Class%E5%AF%B9%E8%B1%A1%E4%B8%8E%E5%AE%9E%E4%BE%8B%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">1.4.</span> <span class="toc-text">Class对象与实例对象的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8D%E5%B0%84%E4%BE%8B%E5%AD%90"><span class="toc-number">1.5.</span> <span class="toc-text">*反射例子</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Java%E5%8F%8D%E5%B0%84%E8%BF%90%E7%94%A8%E5%AE%9E%E4%BE%8B"><span class="toc-number">1.5.0.1.</span> <span class="toc-text">Java反射运用实例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E7%B1%BB%E7%9A%84%E4%B8%89%E4%B8%AA%E6%96%B9%E6%B3%95"><span class="toc-number">1.6.</span> <span class="toc-text">获取类的三个方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#obj-getClass"><span class="toc-number">1.6.1.</span> <span class="toc-text">obj.getClass()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#class-%E4%B8%8D%E5%B1%9E%E4%BA%8E%E5%8F%8D%E5%B0%84"><span class="toc-number">1.6.2.</span> <span class="toc-text">.class[不属于反射]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Class-forName"><span class="toc-number">1.6.3.</span> <span class="toc-text">Class.forName()</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8D%E5%B0%84%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">1.7.</span> <span class="toc-text">反射的作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#forName%E9%87%8D%E8%BD%BD-%E5%8A%A0%E8%BD%BD-%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">1.8.</span> <span class="toc-text">forName重载&#x2F;加载&#x2F;初始化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#forName%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%8F%82%E6%95%B0%E6%98%AF%E7%B1%BB%E5%90%8D"><span class="toc-number">1.8.1.</span> <span class="toc-text">forName的第一个参数是类名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#forName%E7%9A%84%E7%AC%AC%E4%BA%8C%E5%8F%82%E6%95%B0%E8%A1%A8%E7%A4%BA%E6%98%AF%E5%90%A6%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">1.8.2.</span> <span class="toc-text">forName的第二参数表示是否初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#p-s-%E5%88%9D%E5%A7%8B%E5%8C%96%E7%B1%BB%E5%92%8C%E5%88%9B%E5%BB%BA%E7%B1%BB%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.8.3.</span> <span class="toc-text">p.s.初始化类和创建类对象的区别</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#forName"><span class="toc-number">1.8.3.1.</span> <span class="toc-text">forName()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#class"><span class="toc-number">1.8.3.2.</span> <span class="toc-text">.class</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%81%B6%E6%84%8F%E8%B0%83%E7%94%A8"><span class="toc-number">1.8.3.2.1.</span> <span class="toc-text">恶意调用</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#forName%E7%9A%84%E7%AC%AC%E4%B8%89%E4%B8%AA%E5%8F%82%E6%95%B0ClassLoader"><span class="toc-number">1.8.4.</span> <span class="toc-text">forName的第三个参数ClassLoader</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text"></span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Java安全[反射(1)]
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Ttoc</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-05-02T15:44:02.117Z" class="dt-published" itemprop="datePublished">2023-05-02</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Java%E6%BC%AB%E8%B0%88%E5%AD%A6%E4%B9%A0/">Java漫谈学习</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Java/" rel="tag">Java</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <blockquote>
+<p>“类初始化”和“类实例化”严格区分</p>
+</blockquote>
+<span id="more"></span>
+
+<h1 id="Java安全-反射-1"><a href="#Java安全-反射-1" class="headerlink" title="Java安全[反射(1)]"></a>Java安全[反射(1)]</h1><h2 id="反射的概念"><a href="#反射的概念" class="headerlink" title="反射的概念"></a>反射的概念</h2><blockquote>
+<p>反射是大多数语言不可少的一部分，</p>
+<p>指在程序运行中，<code>对于任何一个类，都可以通过反射拿到所有属性和方法（包含私有）</code>，</p>
+<p>拿到的方法可以调用，总之通过反射，我们可以蒋Java这种静态的语言附加上动态的特性。</p>
+<p><code>反射是指运行时检查和操作类、接口、字段、方法等程序结构的能力。</code></p>
+<blockquote>
+<p>Java的反射是指程序在运行期可以拿到一个对象的所有信息。</p>
+<p>它允许运行中的 Java 程序对自身进行检查，或者说“自审”，并能直接操作程序的内部属性和方法。</p>
+</blockquote>
+</blockquote>
+<h2 id="Class对象与反射的关系"><a href="#Class对象与反射的关系" class="headerlink" title="*Class对象与反射的关系"></a>*Class对象与反射的关系</h2><blockquote>
+<p><code>Class对象</code>是<code>Java反射机制的入口</code>，它<code>封装了一个类或接口的运行时信息</code>。</p>
+<p>通过<code>调用Class类的方法</code>，可以获取这些信息，包括类的<code>构造函数、方法、属性</code>等。</p>
+<p>这些信息可以用来<code>在运行时动态地创建对象、调用方法和访问字段</code></p>
+</blockquote>
+<h2 id="Class对象与Class的关系"><a href="#Class对象与Class的关系" class="headerlink" title="Class对象与Class的关系"></a>Class对象与Class的关系</h2><blockquote>
+<p>每一个类都有一个对应的Class对象,它封装了该类的运行时信息。 </p>
+</blockquote>
+<h2 id="Class对象与实例对象的关系"><a href="#Class对象与实例对象的关系" class="headerlink" title="Class对象与实例对象的关系"></a>Class对象与实例对象的关系</h2><blockquote>
+<p>Class对象表示类运行时的信息，而实例对象则是类的一个具体实例。</p>
+<p>每个实例对象都属于一个特定的类，并且与该类的Class对象相关联。</p>
+<p>可以通过实例对象来获取其所属类的Class对象，也可通过Class对象来创建实例对象。</p>
+</blockquote>
+<h2 id="反射例子"><a href="#反射例子" class="headerlink" title="*反射例子"></a>*反射例子</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">(String className, String methodName)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">     <span class="type">Class</span> <span class="variable">clazz</span> <span class="operator">=</span> Class.forName(className);</span><br><span class="line">     clazz.getMethod(methodName).invoke(clazz.newInstance());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的例子中,这几个方法包揽了几个在反射中极为重要的方法</p>
+<blockquote>
+<ul>
+<li><p>获取类的方法: <code>forName</code></p>
+</li>
+<li><p>实例化类对象的方法: <code>newInstance</code></p>
+<blockquote>
+<p>从java9开始，建议使用<code>getDeclaredConstructor().newInstance()</code>来代替<code>newInstance</code>方法，因为<code>newInstance</code>方法会抛出不必要的</p>
+<p><code>InstantiationException</code>和<code>IllegalAccessException</code>异常，而且它也不够清晰地表明正在调用构造函数。</p>
+</blockquote>
+</li>
+<li><p>获得函数的方法: <code>getMethod</code></p>
+</li>
+<li><p>执行函数的方法: <code>invoke</code></p>
+</li>
+</ul>
+</blockquote>
+<p>以上的四种方法几乎包揽所有<code>Java</code>安全中各种发射有关的<code>payload</code></p>
+<hr>
+<h4 id="Java反射运用实例"><a href="#Java反射运用实例" class="headerlink" title="Java反射运用实例"></a>Java反射运用实例</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ReflectionExample</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="comment">// 使用 forName 方法获取类的 Class 对象</span></span><br><span class="line">        <span class="comment">// 此处获得MyClass类的Class对象</span></span><br><span class="line">        Class&lt;?&gt; cls = Class.forName(<span class="string">&quot;MyClass&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 使用 newInstance 方法实例化类对象</span></span><br><span class="line">        <span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> cls.getDeclaredConstructor().newInstance();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 获取方法</span></span><br><span class="line">        <span class="comment">// String.class 代表参数类型为 String 的方法</span></span><br><span class="line">        <span class="type">Method</span> <span class="variable">method</span> <span class="operator">=</span> cls.getMethod(<span class="string">&quot;sayHello&quot;</span>, String.class);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 执行方法</span></span><br><span class="line">        <span class="comment">// 第一个参数为类对象，后面的参数为方法的参数</span></span><br><span class="line">        method.invoke(obj, <span class="string">&quot;John&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyClass</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">sayHello</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Hello, &quot;</span> + name + <span class="string">&quot;!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行截图，获取<code>Myclass</code>类对象，然后调用<code>Myclass</code>中的方法<code>sayHello</code>，主函数说明参数类型<code>String.class</code>并传参<code>John</code></p>
+<blockquote>
+<p>其中Myclass类没有使用任何访问修饰符（如<code>public</code>、<code>private</code>、<code>protected</code>），这种访问权限的范围是限定在同一个包（package）中的其他类可以访问它。</p>
+</blockquote>
+<img src="/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/image-20230816215846754.png" alt="image-20230816215846754" style="zoom:50%;">
+
+<blockquote>
+<p><code>Myclass类</code>可以在<code>src</code>目录以独立的文件格式存在<code>Myclass.class</code></p>
+<p>但是不能在<code>src</code>目录下存在两个相同名字的类，</p>
+<ul>
+<li>在反射过程中，当你尝试通过<code>Class.forName(&quot;MyClass&quot;)</code>这样的方式加载类时，类加载器会在类路径（包括<code>src</code>目录等）中查找<code>MyClass</code>对应的<code>.class</code>文件来加载，如果没有足够的信息（如包名）来区分应该加载哪一个<code>MyClass</code>，就会导致报错。</li>
+</ul>
+<p>在进行反射时会发生报错：<code>类重复</code></p>
+</blockquote>
+<img src="/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/image-20230816205947106.png" alt="image-20230816205947106" style="zoom:50%;">
+
+<hr>
+<h2 id="获取类的三个方法"><a href="#获取类的三个方法" class="headerlink" title="获取类的三个方法"></a>获取类的三个方法</h2><p>通常我们有<code>三种方法</code>获取一个”类”,也就是<code>java.lang.Class</code>对象</p>
+<blockquote>
+<p><code>forName</code>不是获取”类”的唯一途径。</p>
+</blockquote>
+<h3 id="obj-getClass"><a href="#obj-getClass" class="headerlink" title="obj.getClass()"></a>obj.getClass()</h3><blockquote>
+<p>如果上下文存在某个实例<code>obj</code>,那么可以通过<code>obj.getClass()</code>来获取它的类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ReflectionExample</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">MyClass</span> <span class="variable">obj</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MyClass</span>();</span><br><span class="line">        Class&lt;?&gt; cls = obj.getClass();</span><br><span class="line">        System.out.println(<span class="string">&quot;Class Name: &quot;</span> + cls.getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyClass</span> &#123;</span><br><span class="line">    <span class="comment">// 类的定义</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>一个<code>obj</code>对象<code>MyClass</code>实例</p>
+<img src="/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/image-20230816215442026.png" alt="image-20230816215442026" style="zoom:50%;">
+
+<p>两个<code>obj</code>对象<code>MyClass</code>和<code>YourClass</code>实例</p>
+<img src="/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/image-20230816215755720.png" alt="image-20230816215755720" style="zoom:50%;">
+</blockquote>
+<h3 id="class-不属于反射"><a href="#class-不属于反射" class="headerlink" title=".class[不属于反射]"></a>.class[不属于反射]</h3><blockquote>
+<p>如果你已经加载了某个类,只是想获取它的<code>java.lang.Class</code>对象，那么就直接拿它的<code>class</code>属性即可。这个方法其实并不属于反射。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ReflectionExample</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        Class&lt;?&gt; cls = Test.class;</span><br><span class="line">        System.out.println(<span class="string">&quot;Class Name: &quot;</span> + cls.getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Test</span> &#123;</span><br><span class="line">    <span class="comment">// 类的定义</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/image-20230816220429728.png" alt="image-20230816220429728" style="zoom:50%;">
+</blockquote>
+<h3 id="Class-forName"><a href="#Class-forName" class="headerlink" title="Class.forName()"></a>Class.forName()</h3><blockquote>
+<p>如果你知道某个类的名字，想获得到这个类，就可以用<code>forName</code>来进行获取</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ReflectionExample</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ClassNotFoundException &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">className</span> <span class="operator">=</span> <span class="string">&quot;MyClass&quot;</span>;</span><br><span class="line">        Class&lt;?&gt; cls = Class.forName(className);</span><br><span class="line">        System.out.println(<span class="string">&quot;Class Name: &quot;</span> + cls.getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyClass</span> &#123;</span><br><span class="line">    <span class="comment">// 类的定义</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/image-20230816220712735.png" alt="image-20230816220712735" style="zoom:50%;">
+</blockquote>
+<hr>
+<h2 id="反射的作用"><a href="#反射的作用" class="headerlink" title="反射的作用"></a>反射的作用</h2><blockquote>
+<p><code>getClass().forName(&quot;java.lang.Runtime&quot;)</code></p>
+</blockquote>
+<p>在安全研究中，我们使用反射的一大目的，就是绕过某些沙盒。</p>
+<p>比如，上下文中如果只是<code>Integer</code>类型的数字，我们如何获取到可以执行命令的<code>Runtime</code>类呢？</p>
+<blockquote>
+<p><code>java.lang.Runtime</code> 类是一个与 Java 运行时环境相关的类，它提供了访问 Java 运行时系统的接口，例如执行外部命令、管理内存等功能。这个类采用了单例模式，也就是整个 Java 应用程序在运行期间通常只有一个 <code>Runtime</code> 实例存在。</p>
+</blockquote>
+<p>也许可以这样（伪代码）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span>getClass().forName(<span class="string">&quot;java.lang.Runtime&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这个代码看不懂，找了几篇文章，下面是个人理解：</p>
+<p>这段代码是非常常见的payload格式，在很多服务器报警和CVE中常见，下面是一个对应漏洞分析文档</p>
+<p><a target="_blank" rel="noopener" href="http://exploit-db.com/docs/english/46303-remote-code-execution-with-el-injection-vulnerabilities.pdf">http://exploit-db.com/docs/english/46303-remote-code-execution-with-el-injection-vulnerabilities.pdf</a></p>
+<p>常见的格式应该是这种</p>
+<p><code>*.getClass().forName(&quot;java.lang.Runtime&quot;).getRuntime().exec()</code></p>
+<blockquote>
+<p>简单解析一下，<code>*</code>为某实例化对象，getClass获取其类对象，Class.forName是对类进行加载，getRuntime可获得这个代表运行时环境的实例对象，以便后续进行如执行外部命令等操作。</p>
+</blockquote>
+<p>文档中对该<code>payload</code>进行了展示(经典弹计算器</p>
+<img src="/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/image-20230817165815554.png" alt="image-20230817165815554" style="zoom: 50%;">
+
+<p>对<code>Runtime</code>类，执行命令的功能效果，实例代码执行</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CommandExecution</span> &#123;</span><br><span class="line"> <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">     <span class="keyword">try</span> &#123;</span><br><span class="line">         <span class="comment">// 执行命令</span></span><br><span class="line">         <span class="type">Process</span> <span class="variable">process</span> <span class="operator">=</span> Runtime.getRuntime().exec(<span class="string">&quot;calc&quot;</span>);</span><br><span class="line">         <span class="comment">// 等待命令执行完成</span></span><br><span class="line">         process.waitFor();</span><br><span class="line">         <span class="comment">// 获取命令的退出值</span></span><br><span class="line">         <span class="type">int</span> <span class="variable">exitValue</span> <span class="operator">=</span> process.exitValue();</span><br><span class="line">         System.out.println(<span class="string">&quot;命令执行完成，退出值：&quot;</span> + exitValue);</span><br><span class="line">     &#125; <span class="keyword">catch</span> (IOException | InterruptedException e) &#123;</span><br><span class="line">         e.printStackTrace();</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/image-20230821155641195.png" alt="image-20230821155641195" style="zoom:80%;">
+</blockquote>
+<h2 id="forName重载-加载-初始化"><a href="#forName重载-加载-初始化" class="headerlink" title="forName重载&#x2F;加载&#x2F;初始化"></a>forName重载&#x2F;加载&#x2F;初始化</h2><p>可以看看菜鸟教程或者其他文章</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.runoob.com/w3cnote/java-class-forname.html">Java class.forname 详解 | 菜鸟教程 (runoob.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/luoxn28/p/7100713.html">【Java核心技术】类型信息(Class对象 反射 动态代理) - luoxn28 - 博客园 (cnblogs.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/mocas_wang/article/details/107428506">Class.forName()用法详解_mocas_wang的博客-CSDN博客</a></p>
+</blockquote>
+<p><code>forName</code>有两个函数重载： </p>
+<blockquote>
+<ul>
+<li><code>Class&lt;?&gt; forName(String name)</code> </li>
+<li><code>Class&lt;?&gt; forName(String name, boolean initialize, ClassLoader loader)</code></li>
+</ul>
+</blockquote>
+<p>第一个就是我们最常见的获取<code>class</code>的方式，其实可以为第二种方式的一个封装</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Class.forName(className)</span><br><span class="line"><span class="comment">// 等于</span></span><br><span class="line">Class.forName(className,<span class="literal">true</span>,currentLoader)</span><br></pre></td></tr></table></figure>
+
+<p>默认情况下，</p>
+<h3 id="forName的第一个参数是类名"><a href="#forName的第一个参数是类名" class="headerlink" title="forName的第一个参数是类名"></a><code>forName</code>的第一个参数是类名</h3><h3 id="forName的第二参数表示是否初始化"><a href="#forName的第二参数表示是否初始化" class="headerlink" title="forName的第二参数表示是否初始化"></a><code>forName</code>的第二参数表示是否初始化</h3><p>第二个参数<code>initialize</code>常常被人误解，使用功能”.class”来创建Class对象的引用时</p>
+<blockquote>
+<p><code>.class</code>和<code>forName()</code>在Java中的区别是：</p>
+<ul>
+<li><code>.class</code>是在编译时确定的，不会触发类的初始化，只是获取类的<code>Class</code>对象</li>
+<li><code>forName()</code>是在运行时动态加载类，并且会触发类的初始化，除非指定<code>initialize</code>为<code>false</code></li>
+</ul>
+</blockquote>
+<h3 id="p-s-初始化类和创建类对象的区别"><a href="#p-s-初始化类和创建类对象的区别" class="headerlink" title="p.s.初始化类和创建类对象的区别"></a>p.s.初始化类和创建类对象的区别</h3><blockquote>
+<p>初始化类和创建类对象的区别是：</p>
+<ul>
+<li>初始化类是指<code>加载类的字节码到内存中</code>，并执行类的<code>静态变量</code>和<code>静态代码块</code>。初始化类<code>只会发生一次</code>，仅仅当类被首次使用时。</li>
+<li>创建类对象是指使用类的<code>构造方法来分配内存空间</code>，并给<code>对象的属性赋值</code>。创建类对象<code>可以发生多次</code>，每次都会<code>返回一个新的对象</code>。</li>
+</ul>
+</blockquote>
+<p>所以第二参数即使为<code>initialize=true</code>，这里指的也是初始化类而非创建类对象，所以不会触发构造函数</p>
+<h4 id="forName"><a href="#forName" class="headerlink" title="forName()"></a><code>forName()</code></h4><blockquote>
+<p>通过这个例子，</p>
+<p>可以看到初始化的作用和创建类对象，</p>
+<blockquote>
+<p>第一次<code>初始化</code>时，<code>加载</code><u><strong>静态变量</strong></u>和<u><strong>静态代码块</strong></u>，打印数据</p>
+<figure class="highlight nim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">block</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>第二次<code>初始化</code>时，<code>不加载</code><u><strong>静态变量</strong></u>和<u><strong>静态代码块</strong></u>，无任何打印数据</p>
+</blockquote>
+<blockquote>
+<p>当<code>创建类对象</code>时，加载类中构造函数，如果多次创建类对象，会执行多次构造函数</p>
+</blockquote>
+</blockquote>
+<img src="/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/image-20230821212351622.png" alt="image-20230821212351622" style="zoom: 200%;">
+
+<h4 id="class"><a href="#class" class="headerlink" title=".class"></a><code>.class</code></h4><blockquote>
+<p>可以看到.class<code>不会进行</code>初始化<code>静态变量</code>和<code>静态代码块</code>，也<code>不会创建类对象</code></p>
+</blockquote>
+<p><a data-fancybox="gallery" data-src="/Java%E5%AE%89%E5%85%A8%5B%E5%8F%8D%E5%B0%84(1)%5D/image-20230822092726107.png"><img src="/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/image-20230822092726107.png" alt="image-20230822092726107"></a></p>
+<p>常见有三种初始化</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TrainPrint</span> &#123;</span><br><span class="line">    &#123;</span><br><span class="line">        System.out.printf(<span class="string">&quot;Empty block initial %s\n&quot;</span>, <span class="built_in">this</span>.getClass());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.printf(<span class="string">&quot;Static initial %s\n&quot;</span>, TrainPrint.class);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">TrainPrint</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.printf(<span class="string">&quot;Initial %s\n&quot;</span>, <span class="built_in">this</span>.getClass());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这三种中，</p>
+<p>最先调用的是<code>static&#123;&#125;</code></p>
+<p>然后是单个中<code>&#123;&#125;</code></p>
+<p>最后是<code>构造函数</code></p>
+</blockquote>
+<p>运行便可知，</p>
+<img src="/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/image-20230822212911537.png" alt="image-20230822212911537" style="zoom:200%;">
+
+<blockquote>
+<p>因为<code>static&#123;&#125;</code>是类初始化时调用的，而<code>&#123;&#125;</code>中代码是放在<strong>构造函数super()后面</strong>，也就是<code>构造函数</code>的前面</p>
+</blockquote>
+<p>&#x3D;&#x3D;&gt;</p>
+<blockquote>
+<p><code>forName</code>中<code>initialize=true</code>其实就是告诉Java虚拟机<code>是否执行类初始化</code></p>
+</blockquote>
+<h5 id="恶意调用"><a href="#恶意调用" class="headerlink" title="恶意调用"></a>恶意调用</h5><p>假如我们有如下函数，其中函数的参数name可控：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">ref</span><span class="params">(String name)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        Class.forName(name);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们再构造一个恶意类，将恶意的代码放置在<code>static&#123;&#125;</code>中，从而执行</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.Runtime;</span><br><span class="line"><span class="keyword">import</span> java.lang.Process;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">EvilClass</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">Runtime</span> <span class="variable">rt</span> <span class="operator">=</span> Runtime.getRuntime();</span><br><span class="line">            String[] commands = &#123;<span class="string">&quot;touch&quot;</span>, <span class="string">&quot;/tmp/success&quot;</span>&#125;;</span><br><span class="line">            <span class="type">Process</span> <span class="variable">pc</span> <span class="operator">=</span> rt.exec(commands);</span><br><span class="line">            pc.waitFor();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            <span class="comment">// do nothing</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当然，这个恶意类如何带入目标机器中，可能就涉及到<code>ClassLoader</code>的一些利用方法</p>
+<p>后面学到会补充这里实现传入的过程</p>
+<h3 id="forName的第三个参数ClassLoader"><a href="#forName的第三个参数ClassLoader" class="headerlink" title="forName的第三个参数ClassLoader"></a><code>forName</code>的第三个参数<code>ClassLoader</code></h3><blockquote>
+<p><code>ClassLoader</code>是什么呢？</p>
+<p>它就是一个”加载器”，告诉Java虚拟机如何加载这个类。</p>
+</blockquote>
+<p>Java中默认的<code>ClassLoader</code>就是根据类名来加载类，这个类名是类的完整路径，如<code>java.lang.Runtime</code>。</p>
+<h1 id><a href="#" class="headerlink" title></a></h1>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/archives/">文章</a></li>
+        
+          <li><a href="/categories/">分类</a></li>
+        
+          <li><a href="/tags/">标签</a></li>
+        
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Java%E5%AE%89%E5%85%A8-%E5%8F%8D%E5%B0%84-1"><span class="toc-number">1.</span> <span class="toc-text">Java安全[反射(1)]</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8D%E5%B0%84%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-number">1.1.</span> <span class="toc-text">反射的概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Class%E5%AF%B9%E8%B1%A1%E4%B8%8E%E5%8F%8D%E5%B0%84%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">1.2.</span> <span class="toc-text">*Class对象与反射的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Class%E5%AF%B9%E8%B1%A1%E4%B8%8EClass%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">1.3.</span> <span class="toc-text">Class对象与Class的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Class%E5%AF%B9%E8%B1%A1%E4%B8%8E%E5%AE%9E%E4%BE%8B%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">1.4.</span> <span class="toc-text">Class对象与实例对象的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8D%E5%B0%84%E4%BE%8B%E5%AD%90"><span class="toc-number">1.5.</span> <span class="toc-text">*反射例子</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Java%E5%8F%8D%E5%B0%84%E8%BF%90%E7%94%A8%E5%AE%9E%E4%BE%8B"><span class="toc-number">1.5.0.1.</span> <span class="toc-text">Java反射运用实例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E7%B1%BB%E7%9A%84%E4%B8%89%E4%B8%AA%E6%96%B9%E6%B3%95"><span class="toc-number">1.6.</span> <span class="toc-text">获取类的三个方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#obj-getClass"><span class="toc-number">1.6.1.</span> <span class="toc-text">obj.getClass()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#class-%E4%B8%8D%E5%B1%9E%E4%BA%8E%E5%8F%8D%E5%B0%84"><span class="toc-number">1.6.2.</span> <span class="toc-text">.class[不属于反射]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Class-forName"><span class="toc-number">1.6.3.</span> <span class="toc-text">Class.forName()</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8D%E5%B0%84%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">1.7.</span> <span class="toc-text">反射的作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#forName%E9%87%8D%E8%BD%BD-%E5%8A%A0%E8%BD%BD-%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">1.8.</span> <span class="toc-text">forName重载&#x2F;加载&#x2F;初始化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#forName%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%8F%82%E6%95%B0%E6%98%AF%E7%B1%BB%E5%90%8D"><span class="toc-number">1.8.1.</span> <span class="toc-text">forName的第一个参数是类名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#forName%E7%9A%84%E7%AC%AC%E4%BA%8C%E5%8F%82%E6%95%B0%E8%A1%A8%E7%A4%BA%E6%98%AF%E5%90%A6%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">1.8.2.</span> <span class="toc-text">forName的第二参数表示是否初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#p-s-%E5%88%9D%E5%A7%8B%E5%8C%96%E7%B1%BB%E5%92%8C%E5%88%9B%E5%BB%BA%E7%B1%BB%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.8.3.</span> <span class="toc-text">p.s.初始化类和创建类对象的区别</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#forName"><span class="toc-number">1.8.3.1.</span> <span class="toc-text">forName()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#class"><span class="toc-number">1.8.3.2.</span> <span class="toc-text">.class</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%81%B6%E6%84%8F%E8%B0%83%E7%94%A8"><span class="toc-number">1.8.3.2.1.</span> <span class="toc-text">恶意调用</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#forName%E7%9A%84%E7%AC%AC%E4%B8%89%E4%B8%AA%E5%8F%82%E6%95%B0ClassLoader"><span class="toc-number">1.8.4.</span> <span class="toc-text">forName的第三个参数ClassLoader</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text"></span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/&text=Java安全[反射(1)]"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/&title=Java安全[反射(1)]"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/&is_video=false&description=Java安全[反射(1)]"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Java安全[反射(1)]&body=Check out this article: https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/&title=Java安全[反射(1)]"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/&title=Java安全[反射(1)]"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/&title=Java安全[反射(1)]"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/&title=Java安全[反射(1)]"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/&name=Java安全[反射(1)]&description=&lt;blockquote&gt;
+&lt;p&gt;“类初始化”和“类实例化”严格区分&lt;/p&gt;
+&lt;/blockquote&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[%E5%8F%8D%E5%B0%84(1)]/&t=Java安全[反射(1)]"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2022-2024
+    Ttoc
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+
+<!-- FancyBox -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+  
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

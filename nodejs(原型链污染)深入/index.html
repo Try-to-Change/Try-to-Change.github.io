@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="本来想将p神的JavaScript污染链文章并在我写的基础浅入里，但是感觉还是得分开学习记录，p神干货还得和我水的文章分开，浅入就讲概念理解学习吧，深入就涉及深入认识污染了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nodejs(原型链污染)深入">
+<meta property="og:url" content="https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/index.html">
+<meta property="og:site_name" content="Ttoc&#39;s blog">
+<meta property="og:description" content="本来想将p神的JavaScript污染链文章并在我写的基础浅入里，但是感觉还是得分开学习记录，p神干货还得和我水的文章分开，浅入就讲概念理解学习吧，深入就涉及深入认识污染了">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901135415750.png">
+<meta property="og:image" content="https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901154849363.png">
+<meta property="og:image" content="https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901155300768.png">
+<meta property="og:image" content="https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901160722382.png">
+<meta property="og:image" content="https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901150808861.png">
+<meta property="og:image" content="https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901170534691.png">
+<meta property="og:image" content="https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901170427183.png">
+<meta property="og:image" content="https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901171115585.png">
+<meta property="og:image" content="https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901172350796.png">
+<meta property="og:image" content="https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901172719167.png">
+<meta property="og:image" content="https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901182724283.png">
+<meta property="og:image" content="https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901182756972.png">
+<meta property="og:image" content="https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905094854794.png">
+<meta property="og:image" content="https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905095519407.png">
+<meta property="og:image" content="https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905095812582.png">
+<meta property="og:image" content="https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905100719829.png">
+<meta property="og:image" content="https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905101905435.png">
+<meta property="og:image" content="https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905102214488.png">
+<meta property="og:image" content="https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905102456014.png">
+<meta property="og:image" content="https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905102953845.png">
+<meta property="og:image" content="https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20240531103907131.png">
+<meta property="og:image" content="https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905110442713.png">
+<meta property="og:image" content="https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905111044306.png">
+<meta property="og:image" content="https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905111219362.png">
+<meta property="og:image" content="https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905111651534.png">
+<meta property="og:image" content="https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905111841511.png">
+<meta property="article:published_time" content="2023-09-01T05:53:59.950Z">
+<meta property="article:modified_time" content="2024-05-31T02:39:33.896Z">
+<meta property="article:author" content="Ttoc">
+<meta property="article:tag" content="js">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901135415750.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>nodejs(原型链污染)深入</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 5.4.2"><style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style></head>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css" />
+
+
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <li><a href="/">首页</a></li>
+          <li><a href="/archives/">文章</a></li>
+        <li><a href="/search/">搜索</a></li>
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/Java%E5%AE%89%E5%85%A8%5B%E5%8F%8D%E5%B0%84(3)%5D/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B5%85%E5%85%A5/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/&text=nodejs(原型链污染)深入"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/&title=nodejs(原型链污染)深入"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/&is_video=false&description=nodejs(原型链污染)深入"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=nodejs(原型链污染)深入&body=Check out this article: https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/&title=nodejs(原型链污染)深入"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/&title=nodejs(原型链污染)深入"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/&title=nodejs(原型链污染)深入"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/&title=nodejs(原型链污染)深入"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/&name=nodejs(原型链污染)深入&description=&lt;p&gt;&lt;code&gt;本来想将p神的JavaScript污染链文章并在我写的基础浅入里，但是感觉还是得分开学习记录，p神干货还得和我水的文章分开，浅入就讲概念理解学习吧，深入就涉及深入认识污染了&lt;/code&gt;&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/&t=nodejs(原型链污染)深入"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#prototype%E5%92%8C-proto-%E5%88%86%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.</span> <span class="toc-text">prototype和__proto__分别是什么</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%90%86%E8%A7%A3"><span class="toc-number">1.1.</span> <span class="toc-text">理解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E7%82%B9"><span class="toc-number">1.2.</span> <span class="toc-text">关键点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.3.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JavaScript%E5%8E%9F%E5%9E%8B%E9%93%BE%E7%BB%A7%E6%89%BF"><span class="toc-number">2.</span> <span class="toc-text">JavaScript原型链继承</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93-1"><span class="toc-number">2.1.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">3.</span> <span class="toc-text">原型链污染是什么</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%93%AA%E4%BA%9B%E6%83%85%E5%86%B5%E4%B8%8B%E5%8E%9F%E5%9E%8B%E9%93%BE%E4%BC%9A%E8%A2%AB%E6%B1%A1%E6%9F%93%E5%91%A2%EF%BC%9F"><span class="toc-number">4.</span> <span class="toc-text">哪些情况下原型链会被污染呢？</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        nodejs(原型链污染)深入
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Ttoc</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-09-01T05:53:59.950Z" class="dt-published" itemprop="datePublished">2023-09-01</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/">网络安全学习</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/js/" rel="tag">js</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p><code>本来想将p神的JavaScript污染链文章并在我写的基础浅入里，但是感觉还是得分开学习记录，p神干货还得和我水的文章分开，浅入就讲概念理解学习吧，深入就涉及深入认识污染了</code></p>
+<span id="more"></span>
+
+<h1 id="prototype和-proto-分别是什么"><a href="#prototype和-proto-分别是什么" class="headerlink" title="prototype和__proto__分别是什么"></a><code>prototype</code>和<code>__proto__</code>分别是什么</h1><blockquote>
+<p>这里引用p神的文章，加上部分自己的理解</p>
+<p><a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/javascript-prototype-pollution-attack.html#0x02-javascript">https://www.leavesongs.com/PENETRATION/javascript-prototype-pollution-attack.html#0x02-javascript</a></p>
+</blockquote>
+<h2 id="理解"><a href="#理解" class="headerlink" title="理解"></a>理解</h2><p>在JavaScript中，我们如果要定义一个类，需要以<u>定义<code>“构造函数”</code>的方式定义</u>:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">Foo</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">bar</span> = <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="title class_">Foo</span>()</span><br></pre></td></tr></table></figure>
+
+<p><a data-fancybox="gallery" data-src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901135415750.png"><img src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901135415750.png" alt="image-20230901135415750"></a></p>
+<p>其中<code>Foo函数</code>就是<code>Foo类</code>的构造函数，其中的<code>this.bar</code>是<code>Foo类</code>中的一个属性。</p>
+<p><a data-fancybox="gallery" data-src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901154849363.png"><img src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901154849363.png" alt="image-20230901154849363"></a></p>
+<blockquote>
+<p>也就是说<code>利用function定义类</code>的同时，构造函数也被定义好了</p>
+</blockquote>
+<blockquote>
+<p>在ES6中引入了<code>class</code>的概念，两者是有区别，但是不是很大</p>
+<p><code>class</code>本质还是基于原型<code>prototype</code>的实现方式进一步的封装，<code>class</code>本质还是函数<code>function</code></p>
+<p>但是使用<code>class</code>定义类比<code>function</code>使得代码<code>更加直观，也更加灵活</code>，因为class定义类时，可以直接使用<code>constructor()</code>方法来定义<code>构造函数</code>，并且可以使用关键字<code>extends</code>来继承父类</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Foo</span> &#123;</span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">bar</span> = <span class="number">1</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a data-fancybox="gallery" data-src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901155300768.png"><img src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901155300768.png" alt="image-20230901155300768"></a></p>
+<blockquote>
+<p>可以看到用class定义类的时候，构造函数也是被定义好了</p>
+</blockquote>
+<p>并且function和class两者的构造函数的名字也是一样的</p>
+<p><a data-fancybox="gallery" data-src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901160722382.png"><img src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901160722382.png" alt="image-20230901160722382"></a></p>
+<hr>
+<p>在一个类必然有一些方法，类似属性<code>this.bar</code>，我们也可以将方法定义在构造函数的内部</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">Foo</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">bar</span> = <span class="number">1</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">show</span> = <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.<span class="property">bar</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">(<span class="keyword">new</span> <span class="title class_">Foo</span>()).<span class="title function_">show</span>()</span><br></pre></td></tr></table></figure>
+
+<p>代码中我们可以看到，<code>show</code>的定义利用了<code>function</code>，但是并没有被定义为<code>show类</code>，也就是说这个show方法并不是和上面一样是所谓<code>show类</code>的构造函数，而是<code>Foo类</code>中<code>Foo</code>这个构造函数的一个方法</p>
+<p>如下图结果可以理解，在新建实例化Foo对象，执行构造函数时，<code>show</code>方法也会被执行可知，<code>show</code>只是构造函数中的一个方法，是绑定在对象中的吗，而不是绑定在类</p>
+<p><a data-fancybox="gallery" data-src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901150808861.png"><img src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901150808861.png" alt="image-20230901150808861"></a></p>
+<p><a data-fancybox="gallery" data-src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901170534691.png"><img src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901170534691.png" alt="image-20230901170534691"></a></p>
+<p>但由此出现了一个新问题，那如果每次<code>新建一个实例化对象就执行一次show方法</code>，有时在实际生产中并不需要，可能大多数时候<code>只想在创建类后执行一次</code>即可</p>
+<p>那肯定就不能把<code>show</code>方法再写到<code>function Foo&#123;&#125;</code>中去了，</p>
+<blockquote>
+<p>这里就需要使用原型<code>prototype</code></p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">Foo</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">bar</span> = <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title class_">Foo</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">show</span> = <span class="keyword">function</span> <span class="title function_">show</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.<span class="property">bar</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> foo = <span class="keyword">new</span> <span class="title class_">Foo</span>()</span><br><span class="line">foo.<span class="title function_">show</span>()</span><br></pre></td></tr></table></figure>
+
+<p>这段代码其实也好理解，我们将<code>show</code>方法单独提出来当作一个函数，并加到<code>Foo</code>的原型当作一个单独的函数，<code>prototype</code>可以当作<code>Foo</code>类自带的一个属性，所有的创建的<code>Foo</code>对象都将拥有<code>Foo</code>类中所有内容，包括变量和方法。</p>
+<p><a data-fancybox="gallery" data-src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901170427183.png"><img src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901170427183.png" alt="image-20230901170427183"></a></p>
+<p>可以看到和在构造函数中定义<code>show</code>不同的是，<code>show</code>作为和构造函数一样的显示在原型内容中，属于是新创建的<code>Foo</code>类对象可以利用的一部分。</p>
+<p><a data-fancybox="gallery" data-src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901171115585.png"><img src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901171115585.png" alt="image-20230901171115585"></a></p>
+<p>这里将<code>Foo</code>类实例化后给<code>foo</code>，<code>foo</code>也完全可以直接调用<code>show</code>函数的内容，<code>foo</code>自身创建开始就具有<code>Foo</code>中的所有变量方法可以调用。</p>
+<hr>
+<h2 id="关键点"><a href="#关键点" class="headerlink" title="关键点"></a>关键点</h2><p>我们可以通过<code>Foo.prototype</code>来访问<code>Foo</code>类的原型，但是<code>Foo</code>类实例化出来的对象，如上的<code>foo</code>，是不能直接调用<code>prototype</code>进行访问原型的</p>
+<p><a data-fancybox="gallery" data-src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901172350796.png"><img src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901172350796.png" alt="image-20230901172350796"></a></p>
+<p>所以这里就需要提到<code>__proto__</code>，类实例化后的对象可以通过<code>__proto__</code>来直接访问类的原型。</p>
+<p>也就是</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">foo.<span class="property">__proto__</span> == <span class="title class_">Foo</span>.<span class="property"><span class="keyword">prototype</span></span></span><br></pre></td></tr></table></figure>
+
+<p><a data-fancybox="gallery" data-src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901172719167.png"><img src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901172719167.png" alt="image-20230901172719167"></a></p>
+<p>进一步思考，也就是实例化后的对象【[比如<code>foo</code>]可以像上面例子一样，通过<code>__proto__</code>访问原型定义一个新的函数，如下例子，利用<code>foo.__proto__</code>定义了一个新函数<code>hacker</code></p>
+<p>并且能成功调用执行，打印’<code>i get shell</code>‘</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">foo.<span class="property">__proto__</span>.<span class="property">hacker</span> = <span class="keyword">function</span> <span class="title function_">hacker</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;i get shell&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a data-fancybox="gallery" data-src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901182724283.png"><img src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901182724283.png" alt="image-20230901182724283"></a></p>
+<p><a data-fancybox="gallery" data-src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901182756972.png"><img src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230901182756972.png" alt="image-20230901182756972"></a></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><blockquote>
+<ol>
+<li><code>prototype</code>是一个<code>类的属性</code>，所有类对象在实例化的时候将会拥有<code>prototype</code>中的属性和方法</li>
+<li>一个对象的<code>__proto__</code>属性，指向这个对象所在的类的<code>prototype</code>属性</li>
+</ol>
+</blockquote>
+<h1 id="JavaScript原型链继承"><a href="#JavaScript原型链继承" class="headerlink" title="JavaScript原型链继承"></a>JavaScript原型链继承</h1><p>继承在java中很常见，在JavaScript中作用也差不多，只不过概念被替换成原型了</p>
+<blockquote>
+<p>所有类对象在实例化的时候将会拥有<code>prototype</code>中的属性和方法，这个特性被用来实现JavaScript中的继承机制。</p>
+</blockquote>
+<p>比如，</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">Father</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">first_name</span> = <span class="string">&#x27;Donald&#x27;</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">last_name</span> = <span class="string">&#x27;Trump&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">Son</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">first_name</span> = <span class="string">&#x27;Melania&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="title class_">Son</span>.<span class="property"><span class="keyword">prototype</span></span> = <span class="keyword">new</span> <span class="title class_">Father</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> son = <span class="keyword">new</span> <span class="title class_">Son</span>()</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`Name: <span class="subst">$&#123;son.first_name&#125;</span> <span class="subst">$&#123;son.last_name&#125;</span>`</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这里的，</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Son</span>.<span class="property"><span class="keyword">prototype</span></span> = <span class="keyword">new</span> <span class="title class_">Father</span>()</span><br></pre></td></tr></table></figure>
+
+<p>可以理解为Son的原型为实例化的Father类，Son类就会继承Father类得得<code>last_name</code>属性，但是继承不会覆盖自己原有的属性，所以<code>first_name</code>还是Son类自己的</p>
+<p><a data-fancybox="gallery" data-src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905094854794.png"><img src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905094854794.png" alt="image-20230905094854794"></a></p>
+<p>然后再将<code>Son</code>实例化给<code>son</code>，那么<code>son</code>就具有<code>Son类</code>和<code>Father类</code>的所有属性</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> son = <span class="keyword">new</span> <span class="title class_">Son</span>()</span><br></pre></td></tr></table></figure>
+
+<p><a data-fancybox="gallery" data-src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905095519407.png"><img src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905095519407.png" alt="image-20230905095519407"></a></p>
+<p>可以在这里的层次就可以看出，<code>son</code>的<code>first_name</code>是<code>以Son类为主</code>的，而由于自身没有<code>last_name</code>，就会从自己<code>原型Father类</code>继承<code>last_name</code>然后获取值</p>
+<p>于是当打印时，最后输出的是<code>Name: Melania Trump</code>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`Name: <span class="subst">$&#123;son.first_name&#125;</span> <span class="subst">$&#123;son.last_name&#125;</span>`</span>)</span><br></pre></td></tr></table></figure>
+
+<p><a data-fancybox="gallery" data-src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905095812582.png"><img src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905095812582.png" alt="image-20230905095812582"></a></p>
+<h2 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h2><p>以上述的Son类和Father类为例，我们可以看到son的层次中，是有两个<code>Prototype</code>，这就是原型链的最简单的格式。最后一个<code>Object</code>就是<code>null</code>，他在原型Father类的后面，这也是原型链默认的最后一个原型。</p>
+<p>我们可以考虑一个问题，当我在打印<code>$&#123;son.last_name&#125;</code>，如果在<code>Father类</code>中也没有这个属性会怎么样呢，那son就会不断的顺着原型链一直找下去，直到<code>null</code></p>
+<p>就会执行，</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">son.<span class="property">__proto__</span>.<span class="property">__proto__</span>.<span class="property">__proto__</span>.<span class="property">__proto__</span></span><br></pre></td></tr></table></figure>
+
+<p><a data-fancybox="gallery" data-src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905100719829.png"><img src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905100719829.png" alt="image-20230905100719829"></a></p>
+<p><code>JavaScript</code>这种查找机制，被用在面向对象的继承中，被称作<code>prototype</code>继承链。</p>
+<p>以上是最基础的JavaScript面向对象编程，我们并不深入研究更细节的内容，只要牢记下面几点即可：</p>
+<blockquote>
+<ol>
+<li>每个构造函数都有一个原型对象</li>
+<li>对象的<code>__proto__</code>属性，指向类的原型对象<code>prototype</code></li>
+<li>JavaScript使用prototype链实现继承</li>
+</ol>
+</blockquote>
+<h1 id="原型链污染是什么"><a href="#原型链污染是什么" class="headerlink" title="原型链污染是什么"></a>原型链污染是什么</h1><p>在最开始写过<code>foo.__proto__</code>指向Foo类的<code>prototype</code>，我们也试过通过<code>foo.__proto__</code>新增一个新函数，也可以加到原型中去，并且可以成功调用与构造函数同一层次，那么如果修改<code>foo.__proto__</code>中的一些值，同理也可以修改Foo类中的一些东西</p>
+<p>我们简单试一下，</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// foo是一个简单的JavaScript对象</span></span><br><span class="line"><span class="keyword">let</span> foo = &#123;<span class="attr">bar</span>: <span class="number">1</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// foo.bar 此时为1</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(foo.<span class="property">bar</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 修改foo的原型（即Object）</span></span><br><span class="line">foo.<span class="property">__proto__</span>.<span class="property">bar</span> = <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 由于查找顺序的原因，foo.bar仍然是1</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(foo.<span class="property">bar</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 此时再用Object创建一个空的zoo对象</span></span><br><span class="line"><span class="keyword">let</span> zoo = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 查看zoo.bar</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(zoo.<span class="property">bar</span>)</span><br></pre></td></tr></table></figure>
+
+<p>首先我们先构造一个简单对象foo，</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> foo = &#123;<span class="attr">bar</span>: <span class="number">1</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于foo并不是某个具体类的实例，但是所有对象都有一个实例存在，那就<code>Object</code>类</p>
+<p>然后我们先看看，</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(foo.<span class="property">bar</span>)</span><br></pre></td></tr></table></figure>
+
+<p><a data-fancybox="gallery" data-src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905101905435.png"><img src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905101905435.png" alt="image-20230905101905435"></a></p>
+<p>同样可以看到<code>foo</code>确实存在一个原型，并且为<code>Object</code>。</p>
+<p>那么如果我们通过<code>foo.__proto__</code>修改原型中的某些值呢？</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">foo.<span class="property">__proto__</span>.<span class="property">bar</span> = <span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p>这里我们通过<code>foo.__proto__</code>将<code>bar</code>值修改为2，</p>
+<p>然后打印看看，</p>
+<p><a data-fancybox="gallery" data-src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905102214488.png"><img src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905102214488.png" alt="image-20230905102214488"></a></p>
+<p>突然发现，打印的结果是1，而不是我们刚才修改的结果2</p>
+<p>这是为什么呢？</p>
+<p>我们再次看看foo就知道了</p>
+<p><a data-fancybox="gallery" data-src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905102456014.png"><img src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905102456014.png" alt="image-20230905102456014"></a></p>
+<blockquote>
+<p>我们可以看到，<code>bar: 1</code>是foo自身的属性，而原型Object中的<code>bar: 2</code>，层次要低于foo自身的属性，所以相同的属性，还是以自身优先，不存在或者不完善，才从原型中继承，这和上面讲的Son类和Father类是一样的。</p>
+</blockquote>
+<p>所以这里打印结果还是1，就是这个原因。</p>
+<p>但是，如果我们再新建一个对象，让它和foo一样，原型也是只有<code>Object</code>，但是没有bar属性，再次打印会怎么样呢</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> zoo = &#123;&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(zoo.<span class="property">bar</span>)</span><br></pre></td></tr></table></figure>
+
+<p><a data-fancybox="gallery" data-src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905102953845.png"><img src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905102953845.png" alt="image-20230905102953845"></a></p>
+<p>可以看到打印结果为2，因为这里zoo对象没有bar属性，所以这里zoo就直接继承Object中bar属性，而Object本身并没有bar属性，是foo通过<code>foo.__proto__</code>来新增的一个属性，却能达到影响zoo对象的作用。</p>
+<blockquote>
+<p>那么，这种在一个应用中，攻击者控制并修改了一个对象的原型，那么将可能影响所有和这个对象来自同一个类。父祖类的对象。这种攻击方式就是原型链攻击</p>
+</blockquote>
+<h1 id="哪些情况下原型链会被污染呢？"><a href="#哪些情况下原型链会被污染呢？" class="headerlink" title="哪些情况下原型链会被污染呢？"></a>哪些情况下原型链会被污染呢？</h1><p>根据上述内容，我们发现关键在于能够顺利调用<code>__proto__</code>并设置其值即可，那么如何成功呢？</p>
+<blockquote>
+<p>关键在于找到能够控制数字【对象】的“键名”的操作即可：</p>
+<ul>
+<li>对象<code>merge</code></li>
+<li>对象<code>clone</code>（其实内核就是将待操作的对象merge到一个空对象中）</li>
+</ul>
+</blockquote>
+<p>以对象merge为例，我们想象一个简单的merge函数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">merge</span>(<span class="params">target, source</span>) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> key <span class="keyword">in</span> source) &#123;</span><br><span class="line">        <span class="keyword">if</span> (key <span class="keyword">in</span> source &amp;&amp; key <span class="keyword">in</span> target) &#123;</span><br><span class="line">            <span class="title function_">merge</span>(target[key], source[key])</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            target[key] = source[key]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这个函数是一个递归函数，它的目的是将 <code>source</code> 对象中的属性合并到 <code>target</code> 对象中。它通过遍历 <code>source</code> 对象中的每一个键值对，如果 <code>target</code> 对象中也存在这个键，那么就递归调用 <code>merge</code> 函数将两个对象中对应键的值进行合并；否则，就直接将 <code>source</code> 对象中的键值对复制到 <code>target</code> 对象中。最终，<code>target</code> 对象将包含原来的属性以及 <code>source</code> 对象中的所有属性。这个函数通常用于合并两个或多个对象，以便于在一个对象中访问所有属性。</p>
+</blockquote>
+<p>我们看到，在合并时存在复制操作<code>target[key] = source[key]</code>，那么如果这个key是<code>__proto__</code>，是否就可以成功造成污染呢？</p>
+<p>试一下，</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> o1 = &#123;&#125;</span><br><span class="line"><span class="keyword">let</span> o2 = &#123;<span class="attr">a</span>: <span class="number">1</span>, <span class="string">&quot;__proto__&quot;</span>: &#123;<span class="attr">b</span>: <span class="number">2</span>&#125;&#125;</span><br><span class="line"><span class="title function_">merge</span>(o1, o2)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(o1.<span class="property">a</span>, o1.<span class="property">b</span>)</span><br><span class="line"></span><br><span class="line">o3 = &#123;&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(o3.<span class="property">b</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这里可以看到o1和o2确实是合并成功了，但是<code>o2.__proto__</code> 的b却没有合并进去，</p>
+<p><a data-fancybox="gallery" data-src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20240531103907131.png"><img src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20240531103907131.png" alt="image-20240531103907131"></a></p>
+<p>但是我们的<code>__proto__</code>不见了，取而代之发现多了个<code>Object</code>原型，也就是说我们的<code>__proto__</code>被当作o2的原型，也就是其自身的<code>Object</code>，但是并没有影响最后一个每个对象共有<code>Object</code>，</p>
+<p>这里的 <code>__proto__</code> 实际上不是一个普通的属性，而是将 <code>o2</code> 的原型设置为 <code>&#123;b: 2&#125;</code>。所以 <code>o2</code> 的结构如下：</p>
+<ul>
+<li><code>o2.a</code> 是自身的属性，值为 <code>1</code>。</li>
+<li><code>o2</code> 的原型有一个属性 <code>b</code>，值为 <code>2</code>。</li>
+</ul>
+<p>而merge合并只合并自身属性，所以这种污染是无效的。</p>
+<p>此时遍历o2的所有键名，拿到的只有[a,b]，<code>__proto__</code>并不是一个key，自然也不无法修改Object的原型。</p>
+<p><a data-fancybox="gallery" data-src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905110442713.png"><img src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905110442713.png" alt="image-20230905110442713"></a></p>
+<p>所以当我们想用<code>o3</code>测试是否污染时，发现是没有的</p>
+<p><a data-fancybox="gallery" data-src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905111044306.png"><img src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905111044306.png" alt="image-20230905111044306"></a></p>
+<p><a data-fancybox="gallery" data-src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905111219362.png"><img src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905111219362.png" alt="image-20230905111219362"></a></p>
+<p>那么如何将<code>__proto__</code>被当作是一个键名呢，只要加一个解析就行</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> o1 = &#123;&#125;</span><br><span class="line"><span class="keyword">let</span> o2 = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(<span class="string">&#x27;&#123;&quot;a&quot;: 1, &quot;__proto__&quot;: &#123;&quot;b&quot;: 2&#125;&#125;&#x27;</span>)</span><br><span class="line"><span class="title function_">merge</span>(o1, o2)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(o1.<span class="property">a</span>, o1.<span class="property">b</span>)</span><br><span class="line"></span><br><span class="line">o3 = &#123;&#125;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(o3.<span class="property">b</span>)</span><br></pre></td></tr></table></figure>
+
+<p>再看看o2的数据，</p>
+<p><a data-fancybox="gallery" data-src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905111651534.png"><img src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905111651534.png" alt="image-20230905111651534"></a></p>
+<p>发现这次<code>__proto__</code>，没有被当作o2的原型了，而是一个键值</p>
+<p>此时再次打印o3，发现成功污染<code>Object</code></p>
+<p><a data-fancybox="gallery" data-src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905111841511.png"><img src="/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/image-20230905111841511.png" alt="image-20230905111841511"></a></p>
+<blockquote>
+<p>JSON解析的情况下，<code>__proto__</code>会被认为是一个真正的“键名”，而不代表“原型”，所以在遍历o2的时候会存在这个键。</p>
+</blockquote>
+<p>可以是为什么能实现将属性b以及其值污染到Object中呢？</p>
+<p>其实很简单，</p>
+<p>我们实际修改原型时用的语法是</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">o2.<span class="property">__proto__</span>.<span class="property">b</span> = <span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p>而读取数组中键值也是如此语法，所以当键值为<code>__proto__</code>时，调用<code>__proto__</code>其后的数据因为语法，会被当作修改原型的值，从而实现原型链污染的作用</p>
+<blockquote>
+<p>ps. <code>merge</code>操作是最常见可能控制键名的操作，也最能被原型链攻击，很多常见的库都存在这个问题。</p>
+</blockquote>
+<hr>
+<blockquote>
+<p>最后可以做一下p神的</p>
+<p>Code-Breaking 2018 Thejs</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/phith0n/code-breaking/blob/master/2018/thejs/web/server.js">https://github.com/phith0n/code-breaking/blob/master/2018/thejs/web/server.js</a></p>
+</blockquote>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/archives/">文章</a></li>
+        
+          <li><a href="/categories/">分类</a></li>
+        
+          <li><a href="/tags/">标签</a></li>
+        
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#prototype%E5%92%8C-proto-%E5%88%86%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.</span> <span class="toc-text">prototype和__proto__分别是什么</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%90%86%E8%A7%A3"><span class="toc-number">1.1.</span> <span class="toc-text">理解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E7%82%B9"><span class="toc-number">1.2.</span> <span class="toc-text">关键点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.3.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JavaScript%E5%8E%9F%E5%9E%8B%E9%93%BE%E7%BB%A7%E6%89%BF"><span class="toc-number">2.</span> <span class="toc-text">JavaScript原型链继承</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93-1"><span class="toc-number">2.1.</span> <span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">3.</span> <span class="toc-text">原型链污染是什么</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%93%AA%E4%BA%9B%E6%83%85%E5%86%B5%E4%B8%8B%E5%8E%9F%E5%9E%8B%E9%93%BE%E4%BC%9A%E8%A2%AB%E6%B1%A1%E6%9F%93%E5%91%A2%EF%BC%9F"><span class="toc-number">4.</span> <span class="toc-text">哪些情况下原型链会被污染呢？</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/&text=nodejs(原型链污染)深入"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/&title=nodejs(原型链污染)深入"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/&is_video=false&description=nodejs(原型链污染)深入"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=nodejs(原型链污染)深入&body=Check out this article: https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/&title=nodejs(原型链污染)深入"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/&title=nodejs(原型链污染)深入"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/&title=nodejs(原型链污染)深入"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/&title=nodejs(原型链污染)深入"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/&name=nodejs(原型链污染)深入&description=&lt;p&gt;&lt;code&gt;本来想将p神的JavaScript污染链文章并在我写的基础浅入里，但是感觉还是得分开学习记录，p神干货还得和我水的文章分开，浅入就讲概念理解学习吧，深入就涉及深入认识污染了&lt;/code&gt;&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ttoc.fun/nodejs(%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93)%E6%B7%B1%E5%85%A5/&t=nodejs(原型链污染)深入"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2022-2024
+    Ttoc
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+
+<!-- FancyBox -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+  
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>

