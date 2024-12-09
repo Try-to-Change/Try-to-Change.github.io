@@ -489,6 +489,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 .content {
+  font-size: 1rem;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -637,6 +638,7 @@ body {
   line-height: 15px;
 }
 #header #nav ul a {
+  font-size: 1rem;
   margin-right: 15px;
   color: #2bbc8a;
 }
@@ -787,6 +789,7 @@ body {
   line-height: 15px;
 }
 #header-post #nav ul a {
+  font-size: 1.2rem;
   margin-right: 15px;
   color: #2bbc8a;
   display: inline-block;
